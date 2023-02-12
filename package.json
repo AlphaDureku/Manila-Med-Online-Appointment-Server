@@ -1,0 +1,31 @@
+{
+    "name": "server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node server",
+        "devStart": "nodemon server"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "nodemon": "^2.0.20"
+    },
+    "dependencies": {
+        "bcrypt": "^5.1.0",
+        "dotenv": "^16.0.3",
+        "express": "^4.18.2",
+        "express-session": "^1.17.3",
+        "install": "^0.13.0",
+        "memorystore": "^1.6.7",
+        "moment": "^2.29.4",
+        "mysql2": "^3.1.2",
+        "nodemailer": "^6.9.1",
+        "npm": "^9.4.2",
+        "sequelize": "^6.28.0",
+        "twilio": "^4.7.2"
+    }
+}
