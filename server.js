@@ -6,6 +6,9 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const errorHandler = require("./utils/errorHandler");
+//const path = require("path");
+
+//app.use(express.static(path.join(__dirname + "/public")));
 
 app.use(errorHandler);
 app.use(bodyParser.urlencoded({ limit: "10mb", extended: false }));

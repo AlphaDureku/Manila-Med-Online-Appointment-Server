@@ -3,7 +3,7 @@ const router = express.Router();
 
 //Controllers
 const InitializationController = require("../Controller/InitializationController");
-const DoctorController = require("../Controller/doctorController");
+const DoctorController = require("../Controller/DoctorController");
 const UserController = require("../Controller/UserController");
 
 router.get("/api", InitializationController.api);
