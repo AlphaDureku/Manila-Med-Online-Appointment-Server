@@ -23,11 +23,7 @@ const doctorSchedAttributes = [
     "date",
   ],
   [
-    Sequelize.fn(
-      "date_format",
-      Sequelize.col("doctor_schedule_date"),
-      "%b %e, %Y"
-    ),
+    Sequelize.fn("date_format", Sequelize.col("doctor_schedule_date"), "%W"),
     "day",
   ],
   [
