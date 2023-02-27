@@ -22,3 +22,15 @@ exports.getUser_Patients = async (req, res) => {
   console.log(result);
   sendResponse(res, 200, { count: result.count, patientList: result.rows });
 };
+
+exports.fetchPatient_Appointments_Using_Patient_ID = async (req, res) => {
+  if (req.session.user_ID) {
+    const result = await User.fetchPatient_Appointments_Using_Patient_ID(
+      req.params.id
+    );
+    console.log(result);
+    sendResponse(res, 200, result);
+  } else {
+    console.log("Unauthorized");
+  }
+};
