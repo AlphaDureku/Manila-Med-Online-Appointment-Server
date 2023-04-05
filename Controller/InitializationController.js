@@ -10,6 +10,5 @@ exports.api = async (req, res) => {
 exports.initialize = async (req, res) => {
   const specialization = await Initialize.setup_Specialization();
   const hmo = await Initialize.setup_HMO();
-
   sendResponse(res, 200, { specialization: specialization, hmo: hmo });
 };

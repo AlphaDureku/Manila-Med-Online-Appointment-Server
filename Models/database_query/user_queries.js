@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 const model = require("../models");
 
-//For Tracking
+//For User Validation
 exports.findUserUsingEmail = async function (email) {
   return await model.user.findOne({
     raw: true,
@@ -9,7 +9,6 @@ exports.findUserUsingEmail = async function (email) {
     where: { user_email: email },
   });
 };
-
 exports.getUser_Patients_Using_ID = async function (user_ID) {
   return await model.patient.findAndCountAll({
     raw: true,
@@ -31,6 +30,7 @@ exports.getUser_Patients_Using_ID = async function (user_ID) {
   });
 };
 
+//For Tracking Page
 const age = Sequelize.fn(
   "TIMESTAMPDIFF",
   Sequelize.literal("YEAR"),
@@ -107,4 +107,55 @@ exports.fetchPatient_Appointments_Using_Patient_ID = async function (
       patient_ID: patient_ID,
     },
   });
+};
+
+/*Edit Patient Info*/
+exports.fetch_Patient_Info_Using_Patient_ID = async function (patient_ID) {
+  return await model.patient.findOne({
+    raw: true,
+    where: {
+      patient_ID: patient_ID,
+    },
+    attributes: [
+      "patient_first_name",
+      "patient_last_name",
+      "patient_middle_name",
+      "patient_contact_number",
+      [
+        Sequelize.fn(
+          "date_format",
+          Sequelize.col("patient_dateOfBirth"),
+          "%Y-%m-%d"
+        ),
+        "dateOfBirth",
+      ],
+      "patient_address",
+      "patient_gender",
+      [Sequelize.col("user_email"), "email"],
+    ],
+    include: [
+      {
+        model: model.user,
+        attributes: [],
+      },
+    ],
+  });
+};
+
+exports.updatePatientInfo = async function (patientModel) {
+  await model.patient.update(
+    {
+      patient_first_name: patientModel.Fname,
+      patient_middle_name: patientModel.Mname,
+      patient_last_name: patientModel.Lname,
+      patient_contact_number: patientModel.contact,
+      patient_address: patientModel.address,
+      patient_dateOfBirth: patientModel.birth,
+    },
+    {
+      where: {
+        patient_ID: patientModel.patient_ID,
+      },
+    }
+  );
 };
