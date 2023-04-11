@@ -24,7 +24,7 @@ exports.sendEmail_Booking = (email) => {
             <div style='font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2'>
               <div style='margin:50px auto;width:70%;padding:20px 0'>
                 <div style='border-bottom:1px solid #eee'>
-                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src='https://scontent.fmnl13-2.fna.fbcdn.net/v/t39.30808-6/323289895_721708059168068_7716967383321258182_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeFCtue87s6eVW82rSocbCt0kveEtFjVanKS94S0WNVqcoext4GgIfTr7acDsVwuhD-MtKlKPrsp8FxMs3V5ofie&_nc_ohc=z7SE0rt_lhgAX9WFSHd&_nc_ht=scontent.fmnl13-2.fna&oh=00_AfBqcvgJEcTKAO68VFxhKgAT7NfFEU2spxxcqEExEYrEIQ&oe=641D99AC' width='28' 
+                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src='https://scontent.fmnl4-2.fna.fbcdn.net/v/t39.30808-6/323289895_721708059168068_7716967383321258182_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeFCtue87s6eVW82rSocbCt0kveEtFjVanKS94S0WNVqcoext4GgIfTr7acDsVwuhD-MtKlKPrsp8FxMs3V5ofie&_nc_ohc=mbGVH1UEvjEAX_1Hg8n&_nc_ht=scontent.fmnl4-2.fna&oh=00_AfAfheaUrnMEEQkZrrkpY3XWUcFeCZg9SdU6nSOvQPbm3g&oe=643554AC' width='28' 
                  height='25'/> Medical Center Manila</a>
                 </div>
                 <p style='font-size:1.7em;'><b>Hi,</b></p>
@@ -67,7 +67,7 @@ exports.sendEmail_Tracking = (email) => {
             <div style='font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2'>
               <div style='margin:50px auto;width:70%;padding:20px 0'>
                 <div style='border-bottom:1px solid #eee'>
-                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src='https://scontent.fmnl13-2.fna.fbcdn.net/v/t39.30808-6/323289895_721708059168068_7716967383321258182_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeFCtue87s6eVW82rSocbCt0kveEtFjVanKS94S0WNVqcoext4GgIfTr7acDsVwuhD-MtKlKPrsp8FxMs3V5ofie&_nc_ohc=z7SE0rt_lhgAX9WFSHd&_nc_ht=scontent.fmnl13-2.fna&oh=00_AfBqcvgJEcTKAO68VFxhKgAT7NfFEU2spxxcqEExEYrEIQ&oe=641D99AC' width='28' 
+                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src='https://scontent.fmnl4-2.fna.fbcdn.net/v/t39.30808-6/323289895_721708059168068_7716967383321258182_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeFCtue87s6eVW82rSocbCt0kveEtFjVanKS94S0WNVqcoext4GgIfTr7acDsVwuhD-MtKlKPrsp8FxMs3V5ofie&_nc_ohc=mbGVH1UEvjEAX_1Hg8n&_nc_ht=scontent.fmnl4-2.fna&oh=00_AfAfheaUrnMEEQkZrrkpY3XWUcFeCZg9SdU6nSOvQPbm3g&oe=643554AC' width='28' 
                  height='25'/> Medical Center Manila</a>
                 </div>
                 <p style='font-size:1.7em;'><b>Hi,</b></p>

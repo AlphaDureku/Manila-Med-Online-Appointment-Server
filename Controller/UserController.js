@@ -20,9 +20,13 @@ exports.set_userSession = async (req, res) => {
 
 /*Tracker*/
 exports.getUser_Patients = async (req, res) => {
-  const result = await User.getUser_Patients_Using_ID(req.session.user_ID);
-  console.log(result);
-  sendResponse(res, 200, { count: result.count, patientList: result.rows });
+  if (req.session.user_ID) {
+    const result = await User.getUser_Patients_Using_ID(req.session.user_ID);
+    console.log(result);
+    sendResponse(res, 200, { count: result.count, patientList: result.rows });
+  } else {
+    console.log("Unauthorized");
+  }
 };
 exports.fetchPatient_Appointments_Using_Patient_ID = async (req, res) => {
   if (req.session.user_ID) {
@@ -38,8 +42,14 @@ exports.fetchPatient_Appointments_Using_Patient_ID = async (req, res) => {
 
 /*Edit Patient Info*/
 exports.fetchPatientInfo_Using_Patient_ID = async (req, res) => {
-  const result = await User.fetch_Patient_Info_Using_Patient_ID(req.params.id);
-  sendResponse(res, 200, result);
+  if (req.session.user_ID) {
+    const result = await User.fetch_Patient_Info_Using_Patient_ID(
+      req.params.id
+    );
+    sendResponse(res, 200, result);
+  } else {
+    console.log("Unauthorized");
+  }
 };
 
 exports.editPatientInfo_Using_Patient_ID = async (req, res) => {

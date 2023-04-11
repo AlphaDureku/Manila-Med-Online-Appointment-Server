@@ -28,8 +28,10 @@ app.use(bodyParser.json());
 
 const indexRouter = require("./Routes/index");
 const tracking = require("./Routes/tracking");
+const booking = require("./Routes/booking");
 
 app.use("/", indexRouter);
 app.use("/user", tracking);
+app.use("/booking", booking);
 
 app.listen(process.env.PORT || 4000);

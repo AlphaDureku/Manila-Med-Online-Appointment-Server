@@ -1,6 +1,7 @@
 const Sequelize = require("sequelize");
 const model = require("../models");
 
+/! Doctor Attributes/;
 const doctorAttributes = [
   "doctor_ID",
   "doctor_first_name",
@@ -71,6 +72,7 @@ const groupDoctorInfo = [
   "doctor_contact_number",
 ];
 
+/! Doctor DB Queries/;
 exports.getDoctor = async function () {
   return await model.doctor.findAll({
     raw: true,
