@@ -4,7 +4,6 @@ const sendEmail = require("../utils/sendEmail");
 
 exports.sendOTP = async (req, res) => {
   const userResults = {
-    OTP: "",
     hasHistory: false,
     patient_List: {},
   };
@@ -16,7 +15,14 @@ exports.sendOTP = async (req, res) => {
     userResults.patient_List = patient_List.rows;
     userResults.hasHistory = true;
   }
-
-  userResults.OTP = sendEmail.sendEmail_Tracking(req.query.email);
+  req.session.OTP = sendEmail.sendEmail_Tracking(req.query.email);
   sendResponse(res, 200, { data: userResults });
+};
+
+exports.verifyOTP = async (req, res) => {
+  if (req.session.OTP == req.query.inputOTP) {
+    sendResponse(res, 200, { isVerified: true });
+  } else {
+    sendResponse(res, 200, { isVerified: false });
+  }
 };

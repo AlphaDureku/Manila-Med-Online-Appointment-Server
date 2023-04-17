@@ -6,5 +6,6 @@ const userController = require("../Controller/UserController");
 const bookingController = require("../Controller/bookingCotroller");
 
 router.get("/send-otp", bookingController.sendOTP);
+router.get("/verifyOTP", bookingController.verifyOTP);
 
 module.exports = router;
