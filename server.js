@@ -29,9 +29,11 @@ app.use(bodyParser.json());
 const indexRouter = require("./Routes/index");
 const tracking = require("./Routes/tracking");
 const booking = require("./Routes/booking");
+const admin = require("./Routes/NursePage");
 
 app.use("/", indexRouter);
 app.use("/user", tracking);
 app.use("/booking", booking);
+app.use("/admin", admin);
 
 app.listen(process.env.PORT || 4000);

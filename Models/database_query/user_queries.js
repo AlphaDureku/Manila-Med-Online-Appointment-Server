@@ -109,7 +109,7 @@ exports.fetchPatient_Appointments_Using_Patient_ID = async function (
   });
 };
 
-/*Edit Patient Info*/
+/*For Patient Info modifications*/
 exports.fetch_Patient_Info_Using_Patient_ID = async function (patient_ID) {
   return await model.patient.findOne({
     raw: true,
