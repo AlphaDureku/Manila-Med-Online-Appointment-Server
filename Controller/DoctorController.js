@@ -70,6 +70,7 @@ exports.searchDoctor = async (req, res) => {
       console.log("Undefined");
     }
   } catch (error) {
+    console.log(error);
     sendResponse(res, 500, error);
   }
 };

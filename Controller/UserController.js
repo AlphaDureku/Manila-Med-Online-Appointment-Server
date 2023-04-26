@@ -46,6 +46,7 @@ exports.getUser_Patients = async (req, res) => {
     const result = await User.getUser_Patients_Using_ID(req.session.user_ID);
     console.log(result);
     sendResponse(res, 200, { count: result.count, patientList: result.rows });
+    return;
   } catch (error) {
     sendResponse(res, 500, error);
   }
@@ -57,6 +58,7 @@ exports.fetchPatient_Appointments_Using_Patient_ID = async (req, res) => {
     );
     console.log(result);
     sendResponse(res, 200, result);
+    return;
   } catch (error) {
     sendResponse(res, 500, error);
   }
