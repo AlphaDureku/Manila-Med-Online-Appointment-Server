@@ -47,13 +47,15 @@ exports.findDoctors = async function (sec_ID) {
   });
 };
 
-exports.getSelectedDoctorAppointments = async function (doctor_ID, status) {
+exports.getSelectedDoctorAppointments = async function (doctor_ID, DateRange) {
   return await model.appointmentDetails.findAll({
     raw: true,
     attributes: [
+      "patient_ID",
       [Sequelize.col("patient_first_name"), "Fname"],
       [Sequelize.col("patient_last_name"), "Lname"],
       [Sequelize.col("patient_contact_number"), "contact"],
+      [Sequelize.col("appointment_status"), "status"],
       [
         Sequelize.fn(
           "date_format",
@@ -93,7 +95,9 @@ exports.getSelectedDoctorAppointments = async function (doctor_ID, status) {
     where: [
       {
         doctor_ID: doctor_ID,
-        appointment_status: status,
+        createdAt: {
+          [Sequelize.Op.between]: [DateRange.start, DateRange.end],
+        },
       },
     ],
   });
@@ -104,8 +108,6 @@ exports.getDoctorCalendar = async function (doctor_ID) {
     raw: true,
     attributes: [
       "doctor_ID",
-      "doctor_first_name",
-      "doctor_last_name",
       [
         Sequelize.fn(
           "date_format",

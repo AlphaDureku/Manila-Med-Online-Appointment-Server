@@ -14,7 +14,7 @@ const MemoryStore = require("memorystore")(session);
 
 app.use(
   session({
-    secret: "secret-key",
+    secret: process.env.SECRET_KEY,
     store: new MemoryStore({
       checkPeriod: 5000,
     }),
