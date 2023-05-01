@@ -2,20 +2,19 @@ const express = require("express");
 const router = express.Router();
 //Controllers
 const userController = require("../Controller/UserController");
-const auth = require("../utils/UserAuthenticate");
+const jwtMiddleware = require("../utils/JWTHandler");
 
-router.post("/set-userSession", userController.set_userSession);
-router.get("/get-patients", auth, userController.getUser_Patients);
+router.get("/get-patients", jwtMiddleware, userController.getUser_Patients);
 router.get(
   "/:id",
-  auth,
+  jwtMiddleware,
   userController.fetchPatient_Appointments_Using_Patient_ID
 );
 router.get(
   "/get-info/:id",
-  auth,
+  jwtMiddleware,
   userController.fetchPatientInfo_Using_Patient_ID
 );
-router.post("/edit-patient", auth, userController.updatePatientInfo);
+router.post("/edit-patient", jwtMiddleware, userController.updatePatientInfo);
 
 module.exports = router;

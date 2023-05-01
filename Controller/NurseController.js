@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 const Nurse = require("../Models/database_query/nurse_queries");
 const jwt = require("jsonwebtoken");
 const { Day, Week, Year, Month } = require("../utils/DateObjects");
-const { verifyJWT } = require("../utils/JWTHandler");
 
 exports.login = async (req, res) => {
   try {
@@ -30,10 +29,7 @@ exports.login = async (req, res) => {
 
 //Default state of dashboard
 exports.dashboard = async (req, res) => {
-  const { Nurse_ID } = verifyJWT(req.headers.authorization);
-  if (!Nurse_ID) {
-    return sendResponse(res, 401, "unathorized");
-  }
+  const { Nurse_ID } = req.data;
   try {
     const nurse = await Nurse.findNurseUsingID(Nurse_ID);
     const doctor = await Nurse.findDoctors(Nurse_ID);
@@ -43,7 +39,7 @@ exports.dashboard = async (req, res) => {
       const calendar = await Nurse.getDoctorCalendar(doctor.at(0).doctor_ID);
       const appointments = await Nurse.getSelectedDoctorAppointments(
         doctor.at(0).doctor_ID,
-        Day
+        Year
       );
       return sendResponse(res, 200, {
         NurseData: nurse,
@@ -62,10 +58,6 @@ exports.dashboard = async (req, res) => {
 };
 
 exports.changeDoctor = async (req, res) => {
-  const { Nurse_ID } = verifyJWT(req.headers.authorization);
-  if (!Nurse_ID) {
-    return sendResponse(res, 401, "unathorized");
-  }
   req.session.doctor_ID = req.query.doctor_ID;
   const { doctor_ID } = req.session;
   try {
@@ -85,10 +77,6 @@ exports.changeDoctor = async (req, res) => {
 };
 
 exports.changeDateRange = async (req, res) => {
-  const { Nurse_ID } = verifyJWT(req.headers.authorization);
-  if (!Nurse_ID) {
-    return sendResponse(res, 401, "unathorized");
-  }
   let selectedDateRange = Day;
   switch (req.query.DateRange) {
     case "Week":
@@ -113,5 +101,57 @@ exports.changeDateRange = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+  }
+};
+
+exports.searchAppointments = async (req, res) => {
+  selectedDateRange = Year;
+  try {
+    const appointments = await Nurse.getSelectedDoctorAppointments(
+      req.session.doctor_ID,
+      selectedDateRange,
+      req.query.name
+    );
+    console.log(appointments);
+    //Remind front end to set date range to Year to widen search results
+    return sendResponse(res, 200, {
+      appointmentsData: appointments,
+    });
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, "internal error");
+  }
+};
+
+exports.updateAppointmentStatus = async (req, res) => {
+  const { updateStatus, appointment_ID } = req.body;
+  try {
+    if (!updateStatus) {
+      return sendResponse(res, 400, "bad parameter");
+    }
+    switch (updateStatus) {
+      case "Confirmed":
+        await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
+        break;
+      case "Cancelled":
+        await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
+        break;
+      case "Completed":
+        await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
+        break;
+      case "Rejected":
+        await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
+        break;
+      case "Pending":
+        await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
+        break;
+
+      default:
+        return sendResponse(res, 400, "invalid parameters");
+    }
+    return sendResponse(res, 200, "success");
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, "internal error");
   }
 };

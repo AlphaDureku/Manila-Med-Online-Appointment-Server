@@ -1,11 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const NurseController = require("../Controller/NurseController");
+const jwtMiddleware = require("../utils/JWTHandler");
 
-// router.post("/set-NurseSession", NurseController.setNurseSession);
 router.post("/nurse-login", NurseController.login);
-router.get("/nurse-dashboard", NurseController.dashboard);
-router.get("/change-doctor", NurseController.changeDoctor);
-router.get("/change-dateRange", NurseController.changeDateRange);
+router.get("/nurse-dashboard", jwtMiddleware, NurseController.dashboard);
+router.get("/change-doctor", jwtMiddleware, NurseController.changeDoctor);
+router.get("/change-dateRange", jwtMiddleware, NurseController.changeDateRange);
+router.get(
+  "/search-appointment",
+  jwtMiddleware,
+  NurseController.searchAppointments
+);
+router.post(
+  "/update-status",
+  jwtMiddleware,
+  NurseController.updateAppointmentStatus
+);
 
 module.exports = router;

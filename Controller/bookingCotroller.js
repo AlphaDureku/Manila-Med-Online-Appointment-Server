@@ -16,20 +16,19 @@ exports.sendOTP = async (req, res) => {
       userResults.hasHistory = true;
     }
     req.session.OTP = sendEmail.sendEmail_Tracking(req.query.email);
-    sendResponse(res, 200, { data: userResults });
+    return sendResponse(res, 200, { data: userResults });
   } catch (error) {
-    sendResponse(res, 500, error);
+    return sendResponse(res, 500, error);
   }
 };
 
 exports.verifyOTP = async (req, res) => {
   try {
     if (req.session.OTP == req.query.inputOTP || req.query.inputOTP == 1) {
-      sendResponse(res, 200, { isVerified: true });
-      return;
+      return sendResponse(res, 200, { isVerified: true });
     }
-    sendResponse(res, 200, { isVerified: false });
+    return sendResponse(res, 200, { isVerified: false });
   } catch (error) {
-    sendResponse(res, 500, error);
+    return sendResponse(res, 500, error);
   }
 };

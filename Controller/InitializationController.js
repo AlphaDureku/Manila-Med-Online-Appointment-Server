@@ -5,9 +5,9 @@ const Initialize = require("../Models/database_query/intialize_queries");
 exports.api = async (req, res) => {
   try {
     let result = await Doctor.getDoctor();
-    sendResponse(res, 200, result);
+    return sendResponse(res, 200, result);
   } catch (error) {
-    sendResponse(res, 500, error);
+    return sendResponse(res, 500, error);
   }
 };
 
@@ -15,8 +15,8 @@ exports.initialize = async (req, res) => {
   try {
     const specialization = await Initialize.setup_Specialization();
     const hmo = await Initialize.setup_HMO();
-    sendResponse(res, 200, { specialization: specialization, hmo: hmo });
+    return sendResponse(res, 200, { specialization: specialization, hmo: hmo });
   } catch (error) {
-    sendResponse(res, 500, error);
+    return sendResponse(res, 500, error);
   }
 };

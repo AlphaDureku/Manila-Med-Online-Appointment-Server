@@ -10,6 +10,6 @@ router.get("/api", InitializationController.api);
 router.get("/doctors/search", DoctorController.searchDoctor);
 router.post("/trackMe", UserController.checkIfExistsAndSendOTP);
 router.get("/initialize", InitializationController.initialize);
-router.get("/verifyOTP", UserController.verifyOTP);
+router.post("/verifyOTP", UserController.verifyOTP);
 
 module.exports = router;

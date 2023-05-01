@@ -1,12 +1,16 @@
 const jwt = require("jsonwebtoken");
 const sendResponse = require("./sendResponse");
 
-const verifyJWT = (authHeader) => {
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return false;
+const jwtMiddleware = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+    req.data = decodedToken;
+    console.log(decodedToken);
+    next();
+  } catch (err) {
+    sendResponse(res, 401, "Invalid token");
   }
-  const token = authHeader.split(" ")[1];
-  return jwt.verify(token, process.env.JWT_SECRET);
 };
 
-module.exports = { verifyJWT };
+module.exports = jwtMiddleware;
