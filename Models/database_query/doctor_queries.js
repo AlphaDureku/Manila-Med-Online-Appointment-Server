@@ -15,6 +15,7 @@ const doctorAttributes = [
 
 const doctorSchedAttributes = [
   "doctor_ID",
+  [Sequelize.col("doctor_schedule_ID"), "schedule_ID"],
   [
     Sequelize.fn(
       "date_format",
