@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const Nurse = require("../Models/database_query/nurse_queries");
 const jwt = require("jsonwebtoken");
 const { Day, Week, Year, Month } = require("../utils/DateObjects");
+const { NotifyPatients } = require("../utils/sendSMS");
 
 exports.login = async (req, res) => {
   try {
@@ -64,7 +65,7 @@ exports.changeDoctor = async (req, res) => {
     const calendar = await Nurse.getDoctorCalendar(doctor_ID);
     const appointments = await Nurse.getSelectedDoctorAppointments(
       doctor_ID,
-      Day
+      Year
     );
     return sendResponse(res, 200, {
       calendarData: calendar,
@@ -153,5 +154,32 @@ exports.updateAppointmentStatus = async (req, res) => {
   } catch (error) {
     console.log(error);
     return sendResponse(res, 500, "internal error");
+  }
+};
+
+exports.confirmedAppointmentsThatDay = async (req, res) => {
+  const { doctor_ID } = req.session;
+  const { date } = req.query;
+  try {
+    const appointments = await Nurse.getAppointmentsThatDate(doctor_ID, date);
+    return sendResponse(res, 200, appointments);
+  } catch (error) {
+    console.log(error);
+    sendResponse(res, 500, "internal error");
+  }
+};
+
+exports.notifyPatients = async (req, res) => {
+  const { doctor_ID } = req.session;
+  const { date } = req.body;
+  try {
+    const appointments = await Nurse.getAppointmentsThatDate(doctor_ID, date);
+    appointments.forEach((patient) => {
+      NotifyPatients(patient);
+    });
+    return sendResponse(res, 200, "success");
+  } catch (error) {
+    console.log(error);
+    sendResponse(res, 500, "internal error");
   }
 };

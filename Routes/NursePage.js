@@ -8,6 +8,11 @@ router.get("/nurse-dashboard", jwtMiddleware, NurseController.dashboard);
 router.get("/change-doctor", jwtMiddleware, NurseController.changeDoctor);
 router.get("/change-dateRange", jwtMiddleware, NurseController.changeDateRange);
 router.get(
+  "/appointments-withdate",
+  jwtMiddleware,
+  NurseController.confirmedAppointmentsThatDay
+);
+router.get(
   "/search-appointment",
   jwtMiddleware,
   NurseController.searchAppointments
@@ -17,5 +22,6 @@ router.post(
   jwtMiddleware,
   NurseController.updateAppointmentStatus
 );
+router.post("/notify-patient", jwtMiddleware, NurseController.notifyPatients);
 
 module.exports = router;

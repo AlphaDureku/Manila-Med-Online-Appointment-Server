@@ -75,7 +75,7 @@ exports.getSelectedDoctorAppointments = async function (
           Sequelize.col("doctor_schedule_start_time"),
           "%h:%i%p"
         ),
-        "Start",
+        "start",
       ],
       [
         Sequelize.fn(
@@ -83,7 +83,7 @@ exports.getSelectedDoctorAppointments = async function (
           Sequelize.col("doctor_schedule_start_time"),
           "%h:%i%p"
         ),
-        "End",
+        "end",
       ],
     ],
 
@@ -177,20 +177,78 @@ exports.updateAppointmentStatus = async function (
   );
 };
 
-//Still havent implemented yet
-
-exports.updateAppointment = async function (params) {
-  await model.appointmentDetails.update(
-    {
-      appointment_status: params.status,
-    },
-    {
-      where: {
-        appointment_ID: params.ID,
+exports.getAppointmentsThatDate = async function (doctor_ID, date) {
+  return await model.appointmentDetails.findAll({
+    raw: true,
+    attributes: [
+      "appointment_ID",
+      "patient_ID",
+      [Sequelize.col("patient_first_name"), "patient_Fname"],
+      [Sequelize.col("patient_last_name"), "patient_Lname"],
+      [Sequelize.col("patient_contact_number"), "contact"],
+      [Sequelize.col("appointment_queue"), "queue"],
+      [
+        Sequelize.fn(
+          "date_format",
+          Sequelize.col("doctor_schedule_date"),
+          "%m/%d/%Y"
+        ),
+        "appointmentDate",
+      ],
+      [
+        Sequelize.fn(
+          "date_format",
+          Sequelize.col("appointment_start"),
+          "%h:%i%p"
+        ),
+        "start",
+      ],
+      [
+        Sequelize.fn(
+          "date_format",
+          Sequelize.col("doctor_schedule_end_time"),
+          "%h:%i%p"
+        ),
+        "end",
+      ],
+    ],
+    include: [
+      {
+        model: model.doctor,
+        attributes: [],
+        include: [
+          {
+            model: model.doctor_specialization,
+            attributes: [],
+          },
+        ],
       },
-    }
-  );
+      {
+        model: model.patient,
+        attributes: [],
+        include: [
+          {
+            model: model.user,
+            attributes: [],
+          },
+        ],
+      },
+      {
+        model: model.doctor_schedule_table,
+        attributes: [],
+        where: {
+          doctor_schedule_date: date,
+        },
+      },
+    ],
+    where: {
+      doctor_ID: doctor_ID,
+      appointment_status: "Confirmed",
+    },
+  });
 };
+
+//Still havent implemented yet
 
 exports.getContactUsingApp_ID = async function (ID) {
   return await model.appointmentDetails.findOne({
@@ -256,7 +314,7 @@ exports.getAppointmentsToday = async function (ID, date) {
           Sequelize.col("doctor_schedule_start_time"),
           "%h:%i%p"
         ),
-        "Start",
+        "start",
       ],
       [
         Sequelize.fn(
@@ -264,7 +322,7 @@ exports.getAppointmentsToday = async function (ID, date) {
           Sequelize.col("doctor_schedule_start_time"),
           "%h:%i%p"
         ),
-        "End",
+        "end",
       ],
     ],
 

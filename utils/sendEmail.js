@@ -4,7 +4,7 @@ function generateOTP() {
   return Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
 }
 
-exports.sendEmail_Booking = (email) => {
+exports.BookingOTP = (email) => {
   const OTP = generateOTP();
   async function main() {
     let transporter = mail.createTransport({
@@ -47,7 +47,7 @@ exports.sendEmail_Booking = (email) => {
   return OTP;
 };
 
-exports.sendEmail_Tracking = (email) => {
+exports.TrackingOTP = (email) => {
   const OTP = generateOTP();
   async function main() {
     let transporter = mail.createTransport({

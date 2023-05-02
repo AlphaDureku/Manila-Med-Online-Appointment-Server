@@ -8,7 +8,7 @@ exports.checkIfExistsAndSendOTP = async (req, res) => {
   try {
     const result = await User.findUserUsingEmail(req.body.email);
     if (result) {
-      req.session.OTP = sendEmail.sendEmail_Tracking(req.body.email);
+      req.session.OTP = sendEmail.TrackingOTP(req.body.email);
       return sendResponse(res, 200, {
         exist: true,
         user_ID: result.user_ID,

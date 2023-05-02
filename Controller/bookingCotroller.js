@@ -15,7 +15,7 @@ exports.sendOTP = async (req, res) => {
       userResults.patient_List = patient_List.rows;
       userResults.hasHistory = true;
     }
-    req.session.OTP = sendEmail.sendEmail_Tracking(req.query.email);
+    req.session.OTP = sendEmail.BookingOTP(req.query.email);
     return sendResponse(res, 200, { data: userResults });
   } catch (error) {
     return sendResponse(res, 500, error);
