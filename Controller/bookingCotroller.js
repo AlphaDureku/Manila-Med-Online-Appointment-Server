@@ -1,7 +1,9 @@
 const sendResponse = require("../utils/sendResponse");
 const User = require("../Models/database_query/user_queries");
 const sendEmail = require("../utils/sendEmail");
-
+const {
+  getOneDoctorCalendar,
+} = require("../Models/database_query/doctor_queries");
 exports.sendOTP = async (req, res) => {
   try {
     const userResults = {
@@ -29,6 +31,17 @@ exports.verifyOTP = async (req, res) => {
     }
     return sendResponse(res, 200, { isVerified: false });
   } catch (error) {
+    return sendResponse(res, 500, error);
+  }
+};
+
+exports.getOneDoctorCalendar = async (req, res) => {
+  const { doctor_ID } = req.query;
+  try {
+    const result = await getOneDoctorCalendar(doctor_ID);
+    return sendResponse(res, 200, result);
+  } catch (error) {
+    console.log(error);
     return sendResponse(res, 500, error);
   }
 };

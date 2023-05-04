@@ -375,3 +375,38 @@ exports.getSchedule_Using_All = async function (searchOption) {
     ],
   });
 };
+
+exports.getOneDoctorCalendar = async function (doctor_ID) {
+  return await model.doctor.findAll({
+    raw: true,
+    attributes: [
+      "doctor_ID",
+      [
+        Sequelize.fn(
+          "date_format",
+          Sequelize.col("doctor_schedule_date"),
+          "%b %e, %Y"
+        ),
+        "date",
+      ],
+      [
+        Sequelize.fn(
+          "date_format",
+          Sequelize.col("doctor_schedule_date"),
+          "%Y-%m-%d"
+        ),
+        "date2",
+      ],
+      [Sequelize.col("doctor_schedule_start_time"), "start"],
+      [Sequelize.col("doctor_schedule_end_time"), "end"],
+    ],
+    include: [
+      {
+        model: model.doctor_schedule_table,
+        required: true,
+        attributes: [],
+      },
+    ],
+    where: { doctor_ID: doctor_ID },
+  });
+};
