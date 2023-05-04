@@ -381,24 +381,26 @@ exports.getOneDoctorCalendar = async function (doctor_ID) {
     raw: true,
     attributes: [
       "doctor_ID",
-      [
-        Sequelize.fn(
-          "date_format",
-          Sequelize.col("doctor_schedule_date"),
-          "%b %e, %Y"
-        ),
-        "date",
-      ],
+      // [
+      //   Sequelize.fn(
+      //     "date_format",
+      //     Sequelize.col("doctor_schedule_date"),
+      //     "%b %e, %Y"
+      //   ),
+      //   "date",
+      // ],
       [
         Sequelize.fn(
           "date_format",
           Sequelize.col("doctor_schedule_date"),
           "%Y-%m-%d"
         ),
-        "date2",
+        "date",
       ],
       [Sequelize.col("doctor_schedule_start_time"), "start"],
       [Sequelize.col("doctor_schedule_end_time"), "end"],
+      [Sequelize.col("doctor_schedule_current_queue"), "queue"],
+      [Sequelize.col("doctor_schedule_Interval"), "time_interval"],
     ],
     include: [
       {

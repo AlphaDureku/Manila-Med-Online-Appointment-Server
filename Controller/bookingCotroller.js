@@ -42,6 +42,15 @@ exports.getOneDoctorCalendar = async (req, res) => {
     return sendResponse(res, 200, result);
   } catch (error) {
     console.log(error);
+    return sendResponse(res, 500, "inavalid property name");
+  }
+};
+
+exports.setAppointment = async (req, res) => {
+  const { appointmentDetails } = req.body;
+  try {
+  } catch (error) {
+    console.log(error);
     return sendResponse(res, 500, error);
   }
 };

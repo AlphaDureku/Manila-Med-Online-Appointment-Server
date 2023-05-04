@@ -8,5 +8,6 @@ const bookingController = require("../Controller/bookingCotroller");
 router.get("/send-otp", bookingController.sendOTP);
 router.get("/verifyOTP", bookingController.verifyOTP);
 router.get("/doctor-calendar", bookingController.getOneDoctorCalendar);
+router.post("/set-appointment");
 
 module.exports = router;
