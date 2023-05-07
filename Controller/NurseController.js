@@ -34,6 +34,7 @@ exports.dashboard = async (req, res) => {
   try {
     const nurse = await Nurse.findNurseUsingID(Nurse_ID);
     const doctor = await Nurse.findDoctors(Nurse_ID);
+    console.log(doctor);
     if (doctor) {
       //Doctor only at index 0
       req.session.doctor_ID = doctor.at(0).doctor_ID;

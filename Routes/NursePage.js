@@ -8,7 +8,7 @@ router.get("/nurse-dashboard", jwtMiddleware, NurseController.dashboard);
 router.get("/change-doctor", jwtMiddleware, NurseController.changeDoctor);
 router.get("/change-dateRange", jwtMiddleware, NurseController.changeDateRange);
 router.get(
-  "/appointments-withdate",
+  "/appointments-ThatDay",
   jwtMiddleware,
   NurseController.confirmedAppointmentsThatDay
 );

@@ -191,7 +191,7 @@ exports.getAppointmentsThatDate = async function (doctor_ID, date) {
         Sequelize.fn(
           "date_format",
           Sequelize.col("doctor_schedule_date"),
-          "%m/%d/%Y"
+          "%M %e, %Y"
         ),
         "appointmentDate",
       ],
