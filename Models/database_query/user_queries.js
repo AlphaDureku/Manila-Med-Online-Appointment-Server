@@ -1,5 +1,6 @@
 const Sequelize = require("sequelize");
 const model = require("../models");
+const uuid = require("uuid");
 
 //For User Validation
 exports.findUserUsingEmail = async function (email) {
@@ -158,4 +159,13 @@ exports.updatePatientInfo = async function (patientModel) {
       },
     }
   );
+};
+
+exports.insertUser = async function (email) {
+  const userModel = {
+    user_ID: "USER-" + uuid.v4(),
+    user_email: email,
+  };
+  const newUser = await model.user.create(userModel);
+  return userModel;
 };

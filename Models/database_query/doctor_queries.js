@@ -412,3 +412,10 @@ exports.getOneDoctorCalendar = async function (doctor_ID) {
     where: { doctor_ID: doctor_ID },
   });
 };
+
+exports.getQueueInstance = async function (doctor_schedule_ID) {
+  const instance = await model.doctor_schedule_table.findByPk(
+    doctor_schedule_ID
+  );
+  return await instance.get("doctor_schedule_current_queue");
+};
