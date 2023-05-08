@@ -48,7 +48,18 @@ exports.getOneDoctorCalendar = async (req, res) => {
   }
 };
 
-// exports.getPatientDetails = async(req, res);
+exports.getOnePatientDetails = async (req, res) => {
+  const { patient_ID } = req.query;
+  try {
+    const patient_info = await User.fetch_Patient_Info_Using_Patient_ID(
+      patient_ID
+    );
+    sendResponse(res, 200, patient_info);
+  } catch (error) {
+    console.log(error);
+    sendResponse(res, 500, error);
+  }
+};
 
 exports.setAppointment = async (req, res) => {
   const { doctor_schedule_id, email, patient_ID, queue } =
@@ -58,6 +69,7 @@ exports.setAppointment = async (req, res) => {
     patient_middle_name,
     patient_last_name,
     age,
+    contact_number,
     address,
     dateOfBirth,
     gender,
@@ -83,6 +95,7 @@ exports.setAppointment = async (req, res) => {
           patient_first_name: patient_first_name,
           patient_middle_name: patient_middle_name,
           patient_last_name: patient_last_name,
+          contact_number,
           age: age,
           dateOfBirth: dateOfBirth,
           address: address,
@@ -102,6 +115,7 @@ exports.setAppointment = async (req, res) => {
         patient_first_name: patient_first_name,
         patient_middle_name: patient_middle_name,
         patient_last_name: patient_last_name,
+        contact_number,
         age: age,
         dateOfBirth: dateOfBirth,
         address: address,
