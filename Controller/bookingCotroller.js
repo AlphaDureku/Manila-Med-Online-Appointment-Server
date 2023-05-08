@@ -4,8 +4,8 @@ const sendEmail = require("../utils/sendEmail");
 const {
   getOneDoctorCalendar,
   getQueueInstance,
+  incrementQueue,
 } = require("../Models/database_query/doctor_queries");
-const { fetchPatientInfo_Using_Patient_ID } = require("./UserController");
 exports.sendOTP = async (req, res) => {
   try {
     const userResults = {
@@ -62,8 +62,7 @@ exports.getOnePatientDetails = async (req, res) => {
 };
 
 exports.setAppointment = async (req, res) => {
-  const { doctor_schedule_id, email, patient_ID, queue } =
-    req.body.appointmentDetails;
+  const { schedule_ID, email, patient_ID } = req.body.appointmentDetails;
   const {
     patient_first_name,
     patient_middle_name,
@@ -75,22 +74,21 @@ exports.setAppointment = async (req, res) => {
     gender,
   } = req.body.appointmentDetails.patient_info;
   try {
-    console.log(patient_ID);
-    // const queue_number = await getQueueInstance(doctor_schedule_id);
-
     let user_ID = await User.findUserUsingEmail(email);
-    console.log(user_ID);
+    const queue_number = await getQueueInstance(schedule_ID);
+    let prepareAppointmentDetails = {};
     if (user_ID !== null) {
       if (patient_ID) {
-        const prepareAppointmentDetails =
+        prepareAppointmentDetails =
           await User.fetch_Patient_Info_Using_Patient_ID(patient_ID);
-        prepareAppointmentDetails["queue"] = queue;
+        prepareAppointmentDetails["queue"] = queue_number;
+        incrementQueue(schedule_ID);
         return sendResponse(res, 200, {
           prepareAppointmentDetails,
           message: "userExist but old patient",
         });
       } else {
-        const prepareAppointmentDetails = {
+        prepareAppointmentDetails = {
           user_ID: user_ID,
           patient_first_name: patient_first_name,
           patient_middle_name: patient_middle_name,
@@ -100,9 +98,10 @@ exports.setAppointment = async (req, res) => {
           dateOfBirth: dateOfBirth,
           address: address,
           gender: gender,
-          doctor_schedule_id: doctor_schedule_id,
-          queue: queue,
+          schedule_ID: schedule_ID,
+          queue: queue_number,
         };
+        incrementQueue(schedule_ID);
         return sendResponse(res, 200, {
           prepareAppointmentDetails,
           message: "userExist but new patient",
@@ -110,7 +109,7 @@ exports.setAppointment = async (req, res) => {
       }
     } else {
       user_ID = await User.insertUser(email);
-      const prepareAppointmentDetails = {
+      prepareAppointmentDetails = {
         user_ID: user_ID.user_ID,
         patient_first_name: patient_first_name,
         patient_middle_name: patient_middle_name,
@@ -120,9 +119,10 @@ exports.setAppointment = async (req, res) => {
         dateOfBirth: dateOfBirth,
         address: address,
         gender: gender,
-        doctor_schedule_id: doctor_schedule_id,
-        queue: queue,
+        schedule_ID: schedule_ID,
+        queue: queue_number,
       };
+      incrementQueue(schedule_ID);
       return sendResponse(res, 200, {
         prepareAppointmentDetails,
         message: "new User so new patient",

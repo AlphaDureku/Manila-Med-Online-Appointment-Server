@@ -84,14 +84,23 @@ exports.editPatientInfo_Using_Patient_ID = async (req, res) => {
 };
 
 exports.updatePatientInfo = async (req, res) => {
+  const {
+    Patient_ID,
+    patient_first_name,
+    patient_middle_name,
+    patient_last_name,
+    dateOfBirth,
+    patient_address,
+    patient_contact_number,
+  } = req.body;
   let patientModel = {
-    patient_ID: req.body.Patient_ID,
-    Fname: req.body.info.patient_first_name,
-    Mname: req.body.info.patient_middle_name,
-    Lname: req.body.info.patient_last_name,
-    birth: req.body.info.dateOfBirth,
-    address: req.body.info.patient_address,
-    contact: req.body.info.patient_contact_number,
+    patient_ID: Patient_ID,
+    Fname: patient_first_name,
+    Mname: patient_middle_name,
+    Lname: patient_last_name,
+    birth: dateOfBirth,
+    address: patient_address,
+    contact: patient_contact_number,
   };
   console.log(patientModel);
   await User.updatePatientInfo(patientModel);

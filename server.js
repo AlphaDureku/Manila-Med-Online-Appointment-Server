@@ -30,10 +30,12 @@ const indexRouter = require("./Routes/index");
 const tracking = require("./Routes/tracking");
 const booking = require("./Routes/booking");
 const admin = require("./Routes/NursePage");
+const headAdmin = require("./Routes/headAdminPage");
 
 app.use("/", indexRouter);
 app.use("/user", tracking);
 app.use("/booking", booking);
 app.use("/admin", admin);
+app.use("/head-admin", headAdmin);
 
 app.listen(process.env.PORT || 4000);

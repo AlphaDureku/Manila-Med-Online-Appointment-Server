@@ -248,6 +248,10 @@ exports.getAppointmentsThatDate = async function (doctor_ID, date) {
   });
 };
 
+exports.insertDoctorAvailability = async function (schedule_tableModel) {
+  return await model.doctor_schedule_table.create(schedule_tableModel);
+};
+
 //Still havent implemented yet
 
 exports.getContactUsingApp_ID = async function (ID) {

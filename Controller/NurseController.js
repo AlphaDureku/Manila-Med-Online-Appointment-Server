@@ -5,10 +5,11 @@ const Nurse = require("../Models/database_query/nurse_queries");
 const jwt = require("jsonwebtoken");
 const { Day, Week, Year, Month } = require("../utils/DateObjects");
 const { NotifyPatients } = require("../utils/sendSMS");
+const uuid = require("uuid");
 
 exports.login = async (req, res) => {
+  const { username, password } = req.body;
   try {
-    const { username, password } = req.body;
     const result = await Nurse.findNurse(username);
     if (!result) {
       return sendResponse(res, 200, false);
@@ -170,7 +171,7 @@ exports.confirmedAppointmentsThatDay = async (req, res) => {
   }
 };
 
-exports.notifyPatients = async (req, res) => {
+exports.notifyPatientsForToday = async (req, res) => {
   const { doctor_ID } = req.session;
   const { date } = req.body;
   try {
@@ -182,5 +183,26 @@ exports.notifyPatients = async (req, res) => {
   } catch (error) {
     console.log(error);
     sendResponse(res, 500, "internal error");
+  }
+};
+
+exports.addDoctorAvailability = async (req, res) => {
+  const { date, startTime, endTime, intervalTime, maxPatient } = req.body;
+  const schedule_tableModel = {
+    doctor_schedule_ID: "SCHED - " + uuid.v4(),
+    doctor_ID: req.session.doctor_ID,
+    doctor_schedule_date: date,
+    doctor_schedule_start_time: startTime,
+    doctor_schedule_end_time: endTime,
+    doctor_schedule_Interval: intervalTime,
+    doctor_schedule_max_patient: maxPatient,
+  };
+
+  try {
+    const result = await Nurse.insertDoctorAvailability(schedule_tableModel);
+    sendResponse(res, 200, result);
+  } catch (error) {
+    console.log(error);
+    sendResponse(res, 500, error);
   }
 };

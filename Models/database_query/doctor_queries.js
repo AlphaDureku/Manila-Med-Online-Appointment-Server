@@ -412,3 +412,24 @@ exports.getQueueInstance = async function (doctor_schedule_ID) {
   );
   return await instance.get("doctor_schedule_current_queue");
 };
+
+exports.incrementQueue = async function (doctor_schedule_ID) {
+  await model.doctor_schedule_table.increment("doctor_schedule_current_queue", {
+    returning: true,
+    by: 1,
+    where: { doctor_schedule_ID: doctor_schedule_ID },
+  });
+  await model.doctor_schedule_table.update(
+    {
+      doctor_schedule_status: "Unavailable",
+    },
+    {
+      where: {
+        doctor_schedule_ID: doctor_schedule_ID,
+        doctor_schedule_max_patient: {
+          [Sequelize.Op.lt]: Sequelize.col("doctor_schedule_current_queue"),
+        },
+      },
+    }
+  );
+};
