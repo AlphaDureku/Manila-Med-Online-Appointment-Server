@@ -53,6 +53,7 @@ exports.getDoctorsWithNurse = async function () {
     include: [
       {
         model: model.doctor_Secretary,
+        attributes: [],
       },
     ],
     where: {
