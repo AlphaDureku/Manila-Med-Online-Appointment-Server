@@ -51,18 +51,11 @@ const doctorSchedInclude = [
     model: model.doctor_schedule_table,
     required: true,
     attributes: [],
-    where: {
-      [Sequelize.Op.and]: [
-        {
-          doctor_schedule_status: "available",
-        },
-        {
-          doctor_schedule_date: {
-            [Sequelize.Op.gt]: new Date(),
-          },
-        },
-      ],
-    },
+    where: [
+      {
+        doctor_schedule_status: "available",
+      },
+    ],
   },
 ];
 
