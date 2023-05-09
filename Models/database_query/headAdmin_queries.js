@@ -71,3 +71,33 @@ exports.getNurses = async function () {
     order: [["doctor_Secretary_first_name", "asc"]],
   });
 };
+
+exports.addDoctor = async function (doctorModel, hmo_ID) {
+  const newDoctor = await model.doctor.create(doctorModel);
+  const HMO = await model.HMO.findByPk(hmo_ID);
+  await HMO.addDoctor(newDoctor);
+};
+
+exports.removeDoctor = async function (doctorModel, hmo_ID) {
+  await model.doctor.destroy({
+    where: {
+      doctor_ID: doctor_ID,
+    },
+  });
+};
+exports.addNurse = async function (nurseModel) {
+  await model.doctor_Secretary.create(nurseModel);
+};
+
+exports.matchDoctorNurse = async function (doctor_ID, nurse_ID) {
+  await model.doctor.update(
+    {
+      doctorSecretaryDoctorSecretaryID: nurse_ID,
+    },
+    {
+      where: {
+        doctor_ID: doctor_ID,
+      },
+    }
+  );
+};

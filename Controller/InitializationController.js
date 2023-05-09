@@ -7,7 +7,7 @@ exports.api = async (req, res) => {
     let result = await Doctor.getDoctor();
     return sendResponse(res, 200, result);
   } catch (error) {
-    return sendResponse(res, 500, error);
+    return sendResponse(res, 500, error.message);
   }
 };
 
@@ -17,6 +17,6 @@ exports.initialize = async (req, res) => {
     const hmo = await Initialize.setup_HMO();
     return sendResponse(res, 200, { specialization: specialization, hmo: hmo });
   } catch (error) {
-    return sendResponse(res, 500, error);
+    return sendResponse(res, 500, error.message);
   }
 };

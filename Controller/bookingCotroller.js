@@ -22,7 +22,7 @@ exports.sendOTP = async (req, res) => {
     req.session.OTP = sendEmail.BookingOTP(req.query.email);
     return sendResponse(res, 200, { data: userResults });
   } catch (error) {
-    return sendResponse(res, 500, error);
+    return sendResponse(res, 500, error.message);
   }
 };
 
@@ -33,7 +33,7 @@ exports.verifyOTP = async (req, res) => {
     }
     return sendResponse(res, 200, { isVerified: false });
   } catch (error) {
-    return sendResponse(res, 500, error);
+    return sendResponse(res, 500, error.message);
   }
 };
 
@@ -44,7 +44,7 @@ exports.getOneDoctorCalendar = async (req, res) => {
     return sendResponse(res, 200, result);
   } catch (error) {
     console.log(error);
-    return sendResponse(res, 500, error);
+    return sendResponse(res, 500, error.message);
   }
 };
 
@@ -57,7 +57,7 @@ exports.getOnePatientDetails = async (req, res) => {
     sendResponse(res, 200, patient_info);
   } catch (error) {
     console.log(error);
-    sendResponse(res, 500, error);
+    return sendResponse(res, 500, error.message);
   }
 };
 
@@ -130,6 +130,6 @@ exports.setAppointment = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    return sendResponse(res, 500, error);
+    return sendResponse(res, 500, error.message);
   }
 };

@@ -5,5 +5,8 @@ const jwtMiddleware = require("../utils/JWTHandler");
 
 router.post("/login", HeadAdmin.login);
 router.get("/dashboard", jwtMiddleware, HeadAdmin.dashboard);
+router.post("/add-doctor", jwtMiddleware, HeadAdmin.addDoctor);
+router.post("/add-nurse", jwtMiddleware, HeadAdmin.addNurse);
+router.post("/match-doctor", jwtMiddleware, HeadAdmin.matchDoctorNurse);
 
 module.exports = router;

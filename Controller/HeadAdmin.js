@@ -1,8 +1,9 @@
 const HeadAdmin = require("../Models/database_query/headAdmin_queries");
 const sendResponse = require("../utils/sendResponse");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Initialize = require("../Models/database_query/intialize_queries");
+const uuid = require("uuid");
+const { hashSomething, unHashSomething } = require("../utils/Bcrypt");
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
@@ -11,7 +12,7 @@ exports.login = async (req, res) => {
     if (!result) {
       return sendResponse(res, 200, false);
     }
-    if (await bcrypt.compare(password, result.head_Manager_password)) {
+    if (unHashSomething(password, result.head_Manager_password)) {
       const head_Manager_ID = result.head_Manager_ID;
       const token = jwt.sign({ head_Manager_ID }, process.env.JWT_SECRET, {
         expiresIn: "10d",
@@ -22,7 +23,7 @@ exports.login = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    sendResponse(res, 500, error);
+    return sendResponse(res, 500, error.message);
   }
 };
 
@@ -44,6 +45,71 @@ exports.dashboard = async (req, res) => {
     return;
   } catch (error) {
     console.log(error);
-    sendResponse(res, 500, err);
+    return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.addDoctor = async (req, res) => {
+  try {
+    const {
+      Fname,
+      Lname,
+      gender,
+      email,
+      contact,
+      room,
+      specialization_ID,
+      hmo_ID,
+    } = req.body;
+
+    let doctorModel = {
+      doctor_ID: "MCM-" + uuid.v4(),
+      doctor_first_name: Fname,
+      doctor_last_name: Lname,
+      doctor_email: email,
+      doctor_gender: gender,
+      doctor_contact_number: contact,
+      doctor_room: room,
+      doctorSpecializationSpecializationID: specialization_ID,
+    };
+
+    await HeadAdmin.addDoctor(doctorModel, hmo_ID);
+    sendResponse(res, 200, true);
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.deleteDoctor = async (req, res) => {
+  await HeadAdmin.removeDoctor(req.body.doctor_ID);
+};
+
+exports.addNurse = async (req, res) => {
+  try {
+    const { username, password, Fname, Lname } = req.body;
+    const nurseModel = {
+      doctor_Secretary_ID: "NURSE-" + uuid.v4(),
+      doctor_Secretary_username: username,
+      doctor_Secretary_password: await hashSomething(password),
+      doctor_Secretary_first_name: Fname,
+      doctor_Secretary_last_name: Lname,
+    };
+    await HeadAdmin.addNurse(nurseModel);
+    sendResponse(res, 200, true);
+  } catch (error) {
+    console.log(error);
+    sendResponse(res, 400, error.message);
+  }
+};
+
+exports.matchDoctorNurse = async (req, res) => {
+  const { doctor_ID, nurse_ID } = req.body;
+  try {
+    await HeadAdmin.matchDoctorNurse(doctor_ID, nurse_ID);
+    sendResponse(res, 200, true);
+  } catch (error) {
+    console.log(error.message);
+    sendResponse(res, 400, error.message);
   }
 };

@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const { Day, Week, Year, Month } = require("../utils/DateObjects");
 const { NotifyPatients } = require("../utils/sendSMS");
 const uuid = require("uuid");
+const { unHashSomething } = require("../utils/Bcrypt");
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
@@ -14,7 +15,7 @@ exports.login = async (req, res) => {
     if (!result) {
       return sendResponse(res, 200, false);
     }
-    if (await bcrypt.compare(password, result.doctor_Secretary_password)) {
+    if (await unHashSomething(password, result.doctor_Secretary_password)) {
       Nurse_ID = result.doctor_Secretary_ID;
       //Prepare token for nurse login
       const token = jwt.sign({ Nurse_ID }, process.env.JWT_SECRET, {
@@ -25,7 +26,7 @@ exports.login = async (req, res) => {
       return sendResponse(res, 200, false);
     }
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 };
 
@@ -35,8 +36,7 @@ exports.dashboard = async (req, res) => {
   try {
     const nurse = await Nurse.findNurseUsingID(Nurse_ID);
     const doctor = await Nurse.findDoctors(Nurse_ID);
-    console.log(doctor);
-    if (doctor) {
+    if (doctor.length > 0) {
       //Doctor only at index 0
       req.session.doctor_ID = doctor.at(0).doctor_ID;
       const calendar = await Nurse.getDoctorCalendar(doctor.at(0).doctor_ID);
@@ -56,7 +56,7 @@ exports.dashboard = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return sendResponse(res, 500, "internal error");
+    return sendResponse(res, 500, error.message);
   }
 };
 
@@ -75,7 +75,7 @@ exports.changeDoctor = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return sendResponse(res, 500, "internal error");
+    return sendResponse(res, 500, error.message);
   }
 };
 
@@ -104,6 +104,7 @@ exports.changeDateRange = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    return sendResponse(res, 500, error.message);
   }
 };
 
@@ -122,7 +123,7 @@ exports.searchAppointments = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return sendResponse(res, 500, "internal error");
+    return sendResponse(res, 500, error.message);
   }
 };
 
@@ -155,7 +156,7 @@ exports.updateAppointmentStatus = async (req, res) => {
     return sendResponse(res, 200, "success");
   } catch (error) {
     console.log(error);
-    return sendResponse(res, 500, "internal error");
+    return sendResponse(res, 500, error.message);
   }
 };
 
@@ -167,7 +168,7 @@ exports.confirmedAppointmentsThatDay = async (req, res) => {
     return sendResponse(res, 200, appointments);
   } catch (error) {
     console.log(error);
-    sendResponse(res, 500, "internal error");
+    return sendResponse(res, 500, error.message);
   }
 };
 
@@ -182,7 +183,7 @@ exports.notifyPatientsForToday = async (req, res) => {
     return sendResponse(res, 200, "success");
   } catch (error) {
     console.log(error);
-    sendResponse(res, 500, "internal error");
+    return sendResponse(res, 500, error.message);
   }
 };
 
@@ -197,12 +198,11 @@ exports.addDoctorAvailability = async (req, res) => {
     doctor_schedule_Interval: intervalTime,
     doctor_schedule_max_patient: maxPatient,
   };
-
   try {
     const result = await Nurse.insertDoctorAvailability(schedule_tableModel);
     sendResponse(res, 200, result);
   } catch (error) {
     console.log(error);
-    sendResponse(res, 500, error);
+    return sendResponse(res, 500, error.message);
   }
 };

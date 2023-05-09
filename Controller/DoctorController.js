@@ -71,6 +71,6 @@ exports.searchDoctor = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    return sendResponse(res, 500, error);
+    return sendResponse(res, 500, error.message);
   }
 };

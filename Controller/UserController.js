@@ -5,8 +5,8 @@ const jwt = require("jsonwebtoken");
 /*****Home******/
 /* User Validation*/
 exports.checkIfExistsAndSendOTP = async (req, res) => {
+  const result = await User.findUserUsingEmail(req.body.email);
   try {
-    const result = await User.findUserUsingEmail(req.body.email);
     if (result) {
       req.session.OTP = sendEmail.TrackingOTP(req.body.email);
       return sendResponse(res, 200, {
@@ -16,8 +16,8 @@ exports.checkIfExistsAndSendOTP = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    return sendResponse(res, 500, error.message);
   }
-
   return sendResponse(res, 200, { exist: false });
 };
 /*Verify input OTP*/
@@ -47,7 +47,7 @@ exports.getUser_Patients = async (req, res) => {
       patientList: result.rows,
     });
   } catch (error) {
-    sendResponse(res, 500, error);
+    return sendResponse(res, 500, error.message);
   }
 };
 exports.fetchPatient_Appointments_Using_Patient_ID = async (req, res) => {
@@ -58,7 +58,7 @@ exports.fetchPatient_Appointments_Using_Patient_ID = async (req, res) => {
 
     return sendResponse(res, 200, result);
   } catch (error) {
-    sendResponse(res, 500, error);
+    return sendResponse(res, 500, error.message);
   }
 };
 
@@ -70,7 +70,7 @@ exports.fetchPatientInfo_Using_Patient_ID = async (req, res) => {
     );
     return sendResponse(res, 200, result);
   } catch (error) {
-    return sendResponse(res, 500, error);
+    return sendResponse(res, 500, error.message);
   }
 };
 
@@ -79,20 +79,20 @@ exports.editPatientInfo_Using_Patient_ID = async (req, res) => {
     await User.fetch_Patient_Info_Using_Patient_ID(req.body.Patient_ID);
     return;
   } catch (error) {
-    return sendResponse(res, 500, error);
+    return sendResponse(res, 500, error.message);
   }
 };
 
 exports.updatePatientInfo = async (req, res) => {
+  const { Patient_ID } = req.body;
   const {
-    Patient_ID,
     patient_first_name,
     patient_middle_name,
     patient_last_name,
     dateOfBirth,
     patient_address,
     patient_contact_number,
-  } = req.body;
+  } = req.body.info;
   let patientModel = {
     patient_ID: Patient_ID,
     Fname: patient_first_name,
@@ -103,6 +103,9 @@ exports.updatePatientInfo = async (req, res) => {
     contact: patient_contact_number,
   };
   console.log(patientModel);
-  await User.updatePatientInfo(patientModel);
-  return;
+  try {
+    await User.updatePatientInfo(patientModel);
+  } catch (error) {
+    return sendResponse(res, 500, error.message);
+  }
 };
