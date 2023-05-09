@@ -390,6 +390,7 @@ exports.getOneDoctorCalendar = async function (doctor_ID) {
         ),
         "date",
       ],
+      [Sequelize.col("doctor_schedule_ID"), "schedule_ID"],
       [Sequelize.col("doctor_schedule_start_time"), "start"],
       [Sequelize.col("doctor_schedule_end_time"), "end"],
       [Sequelize.col("doctor_schedule_current_queue"), "queue"],
