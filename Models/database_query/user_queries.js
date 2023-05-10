@@ -123,6 +123,7 @@ exports.fetch_Patient_Info_Using_Patient_ID = async function (patient_ID) {
       patient_ID: patient_ID,
     },
     attributes: [
+      "user_ID",
       "patient_first_name",
       "patient_last_name",
       "patient_middle_name",
@@ -173,4 +174,12 @@ exports.insertUser = async function (email) {
   };
   const newUser = await model.user.create(userModel);
   return userModel;
+};
+
+exports.insertPatient = async function (patientModel) {
+  return await model.patient.create(patientModel);
+};
+
+exports.insertAppointment = async function (appointmentDetailsModel) {
+  await model.appointmentDetails.create(appointmentDetailsModel);
 };

@@ -1,4 +1,5 @@
 const sendResponse = require("../utils/sendResponse");
+const uuid = require("uuid");
 const User = require("../Models/database_query/user_queries");
 const sendEmail = require("../utils/sendEmail");
 const {
@@ -62,69 +63,46 @@ exports.getOnePatientDetails = async (req, res) => {
 };
 
 exports.setAppointment = async (req, res) => {
-  const { schedule_ID, email, patient_ID } = req.body.appointmentDetails;
-  const {
-    patient_first_name,
-    patient_middle_name,
-    patient_last_name,
-    age,
-    contact_number,
-    address,
-    dateOfBirth,
-    gender,
-  } = req.body.appointmentDetails.patient_info;
+  const { schedule_ID, email, patient_ID, doctor_ID, recomTime } =
+    req.body.appointmentDetails;
   try {
     let user_ID = await User.findUserUsingEmail(email);
     const queue_number = await getQueueInstance(schedule_ID);
-    let prepareAppointmentDetails = {};
     if (user_ID !== null) {
       if (patient_ID) {
-        prepareAppointmentDetails =
-          await User.fetch_Patient_Info_Using_Patient_ID(patient_ID);
-        prepareAppointmentDetails["queue"] = queue_number;
-        incrementQueue(schedule_ID);
+        const appointmentDetailsModel = {
+          appointment_ID: "APP-" + uuid.v4(),
+          patient_ID: patient_ID,
+          doctor_schedule_ID: schedule_ID,
+          doctor_ID: doctor_ID,
+          appointment_start: recomTime,
+          appointment_queue: queue_number,
+        };
+        await User.insertAppointment(appointmentDetailsModel);
+        await incrementQueue(schedule_ID);
+
         return sendResponse(res, 200, {
-          prepareAppointmentDetails,
           message: "userExist but old patient",
         });
       } else {
-        prepareAppointmentDetails = {
-          user_ID: user_ID,
-          patient_first_name: patient_first_name,
-          patient_middle_name: patient_middle_name,
-          patient_last_name: patient_last_name,
-          contact_number,
-          age: age,
-          dateOfBirth: dateOfBirth,
-          address: address,
-          gender: gender,
-          schedule_ID: schedule_ID,
-          queue: queue_number,
-        };
-        incrementQueue(schedule_ID);
+        preparePatientAndAppointment(
+          req.body.appointmentDetails,
+          user_ID,
+          queue_number
+        );
         return sendResponse(res, 200, {
-          prepareAppointmentDetails,
           message: "userExist but new patient",
         });
       }
     } else {
       user_ID = await User.insertUser(email);
-      prepareAppointmentDetails = {
-        user_ID: user_ID.user_ID,
-        patient_first_name: patient_first_name,
-        patient_middle_name: patient_middle_name,
-        patient_last_name: patient_last_name,
-        contact_number,
-        age: age,
-        dateOfBirth: dateOfBirth,
-        address: address,
-        gender: gender,
-        schedule_ID: schedule_ID,
-        queue: queue_number,
-      };
-      incrementQueue(schedule_ID);
+      preparePatientAndAppointment(
+        req.body.appointmentDetails,
+        user_ID,
+        queue_number
+      );
+
       return sendResponse(res, 200, {
-        prepareAppointmentDetails,
         message: "new User so new patient",
       });
     }
@@ -132,4 +110,34 @@ exports.setAppointment = async (req, res) => {
     console.log(error);
     return sendResponse(res, 500, error.message);
   }
+};
+
+const preparePatientAndAppointment = async (
+  appointmentDetails,
+  user_ID,
+  queue_number
+) => {
+  const { patient_info } = appointmentDetails;
+  const patientModel = {
+    patient_ID: "PATIENT-" + uuid.v4(),
+    user_ID: user_ID.user_ID,
+    patient_first_name: patient_info.patient_first_name,
+    patient_middle_name: patient_info.patient_middle_name,
+    patient_last_name: patient_info.patient_last_name,
+    patient_contact_number: patient_info.contact_number,
+    patient_dateOfBirth: patient_info.dateOfBirth,
+    patient_address: patient_info.address,
+    patient_gender: patient_info.gender,
+  };
+  const appointmentDetailsModel = {
+    appointment_ID: "APP-" + uuid.v4(),
+    patient_ID: patientModel.patient_ID,
+    doctor_schedule_ID: appointmentDetails.schedule_ID,
+    doctor_ID: appointmentDetails.doctor_ID,
+    appointment_start: appointmentDetails.recomTime,
+    appointment_queue: queue_number,
+  };
+  await User.insertPatient(patientModel);
+  await User.insertAppointment(appointmentDetailsModel);
+  await incrementQueue(appointmentDetails.schedule_ID);
 };
