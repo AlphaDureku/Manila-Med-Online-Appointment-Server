@@ -2,6 +2,10 @@ const sendResponse = require("../utils/sendResponse");
 const User = require("../Models/database_query/user_queries");
 const sendEmail = require("../utils/sendEmail");
 const jwt = require("jsonwebtoken");
+const {
+  updateAppointmentStatus,
+} = require("../Models/database_query/nurse_queries");
+
 /*****Home******/
 /* User Validation*/
 exports.checkIfExistsAndSendOTP = async (req, res) => {
@@ -106,6 +110,18 @@ exports.updatePatientInfo = async (req, res) => {
   try {
     await User.updatePatientInfo(patientModel);
   } catch (error) {
+    return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.cancelAppointment = async (req, res) => {
+  const { appointment_ID } = req.body;
+  console.log(req.body);
+  try {
+    await updateAppointmentStatus("Cancelled", appointment_ID);
+    return sendResponse(res, 200, "success");
+  } catch (error) {
+    console.log(error);
     return sendResponse(res, 500, error.message);
   }
 };

@@ -16,5 +16,10 @@ router.get(
   userController.fetchPatientInfo_Using_Patient_ID
 );
 router.post("/edit-patient", jwtMiddleware, userController.updatePatientInfo);
+router.post(
+  "/cancel-appointment",
+  jwtMiddleware,
+  userController.cancelAppointment
+);
 
 module.exports = router;
