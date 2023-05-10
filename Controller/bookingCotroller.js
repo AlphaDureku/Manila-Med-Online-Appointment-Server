@@ -63,7 +63,7 @@ exports.getOnePatientDetails = async (req, res) => {
 };
 
 exports.setAppointment = async (req, res) => {
-  const { schedule_ID, email, patient_ID, doctor_ID, recomTime } =
+  const { schedule_ID, email, patient_ID, doctor_ID, recom_Time } =
     req.body.appointmentDetails;
   try {
     let user_ID = await User.findUserUsingEmail(email);
@@ -75,7 +75,7 @@ exports.setAppointment = async (req, res) => {
           patient_ID: patient_ID,
           doctor_schedule_ID: schedule_ID,
           doctor_ID: doctor_ID,
-          appointment_start: recomTime,
+          appointment_start: recom_Time,
           appointment_queue: queue_number,
         };
         await User.insertAppointment(appointmentDetailsModel);
@@ -134,7 +134,7 @@ const preparePatientAndAppointment = async (
     patient_ID: patientModel.patient_ID,
     doctor_schedule_ID: appointmentDetails.schedule_ID,
     doctor_ID: appointmentDetails.doctor_ID,
-    appointment_start: appointmentDetails.recomTime,
+    appointment_start: appointmentDetails.recom_Time,
     appointment_queue: queue_number,
   };
   await User.insertPatient(patientModel);
