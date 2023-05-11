@@ -28,6 +28,7 @@ exports.getUser_Patients_Using_ID = async function (user_ID) {
     where: {
       user_ID: user_ID,
     },
+    order: [["patient_last_name", "ASC"]],
   });
 };
 
@@ -158,6 +159,7 @@ exports.updatePatientInfo = async function (patientModel) {
       patient_contact_number: patientModel.contact,
       patient_address: patientModel.address,
       patient_dateOfBirth: patientModel.birth,
+      patient_gender: patientModel.gender,
     },
     {
       where: {

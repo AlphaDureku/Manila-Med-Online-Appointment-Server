@@ -116,6 +116,36 @@ exports.setAppointment = async (req, res) => {
   }
 };
 
+exports.updatePatientInfo = async (req, res) => {
+  const { Patient_ID } = req.body;
+  const {
+    firstName,
+    middleName,
+    lastName,
+    dateOfBirth,
+    address,
+    contactNumber,
+    gender,
+  } = req.body.info;
+  let patientModel = {
+    patient_ID: Patient_ID,
+    Fname: firstName,
+    Mname: middleName,
+    Lname: lastName,
+    birth: dateOfBirth,
+    address: address,
+    contact: contactNumber,
+    gender: gender,
+  };
+
+  try {
+    await User.updatePatientInfo(patientModel);
+    return sendResponse(res, 200, "success");
+  } catch (error) {
+    return sendResponse(res, 500, error.message);
+  }
+};
+
 exports.getAppointmentDetails = async (req, res) => {
   const { appointment_ID } = req.query;
 
