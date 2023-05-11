@@ -10,5 +10,5 @@ router.get("/verifyOTP", bookingController.verifyOTP);
 router.get("/doctor-calendar", bookingController.getOneDoctorCalendar);
 router.get("/get-patientInfo", bookingController.getOnePatientDetails);
 router.post("/set-appointment", bookingController.setAppointment);
-
+router.get("/get-appointment", bookingController.getAppointmentDetails);
 module.exports = router;

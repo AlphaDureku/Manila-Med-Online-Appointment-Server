@@ -183,3 +183,32 @@ exports.insertPatient = async function (patientModel) {
 exports.insertAppointment = async function (appointmentDetailsModel) {
   await model.appointmentDetails.create(appointmentDetailsModel);
 };
+
+exports.getAppointmentDetailsUsingAppointmentID = async function (
+  appointmentID
+) {
+  return await model.appointmentDetails.findOne({
+    raw: true,
+    attributes: [
+      [Sequelize.col("appointment_start"), "start"],
+      [Sequelize.col("doctor_first_name"), "Fname"],
+      [Sequelize.col("doctor_last_name"), "Lname"],
+      [Sequelize.col("specialization_Name"), "specialization"],
+    ],
+    where: { appointment_ID: appointmentID },
+
+    include: [
+      {
+        model: model.doctor,
+        attributes: [],
+        required: true,
+        include: [
+          {
+            model: model.doctor_specialization,
+            attributes: [],
+          },
+        ],
+      },
+    ],
+  });
+};

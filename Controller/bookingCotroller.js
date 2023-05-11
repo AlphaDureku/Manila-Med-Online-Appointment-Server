@@ -115,6 +115,15 @@ exports.setAppointment = async (req, res) => {
   }
 };
 
+exports.getAppointmentDetails = async (req, res) => {
+  const { appointment_ID } = req.query;
+
+  const result = await User.getAppointmentDetailsUsingAppointmentID(
+    appointment_ID
+  );
+  sendResponse(res, 200, result);
+};
+
 const preparePatientAndAppointment = async (
   appointmentDetails,
   user_ID,
