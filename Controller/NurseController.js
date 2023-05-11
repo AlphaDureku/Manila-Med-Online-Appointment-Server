@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const { Day, Week, Year, Month } = require("../utils/DateObjects");
 const { NotifyPatients } = require("../utils/sendSMS");
 const uuid = require("uuid");
-const { unHashSomething } = require("../utils/Bcrypt");
+const { unHashSomething, hashSomething } = require("../utils/Bcrypt");
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
@@ -201,6 +201,24 @@ exports.addDoctorAvailability = async (req, res) => {
   try {
     const result = await Nurse.insertDoctorAvailability(schedule_tableModel);
     sendResponse(res, 200, result);
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.updatePassword = async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  const { Nurse_ID } = req.data;
+  try {
+    const { doctor_Secretary_password } =
+      await Nurse.findNurseUsingIDReturnPassword(Nurse_ID);
+    if (await unHashSomething(oldPassword, doctor_Secretary_password)) {
+      await Nurse.updatePassword(await hashSomething(newPassword), Nurse_ID);
+    } else {
+      return sendResponse(res, 200, { message: "Wrong password" });
+    }
+    return sendResponse(res, 200, { message: "Success!" });
   } catch (error) {
     console.log(error);
     return sendResponse(res, 500, error.message);

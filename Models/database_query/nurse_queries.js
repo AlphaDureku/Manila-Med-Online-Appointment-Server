@@ -31,6 +31,16 @@ exports.findNurseUsingID = async function (sec_ID) {
   });
 };
 
+exports.findNurseUsingIDReturnPassword = async function (nurse_ID) {
+  return await model.doctor_Secretary.findOne({
+    raw: true,
+    attributes: ["doctor_Secretary_password"],
+    where: {
+      doctor_Secretary_ID: nurse_ID,
+    },
+  });
+};
+
 exports.findDoctors = async function (sec_ID) {
   return await model.doctor.findAll({
     raw: true,
@@ -252,6 +262,19 @@ exports.insertDoctorAvailability = async function (schedule_tableModel) {
   return await model.doctor_schedule_table.create(schedule_tableModel);
 };
 
+exports.updatePassword = async function (newPassword, nurse_ID) {
+  await model.doctor_Secretary.update(
+    {
+      doctor_Secretary_password: newPassword,
+    },
+    {
+      where: {
+        doctor_Secretary_ID: nurse_ID,
+      },
+    }
+  );
+};
+
 //Still havent implemented yet
 
 exports.getContactUsingApp_ID = async function (ID) {
@@ -279,19 +302,6 @@ exports.updateProfile = async function (params) {
     {
       where: {
         doctor_Secretary_ID: params.ID,
-      },
-    }
-  );
-};
-exports.updatePassword = async function (params) {
-  console.log(params.password);
-  await model.doctor_Secretary.update(
-    {
-      doctor_Secretary_password: params.password,
-    },
-    {
-      where: {
-        doctor_Secretary_ID: params.doctor_Secretary_ID,
       },
     }
   );

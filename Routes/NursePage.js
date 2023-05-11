@@ -32,4 +32,7 @@ router.post(
   jwtMiddleware,
   NurseController.addDoctorAvailability
 );
+
+router.post("/update-password", jwtMiddleware, NurseController.updatePassword);
+
 module.exports = router;

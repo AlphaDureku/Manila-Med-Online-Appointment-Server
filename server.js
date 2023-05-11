@@ -8,10 +8,15 @@ const bodyParser = require("body-parser");
 const errorHandler = require("./utils/errorHandler");
 const session = require("express-session");
 const MemoryStore = require("memorystore")(session);
+const cors = require("cors");
 //const path = require("path");
 
 //app.use(express.static(path.join(__dirname + "/public")));
-
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(
   session({
     secret: process.env.SECRET_KEY,
