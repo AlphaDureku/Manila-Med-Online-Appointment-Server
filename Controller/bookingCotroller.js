@@ -86,19 +86,19 @@ exports.setAppointment = async (req, res) => {
           appointment_ID: appointmentDetailsModel.appointment_ID,
         });
       } else {
-        preparePatientAndAppointment(
+        const appointment_ID = preparePatientAndAppointment(
           req.body.appointmentDetails,
           user_ID,
           queue_number
         );
         return sendResponse(res, 200, {
           message: "userExist but new patient",
-          appointment_ID: appointmentDetailsModel.appointment_ID,
+          appointment_ID: appointment_ID,
         });
       }
     } else {
       user_ID = await User.insertUser(email);
-      preparePatientAndAppointment(
+      const appointment_ID = preparePatientAndAppointment(
         req.body.appointmentDetails,
         user_ID,
         queue_number
@@ -106,7 +106,7 @@ exports.setAppointment = async (req, res) => {
 
       return sendResponse(res, 200, {
         message: "new User so new patient",
-        appointment_ID: appointmentDetailsModel.appointment_ID,
+        appointment_ID: appointment_ID,
       });
     }
   } catch (error) {
@@ -143,4 +143,5 @@ const preparePatientAndAppointment = async (
   await User.insertPatient(patientModel);
   await User.insertAppointment(appointmentDetailsModel);
   await incrementQueue(appointmentDetails.schedule_ID);
+  return appointmentDetails.appointment_ID;
 };
