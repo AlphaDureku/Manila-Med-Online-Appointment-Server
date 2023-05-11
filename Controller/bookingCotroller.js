@@ -86,7 +86,7 @@ exports.setAppointment = async (req, res) => {
           appointment_ID: appointmentDetailsModel.appointment_ID,
         });
       } else {
-        const appointment_ID = preparePatientAndAppointment(
+        const appointment_ID = await preparePatientAndAppointment(
           req.body.appointmentDetails,
           user_ID,
           queue_number
@@ -98,12 +98,13 @@ exports.setAppointment = async (req, res) => {
       }
     } else {
       user_ID = await User.insertUser(email);
-      const appointment_ID = preparePatientAndAppointment(
+
+      const appointment_ID = await preparePatientAndAppointment(
         req.body.appointmentDetails,
         user_ID,
         queue_number
       );
-
+      console.log(appointment_ID);
       return sendResponse(res, 200, {
         message: "new User so new patient",
         appointment_ID: appointment_ID,
@@ -152,5 +153,6 @@ const preparePatientAndAppointment = async (
   await User.insertPatient(patientModel);
   await User.insertAppointment(appointmentDetailsModel);
   await incrementQueue(appointmentDetails.schedule_ID);
-  return appointmentDetails.appointment_ID;
+  console.log(appointmentDetailsModel);
+  return appointmentDetailsModel.appointment_ID;
 };
