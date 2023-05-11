@@ -83,6 +83,7 @@ exports.setAppointment = async (req, res) => {
 
         return sendResponse(res, 200, {
           message: "userExist but old patient",
+          appointment_ID: appointmentDetailsModel.appointment_ID,
         });
       } else {
         preparePatientAndAppointment(
@@ -92,6 +93,7 @@ exports.setAppointment = async (req, res) => {
         );
         return sendResponse(res, 200, {
           message: "userExist but new patient",
+          appointment_ID: appointmentDetailsModel.appointment_ID,
         });
       }
     } else {
@@ -104,6 +106,7 @@ exports.setAppointment = async (req, res) => {
 
       return sendResponse(res, 200, {
         message: "new User so new patient",
+        appointment_ID: appointmentDetailsModel.appointment_ID,
       });
     }
   } catch (error) {
