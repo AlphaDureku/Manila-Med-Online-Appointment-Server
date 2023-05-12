@@ -7,6 +7,7 @@ const {
   getQueueInstance,
   incrementQueue,
 } = require("../Models/database_query/doctor_queries");
+const moment = require("moment");
 exports.sendOTP = async (req, res) => {
   try {
     const userResults = {
@@ -62,6 +63,14 @@ exports.getOnePatientDetails = async (req, res) => {
   }
 };
 
+exports.checkConflict = async (req, res) => {
+  const { date, patient_ID } = req.query;
+  const result = await User.checkIfConflict(
+    patient_ID,
+    moment(date).format("YYYY-MM-DD")
+  );
+  return sendResponse(res, 200, result);
+};
 exports.setAppointment = async (req, res) => {
   const { schedule_ID, email, patient_ID, doctor_ID, recom_Time } =
     req.body.appointmentDetails;

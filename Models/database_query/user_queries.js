@@ -227,3 +227,28 @@ exports.getAppointmentDetailsUsingAppointmentID = async function (
     ],
   });
 };
+
+exports.checkIfConflict = async function (patient_ID, date) {
+  return await model.appointmentDetails.findAll({
+    raw: true,
+    where: {
+      [Sequelize.Op.and]: [
+        { patient_ID: patient_ID },
+        {
+          [Sequelize.Op.or]: [
+            { appointment_status: "Confirmed" },
+            { appointment_status: "Pending" },
+          ],
+        },
+      ],
+    },
+    include: [
+      {
+        model: model.doctor_schedule_table,
+        where: {
+          doctor_schedule_date: date,
+        },
+      },
+    ],
+  });
+};
