@@ -18,7 +18,7 @@ exports.searchDoctor = async (req, res) => {
     ) {
       const result = await Doctor.getDoctor();
       const schedule = await Doctor.getSchedule();
-      return sendResponse(res, 200, { result, schedule });
+      return sendResponse(res, 200, { result: result, schedule: schedule });
 
       //Using specs only
     } else if (
@@ -37,7 +37,7 @@ exports.searchDoctor = async (req, res) => {
         searchOption.doctor_HMO
       );
       console.log(result);
-      return sendResponse(res, 200, { result, schedule });
+      return sendResponse(res, 200, { result: result, schedule: schedule });
     } else if (
       (searchOption.Fname != undefined || searchOption.Lname != undefined) &&
       (searchOption.Specialization || searchOption.doctor_HMO)
@@ -45,7 +45,7 @@ exports.searchDoctor = async (req, res) => {
       console.log("get by Name, spec and sub_spec");
       const result = await Doctor.getDoctor_Using_All(searchOption);
       const schedule = await Doctor.getSchedule_Using_All(searchOption);
-      return sendResponse(res, 200, { result, schedule });
+      return sendResponse(res, 200, { result: result, schedule: schedule });
     } else if (searchOption.Fname && searchOption.Lname) {
       console.log("get by Fname Lname");
       const result = await Doctor.getDoctor_Using_Fname_Lname(
@@ -56,16 +56,16 @@ exports.searchDoctor = async (req, res) => {
         searchOption.Fname,
         searchOption.Lname
       );
-      return sendResponse(res, 200, { result, schedule });
+      return sendResponse(res, 200, { result: result, schedule: schedule });
     } else if (searchOption.Lname) {
       console.log("get by LName");
       const result = await Doctor.getDoctor_Using_Lname(searchOption.Lname);
       const schedule = await Doctor.getSchedule_Using_Lname(searchOption.Lname);
-      return sendResponse(res, 200, { result, schedule });
+      return sendResponse(res, 200, { result: result, schedule: schedule });
     } else if (searchOption.Fname) {
       const result = await Doctor.getDoctor_Using_Fname(searchOption.Fname);
       const schedule = await Doctor.getSchedule_Using_Fname(searchOption.Fname);
-      return sendResponse(res, 200, { result, schedule });
+      return sendResponse(res, 200, { result: result, schedule: schedule });
     } else {
       console.log("Undefined");
     }
