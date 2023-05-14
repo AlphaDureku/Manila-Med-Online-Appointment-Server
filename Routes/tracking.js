@@ -6,12 +6,12 @@ const jwtMiddleware = require("../utils/JWTHandler");
 
 router.get("/get-patients", jwtMiddleware, userController.getUser_Patients);
 router.get(
-  "/:id",
+  "/get-appointments",
   jwtMiddleware,
   userController.fetchPatient_Appointments_Using_Patient_ID
 );
 router.get(
-  "/get-info/:id",
+  "/get-info",
   jwtMiddleware,
   userController.fetchPatientInfo_Using_Patient_ID
 );

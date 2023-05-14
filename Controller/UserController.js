@@ -57,11 +57,11 @@ exports.getUser_Patients = async (req, res) => {
 exports.fetchPatient_Appointments_Using_Patient_ID = async (req, res) => {
   try {
     const result = await User.fetchPatient_Appointments_Using_Patient_ID(
-      req.params.id
+      req.query.id
     );
-
     return sendResponse(res, 200, result);
   } catch (error) {
+    console.log(error);
     return sendResponse(res, 500, error.message);
   }
 };
@@ -69,9 +69,7 @@ exports.fetchPatient_Appointments_Using_Patient_ID = async (req, res) => {
 /*Edit Patient Info*/
 exports.fetchPatientInfo_Using_Patient_ID = async (req, res) => {
   try {
-    const result = await User.fetch_Patient_Info_Using_Patient_ID(
-      req.params.id
-    );
+    const result = await User.fetch_Patient_Info_Using_Patient_ID(req.query.id);
     return sendResponse(res, 200, result);
   } catch (error) {
     return sendResponse(res, 500, error.message);
