@@ -84,7 +84,7 @@ exports.setAppointment = async (req, res) => {
           patient_ID: patient_ID,
           doctor_schedule_ID: schedule_ID,
           doctor_ID: doctor_ID,
-          appointment_start: recom_Time,
+          appointment_start: moment(recom_Time, "h:mm A").format("HH:mm:ss"),
           appointment_queue: queue_number,
         };
         await User.insertAppointment(appointmentDetailsModel);
@@ -169,7 +169,7 @@ const preparePatientAndAppointment = async (
   user_ID,
   queue_number
 ) => {
-  const { patient_info } = appointmentDetails;
+  const { patient_info, recom_Time } = appointmentDetails;
   const patientModel = {
     patient_ID: "PATIENT-" + uuid.v4(),
     user_ID: user_ID.user_ID,
@@ -186,7 +186,7 @@ const preparePatientAndAppointment = async (
     patient_ID: patientModel.patient_ID,
     doctor_schedule_ID: appointmentDetails.schedule_ID,
     doctor_ID: appointmentDetails.doctor_ID,
-    appointment_start: appointmentDetails.recom_Time,
+    appointment_start: moment(recom_Time, "h:mm A").format("HH:mm:ss"),
     appointment_queue: queue_number,
   };
   await User.insertPatient(patientModel);
