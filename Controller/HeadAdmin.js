@@ -12,14 +12,15 @@ exports.login = async (req, res) => {
     if (!result) {
       return sendResponse(res, 200, false);
     }
-    if (unHashSomething(password, result.head_Manager_password)) {
+    if (await unHashSomething(password, result.head_Manager_password)) {
       const head_Manager_ID = result.head_Manager_ID;
       const token = jwt.sign({ head_Manager_ID }, process.env.JWT_SECRET, {
         expiresIn: "10d",
       });
+
       return sendResponse(res, 200, { status: true, token: token });
     } else {
-      return sendResponse(res, 200, false);
+      return sendResponse(res, 200, { status: false });
     }
   } catch (error) {
     console.log(error);
