@@ -51,16 +51,8 @@ exports.dashboard = async (req, res) => {
 
 exports.addDoctor = async (req, res) => {
   try {
-    const {
-      Fname,
-      Lname,
-      gender,
-      email,
-      contact,
-      room,
-      specialization_ID,
-      hmo_ID,
-    } = req.body;
+    const { Fname, Lname, gender, email, contact, specialization_ID, hmo_ID } =
+      req.body;
 
     let doctorModel = {
       doctor_ID: "MCM-" + uuid.v4(),
@@ -69,7 +61,6 @@ exports.addDoctor = async (req, res) => {
       doctor_email: email,
       doctor_gender: gender,
       doctor_contact_number: contact,
-      doctor_room: room,
       doctorSpecializationSpecializationID: specialization_ID,
     };
 
@@ -82,7 +73,13 @@ exports.addDoctor = async (req, res) => {
 };
 
 exports.deleteDoctor = async (req, res) => {
-  await HeadAdmin.removeDoctor(req.body.doctor_ID);
+  try {
+    await HeadAdmin.removeDoctor(req.body.doctor_ID);
+    return sendResponse(res, 200, "success");
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, error.message);
+  }
 };
 
 exports.addNurse = async (req, res) => {

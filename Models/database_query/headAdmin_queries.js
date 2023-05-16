@@ -74,17 +74,20 @@ exports.getNurses = async function () {
 
 exports.addDoctor = async function (doctorModel, hmo_ID) {
   const newDoctor = await model.doctor.create(doctorModel);
-  const HMO = await model.HMO.findByPk(hmo_ID);
-  await HMO.addDoctor(newDoctor);
+  for (let i = 0; i < hmo_ID.length; i++) {
+    const HMO = await model.HMO.findByPk(hmo_ID[i]);
+    await HMO.addDoctor(newDoctor);
+  }
 };
 
-exports.removeDoctor = async function (doctorModel, hmo_ID) {
+exports.removeDoctor = async function (doctor_ID) {
   await model.doctor.destroy({
     where: {
       doctor_ID: doctor_ID,
     },
   });
 };
+
 exports.addNurse = async function (nurseModel) {
   await model.doctor_Secretary.create(nurseModel);
 };
