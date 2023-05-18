@@ -1,3 +1,3 @@
-exports.upperCaseFirstLetter = (string) => {
-  return string.charAt(0).toUpperCase + string.slice(1);
+exports.upperCaseFirstLetter = (params) => {
+  return params.charAt(0).toUpperCase() + params.slice(1);
 };
