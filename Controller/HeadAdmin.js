@@ -94,7 +94,10 @@ exports.addNurse = async (req, res) => {
       req.body;
     const result = await findNurse(username);
     if (result) {
-      return sendResponse(res, 200, "username already in use");
+      return sendResponse(res, 200, {
+        status: false,
+        message: "username already in use",
+      });
     }
     const nurseModel = {
       doctor_Secretary_ID: "NURSE-" + uuid.v4(),
