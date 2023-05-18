@@ -85,11 +85,14 @@ exports.deleteDoctor = async (req, res) => {
 
 exports.addNurse = async (req, res) => {
   try {
-    const { username, password, Fname, Lname } = req.body;
+    const { username, password, Fname, Lname, email, contact_number } =
+      req.body;
     const nurseModel = {
       doctor_Secretary_ID: "NURSE-" + uuid.v4(),
       doctor_Secretary_username: username,
       doctor_Secretary_password: await hashSomething(password),
+      doctor_email: email,
+      doctor_Secretary_contact_number: contact_number,
       doctor_Secretary_first_name: Fname,
       doctor_Secretary_last_name: Lname,
     };

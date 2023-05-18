@@ -164,6 +164,12 @@ const Doctor_Secretary = sequelize.define("doctor_Secretary", {
   doctor_Secretary_last_name: {
     type: DataTypes.STRING,
   },
+  doctor_Secretary_email: {
+    type: DataTypes.STRING,
+  },
+  doctor_Secretary_contact_number: {
+    type: DataTypes.STRING,
+  },
 });
 
 const AppointmentDetails = sequelize.define(
@@ -304,5 +310,7 @@ async function setDoctor_Department(doctorModel) {
 }
 setDoctor_Department(doctorModel)
 */
+
+syncAll();
 
 module.exports = sequelize.models;
