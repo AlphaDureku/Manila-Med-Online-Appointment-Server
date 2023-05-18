@@ -5,6 +5,7 @@ const Initialize = require("../Models/database_query/intialize_queries");
 const uuid = require("uuid");
 const { hashSomething, unHashSomething } = require("../utils/Bcrypt");
 const { upperCaseFirstLetter } = require("../utils/collectionOfFunctions");
+const { sendEmail } = require("../utils/sendEmail");
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
@@ -99,6 +100,7 @@ exports.addNurse = async (req, res) => {
       doctor_Secretary_first_name: upperCaseFirstLetter(Fname),
       doctor_Secretary_last_name: upperCaseFirstLetter(Lname),
     };
+    sendEmail(email, { username: username, password: password });
     await HeadAdmin.addNurse(nurseModel);
     sendResponse(res, 200, true);
   } catch (error) {

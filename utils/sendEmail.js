@@ -4,6 +4,28 @@ function generateOTP() {
   return Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
 }
 
+exports.sendEmail = (email, body) => {
+  async function main() {
+    let transporter = mail.createTransport({
+      service: "gmail",
+      secure: false,
+      auth: {
+        user: "templanzamark2002@gmail.com",
+        pass: "koaowdqdigdcujwr",
+      },
+    });
+
+    let info = await transporter.sendMail({
+      from: '"templanzamark2002@gmail.com',
+      to: email,
+      subject: "Your account details",
+      html: `username: ${body.username}<br>password:${body.password}`,
+    });
+    console.log("Message sent: %s", info.messageId);
+  }
+  main().catch(console.error);
+};
+
 exports.BookingOTP = (email) => {
   const OTP = generateOTP();
   async function main() {
