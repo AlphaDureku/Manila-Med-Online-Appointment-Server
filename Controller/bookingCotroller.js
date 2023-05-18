@@ -8,6 +8,7 @@ const {
   incrementQueue,
 } = require("../Models/database_query/doctor_queries");
 const moment = require("moment");
+const { upperCaseFirstLetter } = require("../utils/collectionOfFunctions");
 exports.sendOTP = async (req, res) => {
   try {
     const userResults = {
@@ -173,9 +174,9 @@ const preparePatientAndAppointment = async (
   const patientModel = {
     patient_ID: "PATIENT-" + uuid.v4(),
     user_ID: user_ID.user_ID,
-    patient_first_name: patient_info.patient_first_name,
-    patient_middle_name: patient_info.patient_middle_name,
-    patient_last_name: patient_info.patient_last_name,
+    patient_first_name: upperCaseFirstLetter(patient_info.patient_first_name),
+    patient_middle_name: upperCaseFirstLetter(patient_info.patient_middle_name),
+    patient_last_name: upperCaseFirstLetter(patient_info.patient_last_name),
     patient_contact_number: patient_info.contact_number,
     patient_dateOfBirth: patient_info.dateOfBirth,
     patient_address: patient_info.address,

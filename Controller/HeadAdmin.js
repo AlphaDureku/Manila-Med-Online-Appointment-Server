@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const Initialize = require("../Models/database_query/intialize_queries");
 const uuid = require("uuid");
 const { hashSomething, unHashSomething } = require("../utils/Bcrypt");
+const { upperCaseFirstLetter } = require("../utils/collectionOfFunctions");
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
@@ -59,8 +60,8 @@ exports.addDoctor = async (req, res) => {
 
     let doctorModel = {
       doctor_ID: "MCM-" + uuid.v4(),
-      doctor_first_name: Fname,
-      doctor_last_name: Lname,
+      doctor_first_name: upperCaseFirstLetter(Fname),
+      doctor_last_name: upperCaseFirstLetter(Lname),
       doctor_email: email,
       doctor_gender: gender,
       doctor_contact_number: contact,
@@ -95,8 +96,8 @@ exports.addNurse = async (req, res) => {
       doctor_Secretary_password: await hashSomething(password),
       doctorSecretary_email: email,
       doctor_Secretary_contact_number: contact_number,
-      doctor_Secretary_first_name: Fname,
-      doctor_Secretary_last_name: Lname,
+      doctor_Secretary_first_name: upperCaseFirstLetter(Fname),
+      doctor_Secretary_last_name: upperCaseFirstLetter(Lname),
     };
     await HeadAdmin.addNurse(nurseModel);
     sendResponse(res, 200, true);
