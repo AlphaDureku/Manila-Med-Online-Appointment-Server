@@ -36,10 +36,12 @@ exports.dashboard = async (req, res) => {
     const DoctorsWithNurses = await HeadAdmin.getDoctorsWithNurse();
     const HmoLists = await Initialize.setup_HMO();
     const SpecializationList = await Initialize.setup_Specialization();
+    const Nurses = await HeadAdmin.getNurses();
     sendResponse(res, 200, {
       AdminInfo: AdminInfo,
       DoctorsWithNurses: DoctorsWithNurses,
       DoctorsWithoutNurses: DoctorsWithoutNurses,
+      NurseLists: Nurses,
       HmoLists: HmoLists,
       SpecializationList: SpecializationList,
     });
@@ -91,7 +93,7 @@ exports.addNurse = async (req, res) => {
       doctor_Secretary_ID: "NURSE-" + uuid.v4(),
       doctor_Secretary_username: username,
       doctor_Secretary_password: await hashSomething(password),
-      doctor_email: email,
+      doctorSecretary_email: email,
       doctor_Secretary_contact_number: contact_number,
       doctor_Secretary_first_name: Fname,
       doctor_Secretary_last_name: Lname,
