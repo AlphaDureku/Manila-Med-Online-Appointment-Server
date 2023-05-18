@@ -1,3 +1,7 @@
 exports.upperCaseFirstLetter = (params) => {
-  return params.charAt(0).toUpperCase() + params.slice(1);
+  const words = params.split(" ");
+  const capitalizedWords = words.map((word) => {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  });
+  return capitalizedWords.join(" ");
 };
