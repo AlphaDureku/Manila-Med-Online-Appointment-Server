@@ -37,7 +37,10 @@ exports.getDoctorsWithoutNurse = async function () {
       doctorSecretaryDoctorSecretaryID: null,
     },
     order: [
-      [Sequelize.literal("DATE_FORMAT(createdAt, '%Y-%m-%d %H:%i:%s')"), "ASC"],
+      [
+        Sequelize.literal("DATE_FORMAT(doctor.createdAt, '%Y-%m-%d %H:%i:%s')"),
+        "ASC",
+      ],
     ],
   });
 };
@@ -66,7 +69,10 @@ exports.getDoctorsWithNurse = async function () {
       },
     },
     order: [
-      [Sequelize.literal("DATE_FORMAT(createdAt, '%Y-%m-%d %H:%i:%s')"), "ASC"],
+      [
+        Sequelize.literal("DATE_FORMAT(doctor.createdAt, '%Y-%m-%d %H:%i:%s')"),
+        "ASC",
+      ],
     ],
   });
 };
@@ -75,7 +81,12 @@ exports.getNurses = async function () {
   return await model.doctor_Secretary.findAll({
     raw: true,
     order: [
-      [Sequelize.literal("DATE_FORMAT(createdAt, '%Y-%m-%d %H:%i:%s')"), "ASC"],
+      [
+        Sequelize.literal(
+          "DATE_FORMAT(doctor_Secretary.createdAt, '%Y-%m-%d %H:%i:%s')"
+        ),
+        "ASC",
+      ],
     ],
   });
 };
