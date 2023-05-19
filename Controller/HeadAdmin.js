@@ -40,7 +40,7 @@ exports.dashboard = async (req, res) => {
     const HmoLists = await Initialize.setup_HMO();
     const SpecializationList = await Initialize.setup_Specialization();
     const Nurses = await HeadAdmin.getNurses();
-    sendResponse(res, 200, {
+    return sendResponse(res, 200, {
       AdminInfo: AdminInfo,
       DoctorsWithNurses: DoctorsWithNurses,
       DoctorsWithoutNurses: DoctorsWithoutNurses,
@@ -48,7 +48,6 @@ exports.dashboard = async (req, res) => {
       HmoLists: HmoLists,
       SpecializationList: SpecializationList,
     });
-    return;
   } catch (error) {
     console.log(error);
     return sendResponse(res, 500, error.message);
@@ -69,7 +68,6 @@ exports.addDoctor = async (req, res) => {
       doctor_contact_number: contact,
       doctorSpecializationSpecializationID: specialization_ID,
     };
-
     await HeadAdmin.addDoctor(doctorModel, hmo_ID);
     sendResponse(res, 200, true);
   } catch (error) {
