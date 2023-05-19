@@ -36,7 +36,7 @@ exports.getDoctorsWithoutNurse = async function () {
     where: {
       doctorSecretaryDoctorSecretaryID: null,
     },
-    order: [["createdAt", "asc"]],
+    order: [["index", "asc"]],
   });
 };
 
@@ -50,7 +50,7 @@ exports.getDoctorsWithNurse = async function () {
       [Sequelize.col("doctor_Secretary_ID"), "nurse_ID"],
       [Sequelize.col("doctor_Secretary_first_name"), "nurse_Fname"],
       [Sequelize.col("doctor_Secretary_last_name"), "nurse_Lname"],
-      ["createdAt", "date_added"],
+      ["index", "date_added"],
     ],
     include: [
       {
@@ -70,7 +70,7 @@ exports.getDoctorsWithNurse = async function () {
 exports.getNurses = async function () {
   return await model.doctor_Secretary.findAll({
     raw: true,
-    order: [["createdAt", "asc"]],
+    order: [["index", "asc"]],
   });
 };
 
