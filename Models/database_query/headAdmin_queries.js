@@ -31,6 +31,7 @@ exports.getDoctorsWithoutNurse = async function () {
       "doctor_ID",
       ["doctor_first_name", "DFname"],
       ["doctor_last_name", "DLname"],
+      ["createdAt", "date_added"],
     ],
     where: {
       doctorSecretaryDoctorSecretaryID: null,
