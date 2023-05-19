@@ -52,42 +52,36 @@ const User = sequelize.define("user", {
   },
 });
 
-const Patient = sequelize.define(
-  "patient",
-  {
-    patient_ID: {
-      type: DataTypes.STRING(50),
-      primaryKey: true,
-    },
-    user_ID: {
-      type: DataTypes.STRING(50),
-    },
-    patient_first_name: {
-      type: DataTypes.STRING,
-    },
-    patient_middle_name: {
-      type: DataTypes.STRING,
-    },
-    patient_last_name: {
-      type: DataTypes.STRING,
-    },
-    patient_contact_number: {
-      type: DataTypes.STRING,
-    },
-    patient_dateOfBirth: {
-      type: DataTypes.DATE,
-    },
-    patient_gender: {
-      type: DataTypes.STRING(1),
-    },
-    patient_address: {
-      type: DataTypes.STRING,
-    },
+const Patient = sequelize.define("patient", {
+  patient_ID: {
+    type: DataTypes.STRING(50),
+    primaryKey: true,
   },
-  {
-    timestamps: true,
-  }
-);
+  user_ID: {
+    type: DataTypes.STRING(50),
+  },
+  patient_first_name: {
+    type: DataTypes.STRING,
+  },
+  patient_middle_name: {
+    type: DataTypes.STRING,
+  },
+  patient_last_name: {
+    type: DataTypes.STRING,
+  },
+  patient_contact_number: {
+    type: DataTypes.STRING,
+  },
+  patient_dateOfBirth: {
+    type: DataTypes.DATE,
+  },
+  patient_gender: {
+    type: DataTypes.STRING(1),
+  },
+  patient_address: {
+    type: DataTypes.STRING,
+  },
+});
 
 const Doctor = sequelize.define("doctor", {
   doctor_ID: {
@@ -116,8 +110,8 @@ const Doctor = sequelize.define("doctor", {
     type: DataTypes.STRING,
   },
   createdAt: {
-    allowNull: false,
-    type: Sequelize.DATE,
+    type: DataTypes.DATE,
+    defaultValue: new Date(),
   },
 });
 
@@ -181,8 +175,8 @@ const Doctor_Secretary = sequelize.define("doctor_Secretary", {
     type: DataTypes.STRING,
   },
   createdAt: {
-    allowNull: false,
-    type: Sequelize.DATE,
+    type: DataTypes.DATE,
+    defaultValue: new Date(),
   },
 });
 
