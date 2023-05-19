@@ -31,7 +31,7 @@ exports.getDoctorsWithoutNurse = async function () {
       "doctor_ID",
       ["doctor_first_name", "DFname"],
       ["doctor_last_name", "DLname"],
-      ["createdAt", "date_added"],
+      ["index", "index"],
     ],
     where: {
       doctorSecretaryDoctorSecretaryID: null,
@@ -50,7 +50,7 @@ exports.getDoctorsWithNurse = async function () {
       [Sequelize.col("doctor_Secretary_ID"), "nurse_ID"],
       [Sequelize.col("doctor_Secretary_first_name"), "nurse_Fname"],
       [Sequelize.col("doctor_Secretary_last_name"), "nurse_Lname"],
-      ["index", "date_added"],
+      ["index", "index"],
     ],
     include: [
       {
