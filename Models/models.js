@@ -111,7 +111,7 @@ const Doctor = sequelize.define("doctor", {
   },
   createdAt: {
     type: DataTypes.DATE,
-    defaultValue: new Date(),
+    defaultValue: new Date().toISOString().slice(0, 19).replace("T", " "),
   },
 });
 
@@ -176,7 +176,7 @@ const Doctor_Secretary = sequelize.define("doctor_Secretary", {
   },
   createdAt: {
     type: DataTypes.DATE,
-    defaultValue: new Date(),
+    defaultValue: new Date().toISOString().slice(0, 19).replace("T", " "),
   },
 });
 
@@ -318,5 +318,7 @@ async function setDoctor_Department(doctorModel) {
 }
 setDoctor_Department(doctorModel)
 */
+
+syncAll();
 
 module.exports = sequelize.models;

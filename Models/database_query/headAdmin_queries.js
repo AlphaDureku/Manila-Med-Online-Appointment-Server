@@ -50,6 +50,7 @@ exports.getDoctorsWithNurse = async function () {
       [Sequelize.col("doctor_Secretary_ID"), "nurse_ID"],
       [Sequelize.col("doctor_Secretary_first_name"), "nurse_Fname"],
       [Sequelize.col("doctor_Secretary_last_name"), "nurse_Lname"],
+      ["createdAt", "date_added"],
     ],
     include: [
       {
