@@ -39,7 +39,7 @@ exports.getDoctorsWithoutNurse = async function () {
     order: [
       [
         Sequelize.literal("DATE_FORMAT(doctor.createdAt, '%Y-%m-%d %H:%i:%s')"),
-        "ASC",
+        "DESC",
       ],
     ],
   });
@@ -71,7 +71,7 @@ exports.getDoctorsWithNurse = async function () {
     order: [
       [
         Sequelize.literal("DATE_FORMAT(doctor.createdAt, '%Y-%m-%d %H:%i:%s')"),
-        "ASC",
+        "DESC",
       ],
     ],
   });
@@ -85,7 +85,7 @@ exports.getNurses = async function () {
         Sequelize.literal(
           "DATE_FORMAT(doctor_Secretary.createdAt, '%Y-%m-%d %H:%i:%s')"
         ),
-        "ASC",
+        "DESC",
       ],
     ],
   });
