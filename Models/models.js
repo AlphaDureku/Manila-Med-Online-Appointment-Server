@@ -109,9 +109,10 @@ const Doctor = sequelize.define("doctor", {
   doctor_room: {
     type: DataTypes.STRING,
   },
-  number: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
+  createdAt: {
+    allowNull: false,
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.fn("NOW"),
   },
 });
 
@@ -174,9 +175,10 @@ const Doctor_Secretary = sequelize.define("doctor_Secretary", {
   doctor_Secretary_contact_number: {
     type: DataTypes.STRING,
   },
-  number: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
+  createdAt: {
+    allowNull: false,
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.fn("NOW"),
   },
 });
 
