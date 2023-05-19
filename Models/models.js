@@ -89,39 +89,37 @@ const Patient = sequelize.define(
   }
 );
 
-const Doctor = sequelize.define(
-  "doctor",
-  {
-    doctor_ID: {
-      type: DataTypes.STRING(50),
-      primaryKey: true,
-    },
-    doctor_email: {
-      type: DataTypes.STRING,
-    },
-    doctor_first_name: {
-      type: DataTypes.STRING,
-    },
-    doctor_last_name: {
-      type: DataTypes.STRING,
-    },
-    doctor_gender: {
-      type: DataTypes.STRING,
-    },
-    doctor_contact_number: {
-      type: DataTypes.STRING,
-    },
-    doctor_dateOfBirth: {
-      type: DataTypes.DATE,
-    },
-    doctor_room: {
-      type: DataTypes.STRING,
-    },
+const Doctor = sequelize.define("doctor", {
+  doctor_ID: {
+    type: DataTypes.STRING(50),
+    primaryKey: true,
   },
-  {
-    timestamps: true,
-  }
-);
+  doctor_email: {
+    type: DataTypes.STRING,
+  },
+  doctor_first_name: {
+    type: DataTypes.STRING,
+  },
+  doctor_last_name: {
+    type: DataTypes.STRING,
+  },
+  doctor_gender: {
+    type: DataTypes.STRING,
+  },
+  doctor_contact_number: {
+    type: DataTypes.STRING,
+  },
+  doctor_dateOfBirth: {
+    type: DataTypes.DATE,
+  },
+  doctor_room: {
+    type: DataTypes.STRING,
+  },
+  createdAt: {
+    allowNull: false,
+    type: Sequelize.DATE,
+  },
+});
 
 const Doctor_department = sequelize.define("department", {
   department_ID: {
@@ -156,39 +154,37 @@ const Doctor_specialization = sequelize.define("doctor_specialization", {
   },
 });
 
-const Doctor_Secretary = sequelize.define(
-  "doctor_Secretary",
-  {
-    doctor_Secretary_ID: {
-      type: DataTypes.STRING(50),
-      primaryKey: true,
-    },
-    doctor_Secretary_username: {
-      type: DataTypes.STRING,
-    },
-    doctor_Secretary_password: {
-      type: DataTypes.STRING,
-    },
-    doctor_Secretary_first_name: {
-      type: DataTypes.STRING,
-    },
-    doctor_Secretary_middle_name: {
-      type: DataTypes.STRING,
-    },
-    doctor_Secretary_last_name: {
-      type: DataTypes.STRING,
-    },
-    doctor_Secretary_email: {
-      type: DataTypes.STRING,
-    },
-    doctor_Secretary_contact_number: {
-      type: DataTypes.STRING,
-    },
+const Doctor_Secretary = sequelize.define("doctor_Secretary", {
+  doctor_Secretary_ID: {
+    type: DataTypes.STRING(50),
+    primaryKey: true,
   },
-  {
-    timestamps: true,
-  }
-);
+  doctor_Secretary_username: {
+    type: DataTypes.STRING,
+  },
+  doctor_Secretary_password: {
+    type: DataTypes.STRING,
+  },
+  doctor_Secretary_first_name: {
+    type: DataTypes.STRING,
+  },
+  doctor_Secretary_middle_name: {
+    type: DataTypes.STRING,
+  },
+  doctor_Secretary_last_name: {
+    type: DataTypes.STRING,
+  },
+  doctor_Secretary_email: {
+    type: DataTypes.STRING,
+  },
+  doctor_Secretary_contact_number: {
+    type: DataTypes.STRING,
+  },
+  createdAt: {
+    allowNull: false,
+    type: Sequelize.DATE,
+  },
+});
 
 const AppointmentDetails = sequelize.define(
   "appointmentDetails",
