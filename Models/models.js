@@ -109,7 +109,7 @@ const Doctor = sequelize.define("doctor", {
   doctor_room: {
     type: DataTypes.STRING,
   },
-  index: {
+  number: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
   },
@@ -174,7 +174,7 @@ const Doctor_Secretary = sequelize.define("doctor_Secretary", {
   doctor_Secretary_contact_number: {
     type: DataTypes.STRING,
   },
-  index: {
+  number: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
   },
@@ -318,5 +318,5 @@ async function setDoctor_Department(doctorModel) {
 }
 setDoctor_Department(doctorModel)
 */
-
+syncAll();
 module.exports = sequelize.models;
