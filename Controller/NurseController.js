@@ -15,6 +15,7 @@ exports.login = async (req, res) => {
     if (!result) {
       return sendResponse(res, 200, false);
     }
+    console.log(result);
     if (await unHashSomething(password, result.doctor_Secretary_password)) {
       Nurse_ID = result.doctor_Secretary_ID;
       //Prepare token for nurse login
@@ -36,6 +37,7 @@ exports.dashboard = async (req, res) => {
   try {
     const nurse = await Nurse.findNurseUsingID(Nurse_ID);
     const doctor = await Nurse.findDoctors(Nurse_ID);
+
     if (doctor.length > 0) {
       //Doctor only at index 0
       req.session.doctor_ID = doctor.at(0).doctor_ID;
