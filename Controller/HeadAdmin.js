@@ -101,7 +101,7 @@ exports.addNurse = async (req, res) => {
       doctor_Secretary_ID: "NURSE-" + uuid.v4(),
       doctor_Secretary_username: username,
       doctor_Secretary_password: await hashSomething(password),
-      doctorSecretary_email: email,
+      doctor_Secretary_email: email,
       doctor_Secretary_contact_number: contact_number,
       doctor_Secretary_first_name: upperCaseFirstLetter(Fname),
       doctor_Secretary_last_name: upperCaseFirstLetter(Lname),
