@@ -1,3 +1,4 @@
+const { hashSomething } = require("../../utils/Bcrypt");
 const model = require("../models");
 const Sequelize = require("sequelize");
 exports.findHeadAdmin = async function (username) {
@@ -129,6 +130,63 @@ exports.removeNurse = async function (Nurse_ID) {
       doctor_Secretary_ID: Nurse_ID,
     },
   });
+};
+
+exports.NurseDetails = async function (Nurse_ID) {
+  return await model.doctor_Secretary.findOne({
+    raw: true,
+    attributes: [
+      [Sequelize.col("doctor_Secretary_ID"), "nurse_ID"],
+      [Sequelize.col("doctor_Secretary_username"), "nurse_Username"],
+      [Sequelize.col("doctor_Secretary_first_name"), "nurse_Fname"],
+      [Sequelize.col("doctor_Secretary_middle_name"), "nurse_Mname"],
+      [Sequelize.col("doctor_Secretary_last_name"), "nurse_Lname"],
+      [Sequelize.col("doctor_Secretary_email"), "nurse_Email"],
+      [Sequelize.col("doctor_Secretary_contact_number"), "nurse_Contact"],
+    ],
+
+    where: {
+      doctor_Secretary_ID: Nurse_ID,
+    },
+  });
+};
+
+exports.updateNurse = async function (NurseModel) {
+  const updateData = {
+    doctor_Secretary_username: NurseModel.nurse_Username,
+    doctor_Secretary_first_name: NurseModel.nurse_Fname,
+    doctor_Secretary_middle_name: NurseModel.nurse_Mname,
+    doctor_Secretary_last_name: NurseModel.nurse_Lname,
+    doctor_Secretary_email: NurseModel.nurse_Email,
+    doctor_Secretary_contact_number: NurseModel.nurse_Contact,
+  };
+
+  if (NurseModel.nurse_NewPassword) {
+    updateData.doctor_Secretary_password = await hashSomething(
+      NurseModel.nurse_NewPassword
+    );
+  }
+
+  await model.doctor_Secretary.update(updateData, {
+    where: {
+      doctor_Secretary_ID: NurseModel.nurse_ID,
+    },
+  });
+};
+
+exports.updateProfile = async function (params) {
+  await model.doctor_Secretary.update(
+    {
+      doctor_Secretary_first_name: params.Fname,
+      doctor_Secretary_middle_name: params.Mname,
+      doctor_Secretary_last_name: params.Lname,
+    },
+    {
+      where: {
+        doctor_Secretary_ID: params.ID,
+      },
+    }
+  );
 };
 
 exports.matchDoctorNurse = async function (doctor_ID, nurse_ID) {

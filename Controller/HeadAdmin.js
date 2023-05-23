@@ -85,27 +85,6 @@ exports.deleteDoctor = async (req, res) => {
     return sendResponse(res, 500, error.message);
   }
 };
-
-exports.checkNurseBinding = async (req, res) => {
-  try {
-    const result = await HeadAdmin.nurseBindings(req.query.Nurse_ID);
-    return sendResponse(res, 200, result);
-  } catch (error) {
-    console.log(error);
-    return sendResponse(res, 500, error.message);
-  }
-};
-
-exports.removeNurse = async (req, res) => {
-  try {
-    await HeadAdmin.removeNurse(req.body.Nurse_ID);
-    return sendResponse(res, 200, "success");
-  } catch (error) {
-    console.log(error);
-    return sendResponse(res, 500, error.message);
-  }
-};
-
 exports.addNurse = async (req, res) => {
   try {
     const { username, password, Fname, Lname, email, contact_number } =
@@ -132,6 +111,44 @@ exports.addNurse = async (req, res) => {
   } catch (error) {
     console.log(error);
     sendResponse(res, 400, error.message);
+  }
+};
+
+exports.nurseDetails = async (req, res) => {
+  try {
+    const result = await HeadAdmin.NurseDetails(req.query.nurse_ID);
+    return sendResponse(res, 200, result);
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, error.message);
+  }
+};
+exports.checkNurseBinding = async (req, res) => {
+  try {
+    const result = await HeadAdmin.nurseBindings(req.query.nurse_ID);
+    return sendResponse(res, 200, result);
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, error.message);
+  }
+};
+exports.removeNurse = async (req, res) => {
+  try {
+    await HeadAdmin.removeNurse(req.body.nurse_ID);
+    return sendResponse(res, 200, "success");
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.updateNurse = async (req, res) => {
+  try {
+    await HeadAdmin.updateNurse(req.body.NurseModel);
+    return sendResponse(res, 200, "success");
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, error.message);
   }
 };
 
