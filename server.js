@@ -14,7 +14,11 @@ const cors = require("cors");
 //app.use(express.static(path.join(__dirname + "/public")));
 app.use(
   cors({
-    origin: ["http://localhost:3000", "*"],
+    origin: [
+      "http://localhost:3000",
+      "*",
+      "https://whimsical-custard-fa9177.netlify.app",
+    ],
     credentials: true,
   })
 );
