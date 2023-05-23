@@ -1,7 +1,7 @@
 const model = require("../models");
 const Sequelize = require("sequelize");
 
-const patient_age = Sequelize.fn(
+const age = Sequelize.fn(
   "TIMESTAMPDIFF",
   Sequelize.literal("YEAR"),
   Sequelize.literal("patient_dateOfBirth"),
@@ -67,10 +67,25 @@ exports.getSelectedDoctorAppointments = async function (
     attributes: [
       "patient_ID",
       "appointment_ID",
+      [age, "patient_age"],
+      [Sequelize.col("user_email"), "email"],
       [Sequelize.col("patient_first_name"), "Fname"],
       [Sequelize.col("patient_last_name"), "Lname"],
+      [Sequelize.col("patient_gender"), "gender"],
+      [Sequelize.col("patient_address"), "patient_address"],
       [Sequelize.col("patient_contact_number"), "Contact"],
       [Sequelize.col("appointment_status"), "Status"],
+      [Sequelize.col("doctor_first_name"), "doctor_Fname"],
+      [Sequelize.col("specialization_Name"), "specialization"],
+      [Sequelize.col("doctor_last_name"), "doctor_Lname"],
+      [
+        Sequelize.fn(
+          "date_format",
+          Sequelize.col("appointmentDetails.createdAt"),
+          "%M %e, %Y"
+        ),
+        "createdAt",
+      ],
       [
         Sequelize.fn(
           "date_format",
@@ -101,6 +116,12 @@ exports.getSelectedDoctorAppointments = async function (
       {
         model: model.patient,
         attributes: [],
+        include: [
+          {
+            model: model.user,
+            attributes: [],
+          },
+        ],
         where: nameQuery
           ? [
               {
@@ -123,6 +144,17 @@ exports.getSelectedDoctorAppointments = async function (
       {
         model: model.doctor_schedule_table,
         attributes: [],
+      },
+      {
+        model: model.doctor,
+        attributes: [],
+        required: true,
+        include: [
+          {
+            model: model.doctor_specialization,
+            attributes: [],
+          },
+        ],
       },
     ],
     where: [
