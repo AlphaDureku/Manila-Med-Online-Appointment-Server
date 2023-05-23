@@ -109,6 +109,28 @@ exports.addNurse = async function (nurseModel) {
   await model.doctor_Secretary.create(nurseModel);
 };
 
+exports.nurseBindings = async function (nurse_ID) {
+  return await model.doctor.findAll({
+    raw: true,
+    attributes: [
+      "doctor_ID",
+      ["doctor_first_name", "DFname"],
+      ["doctor_last_name", "DLname"],
+    ],
+    where: {
+      doctorSecretaryDoctorSecretaryID: nurse_ID,
+    },
+  });
+};
+
+exports.removeNurse = async function (Nurse_ID) {
+  await model.doctor_Secretary.destroy({
+    where: {
+      doctor_Secretary_ID: Nurse_ID,
+    },
+  });
+};
+
 exports.matchDoctorNurse = async function (doctor_ID, nurse_ID) {
   await model.doctor.update(
     {

@@ -26,6 +26,7 @@ exports.checkIfExistsAndSendOTP = async (req, res) => {
 };
 /*Verify input OTP*/
 exports.verifyOTP = async (req, res) => {
+  console.log(req.session.OTP);
   try {
     if (req.session.OTP == req.body.inputOTP || req.body.inputOTP == 1) {
       const { user_ID } = req.body;

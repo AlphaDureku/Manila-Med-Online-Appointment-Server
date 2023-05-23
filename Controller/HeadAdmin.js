@@ -86,6 +86,26 @@ exports.deleteDoctor = async (req, res) => {
   }
 };
 
+exports.checkNurseBinding = async (req, res) => {
+  try {
+    const result = await HeadAdmin.nurseBindings(req.query.Nurse_ID);
+    return sendResponse(res, 200, result);
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.removeNurse = async (req, res) => {
+  try {
+    await HeadAdmin.removeNurse(req.body.Nurse_ID);
+    return sendResponse(res, 200, "success");
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, error.message);
+  }
+};
+
 exports.addNurse = async (req, res) => {
   try {
     const { username, password, Fname, Lname, email, contact_number } =

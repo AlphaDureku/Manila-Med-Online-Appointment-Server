@@ -14,7 +14,8 @@ const cors = require("cors");
 //app.use(express.static(path.join(__dirname + "/public")));
 app.use(
   cors({
-    origin: "*",
+    origin: ["http://localhost:3000", "*"],
+    credentials: true,
   })
 );
 app.use(
