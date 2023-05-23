@@ -174,21 +174,6 @@ exports.updateNurse = async function (NurseModel) {
   });
 };
 
-exports.updateProfile = async function (params) {
-  await model.doctor_Secretary.update(
-    {
-      doctor_Secretary_first_name: params.Fname,
-      doctor_Secretary_middle_name: params.Mname,
-      doctor_Secretary_last_name: params.Lname,
-    },
-    {
-      where: {
-        doctor_Secretary_ID: params.ID,
-      },
-    }
-  );
-};
-
 exports.matchDoctorNurse = async function (doctor_ID, nurse_ID) {
   await model.doctor.update(
     {
@@ -200,4 +185,40 @@ exports.matchDoctorNurse = async function (doctor_ID, nurse_ID) {
       },
     }
   );
+};
+
+exports.AdminDetails = async function (head_ID) {
+  return await model.head_Manager.findOne({
+    raw: true,
+    attributes: [
+      [Sequelize.col("head_Manager_ID"), "head_ID"],
+      [Sequelize.col("head_Manager_Fname"), "head_Fname"],
+      [Sequelize.col("head_Manager_Lname"), "head_Lname"],
+      [Sequelize.col("head_Manager_username"), "head_Username"],
+    ],
+
+    where: {
+      head_Manager_ID: head_ID,
+    },
+  });
+};
+exports.updateHead = async function (headModel) {
+  const updateData = {
+    head_Manager_username: headModel.head_Username,
+    head_Manager_Fname: headModel.head_Fname,
+    head_Manager_Lname: headModel.head_Lname,
+    head_Manager_email: headModel.head_Email,
+  };
+
+  if (headModel.head_NewPassword) {
+    updateData.head_Manager_password = await hashSomething(
+      headModel.head_NewPassword
+    );
+  }
+
+  return await model.head_Manager.update(updateData, {
+    where: {
+      head_Manager_ID: headModel.head_ID,
+    },
+  });
 };

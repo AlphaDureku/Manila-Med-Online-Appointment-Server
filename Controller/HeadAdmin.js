@@ -162,3 +162,25 @@ exports.matchDoctorNurse = async (req, res) => {
     sendResponse(res, 400, error.message);
   }
 };
+
+exports.headDetails = async (req, res) => {
+  try {
+    const result = await HeadAdmin.AdminDetails(req.query.head_ID);
+    return sendResponse(res, 200, result);
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.updateHead = async (req, res) => {
+  try {
+    result = await HeadAdmin.updateHead(req.body.headModel);
+
+    console.log(req.body.headModel);
+    return sendResponse(res, 200, "success");
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, error.message);
+  }
+};

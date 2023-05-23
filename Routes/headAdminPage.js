@@ -13,5 +13,6 @@ router.post("/update-nurse", jwtMiddleware, HeadAdmin.updateNurse);
 router.get("/check-nursebinding", jwtMiddleware, HeadAdmin.checkNurseBinding);
 router.post("/remove-nurse", jwtMiddleware, HeadAdmin.removeNurse);
 router.post("/match-doctor", jwtMiddleware, HeadAdmin.matchDoctorNurse);
-
+router.get("/head-info", jwtMiddleware, HeadAdmin.headDetails);
+router.post("/update-head", jwtMiddleware, HeadAdmin.updateHead);
 module.exports = router;

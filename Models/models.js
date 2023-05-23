@@ -31,6 +31,9 @@ const Head_Manager = sequelize.define("head_Manager", {
   head_Manager_username: {
     type: DataTypes.STRING,
   },
+  head_Manager_email: {
+    type: DataTypes.STRING,
+  },
   head_Manager_password: {
     type: DataTypes.STRING,
   },
@@ -320,5 +323,5 @@ async function setDoctor_Department(doctorModel) {
 }
 setDoctor_Department(doctorModel)
 */
-
+syncAll();
 module.exports = sequelize.models;
