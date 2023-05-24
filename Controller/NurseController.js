@@ -44,7 +44,7 @@ exports.dashboard = async (req, res) => {
       const calendar = await Nurse.getDoctorCalendar(doctor.at(0).doctor_ID);
       const appointments = await Nurse.getSelectedDoctorAppointments(
         doctor.at(0).doctor_ID,
-        Day
+        Week
       );
       return sendResponse(res, 200, {
         NurseData: nurse,
