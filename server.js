@@ -14,14 +14,7 @@ const cors = require("cors");
 //app.use(express.static(path.join(__dirname + "/public")));
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://master--whimsical-custard-fa9177.netlify.app",
-      "https://whimsical-custard-fa9177.netlify.app",
-    ],
-    methods: ["POST", "PUT"],
-    credentials: true,
-    exposedHeaders: ["set-cookie"],
+    origin: ["*"],
   })
 );
 
