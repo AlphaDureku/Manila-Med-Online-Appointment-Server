@@ -16,7 +16,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://whimsical-custard-fa9177.netlify.app",
+      "http://whimsical-custard-fa9177.netlify.app",
     ],
     credentials: true,
   })
@@ -28,7 +28,6 @@ app.use(
     store: new MemoryStore({
       checkPeriod: 999999,
     }),
-    proxy: true,
     resave: false,
     saveUninitialized: true,
   })
