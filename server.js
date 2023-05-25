@@ -14,10 +14,14 @@ const cors = require("cors");
 //app.use(express.static(path.join(__dirname + "/public")));
 app.use(
   cors({
-    origin: "*",
+    origin: [
+      "http://localhost:3000",
+      "https://master--whimsical-custard-fa9177.netlify.app",
+      "https://whimsical-custard-fa9177.netlify.app",
+    ],
+    credentials: true,
   })
 );
-
 app.use(
   session({
     secret: process.env.SECRET_KEY,
