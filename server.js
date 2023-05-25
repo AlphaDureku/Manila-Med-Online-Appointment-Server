@@ -16,7 +16,6 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://master--whimsical-custard-fa9177.netlify.app",
       "https://whimsical-custard-fa9177.netlify.app",
     ],
     credentials: true,
@@ -29,7 +28,7 @@ app.use(
       checkPeriod: 5000,
     }),
     resave: true,
-    saveUninitialized: false,
+    saveUninitialized: true,
   })
 );
 app.use(errorHandler);
