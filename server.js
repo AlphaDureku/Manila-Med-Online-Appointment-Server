@@ -28,6 +28,7 @@ app.use(
     store: new MemoryStore({
       checkPeriod: 999999,
     }),
+    proxy: true,
     resave: false,
     saveUninitialized: true,
   })
