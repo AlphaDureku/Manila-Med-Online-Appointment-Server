@@ -27,8 +27,9 @@ app.use(
     store: new MemoryStore({
       checkPeriod: 5000,
     }),
-    resave: true,
+    resave: false,
     saveUninitialized: true,
+    cookie: { secure: true },
   })
 );
 app.use(errorHandler);
