@@ -21,6 +21,7 @@ app.use(
     ],
     methods: ["POST", "PUT"],
     credentials: true,
+    exposedHeaders: ["set-cookie"],
   })
 );
 
