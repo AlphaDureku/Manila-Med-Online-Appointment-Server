@@ -21,11 +21,12 @@ app.use(
     credentials: true,
   })
 );
+app.use(router);
 app.use(
   session({
     secret: process.env.SECRET_KEY,
     store: new MemoryStore({
-      checkPeriod: 5000,
+      checkPeriod: 999999,
     }),
     resave: false,
     saveUninitialized: true,
@@ -41,6 +42,7 @@ const tracking = require("./Routes/tracking");
 const booking = require("./Routes/booking");
 const admin = require("./Routes/NursePage");
 const headAdmin = require("./Routes/headAdminPage");
+const router = require("./Routes/index");
 
 app.use("/", indexRouter);
 app.use("/user", tracking);
