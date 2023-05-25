@@ -21,7 +21,7 @@ app.use(
     credentials: true,
   })
 );
-app.use(router);
+
 app.use(
   session({
     secret: process.env.SECRET_KEY,
@@ -30,7 +30,6 @@ app.use(
     }),
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true },
   })
 );
 app.use(errorHandler);
