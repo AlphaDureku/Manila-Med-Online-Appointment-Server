@@ -18,6 +18,7 @@ app.use(
       "http://localhost:3000",
       "https://whimsical-custard-fa9177.netlify.app",
       "https://client-v2-phi.vercel.app",
+      "https://client-v2-2xi8rdyr2-alphadureku.vercel.app",
     ],
     credentials: true,
   })
