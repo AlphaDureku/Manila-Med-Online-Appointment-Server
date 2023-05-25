@@ -32,7 +32,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       domain: "https://server-production-d8df.up.railway.app",
-      path: "/trackMe",
+      path: "/",
       secure: true,
       sameSite: "none",
     },
