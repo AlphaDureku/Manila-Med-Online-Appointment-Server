@@ -29,7 +29,13 @@ app.use(
       checkPeriod: 999999,
     }),
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    cookie: {
+      domain: "https://server-production-d8df.up.railway.app/",
+      path: "/",
+      secure: true,
+      sameSite: "none",
+    },
   })
 );
 app.use(errorHandler);
