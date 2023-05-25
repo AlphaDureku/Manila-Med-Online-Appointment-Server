@@ -31,7 +31,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      domain: "https://server-production-d8df.up.railway.app/",
+      domain: "https://server-production-d8df.up.railway.app",
       path: "/trackMe",
       secure: true,
       sameSite: "none",
