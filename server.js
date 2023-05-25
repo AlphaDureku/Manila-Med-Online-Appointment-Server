@@ -17,6 +17,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://whimsical-custard-fa9177.netlify.app",
+      "https://client-v2-phi.vercel.app",
     ],
     credentials: true,
   })
