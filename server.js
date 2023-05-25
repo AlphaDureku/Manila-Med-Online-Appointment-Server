@@ -14,7 +14,7 @@ const cors = require("cors");
 //app.use(express.static(path.join(__dirname + "/public")));
 app.use(
   cors({
-    origin: ["*"],
+    origin: "*",
   })
 );
 
