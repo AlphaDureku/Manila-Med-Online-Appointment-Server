@@ -24,6 +24,7 @@ const createRefreshToken = async (params) => {
 const sendRefreshToken = async (res, token) => {
   res.cookie("Nurse_ID", token, {
     httpOnly: true,
+    secure: true,
   });
 };
 const authorizedUsingCookie = async (res, token) => {
