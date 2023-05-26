@@ -18,7 +18,7 @@ const createAccessToken = async (params) => {
 };
 
 const createRefreshToken = async (params) => {
-  return jwt.sign(params, process.env.JWT_SECRET_REFRESH, { expiresIn: "20s" });
+  return jwt.sign(params, process.env.JWT_SECRET_REFRESH, { expiresIn: "1d" });
 };
 
 const sendRefreshToken = async (res, token) => {

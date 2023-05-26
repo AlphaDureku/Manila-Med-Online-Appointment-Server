@@ -60,7 +60,7 @@ exports.refreshToken = async (req, res) => {
 //Default state of dashboard
 exports.dashboard = async (req, res) => {
   const token = req.cookies.Nurse_ID;
-  if (await authorizedUsingCookie(res, token)) {
+  if ((await authorizedUsingCookie(res, token)).authorized) {
     const { Nurse_ID } = req.data;
     try {
       const nurse = await Nurse.findNurseUsingID(Nurse_ID);
