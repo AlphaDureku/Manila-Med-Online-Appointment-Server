@@ -5,3 +5,7 @@ exports.upperCaseFirstLetter = (params) => {
   });
   return capitalizedWords.join(" ");
 };
+
+exports.sessionDestroy = (req) => {
+  req.session.destroy();
+};

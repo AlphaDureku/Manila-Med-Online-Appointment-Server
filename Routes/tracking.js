@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 //Controllers
 const userController = require("../Controller/UserController");
-const jwtMiddleware = require("../utils/JWTHandler");
+const { jwtMiddleware } = require("../utils/JWTHandler");
 
 router.get("/get-patients", jwtMiddleware, userController.getUser_Patients);
 router.get(

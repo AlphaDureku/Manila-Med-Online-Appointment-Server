@@ -7,6 +7,12 @@ const { Day, Week, Year, Month } = require("../utils/DateObjects");
 const { NotifyPatients } = require("../utils/sendSMS");
 const uuid = require("uuid");
 const { unHashSomething, hashSomething } = require("../utils/Bcrypt");
+const {
+  createRefreshToken,
+  createAccessToken,
+  sendRefreshToken,
+  authorizedUsingCookie,
+} = require("../utils/JWTHandler");
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
@@ -19,9 +25,8 @@ exports.login = async (req, res) => {
     if (await unHashSomething(password, result.doctor_Secretary_password)) {
       Nurse_ID = result.doctor_Secretary_ID;
       //Prepare token for nurse login
-      const token = jwt.sign({ Nurse_ID }, process.env.JWT_SECRET, {
-        expiresIn: "10d",
-      });
+      const token = await createAccessToken({ Nurse_ID });
+      sendRefreshToken(res, await createRefreshToken({ Nurse_ID }));
       return sendResponse(res, 200, { status: true, token: token });
     } else {
       return sendResponse(res, 200, false);
@@ -31,34 +36,59 @@ exports.login = async (req, res) => {
   }
 };
 
+exports.refreshToken = async (req, res) => {
+  const token = req.cookies.Nurse_ID;
+  if (!token) {
+    return sendResponse(res, 200, { ok: false, accessToken: "" });
+  }
+  let payload = null;
+  try {
+    payload = jwt.verify(token, process.env.JWT_SECRET_REFRESH);
+  } catch (err) {
+    console.log(err);
+    return sendResponse(res, 200, { ok: false, accessToken: "whu" });
+  }
+
+  const { Nurse_ID } = payload;
+  sendRefreshToken(res, await createRefreshToken({ Nurse_ID }));
+  return sendResponse(res, 200, {
+    ok: false,
+    accessToken: await createAccessToken({ Nurse_ID }),
+  });
+};
+
 //Default state of dashboard
 exports.dashboard = async (req, res) => {
-  const { Nurse_ID } = req.data;
-  try {
-    const nurse = await Nurse.findNurseUsingID(Nurse_ID);
-    const doctor = await Nurse.findDoctors(Nurse_ID);
-
-    if (doctor.length > 0) {
-      //Doctor only at index 0
-      req.session.doctor_ID = doctor.at(0).doctor_ID;
-      const calendar = await Nurse.getDoctorCalendar(doctor.at(0).doctor_ID);
-      const appointments = await Nurse.getSelectedDoctorAppointments(
-        doctor.at(0).doctor_ID,
-        Week
-      );
+  const token = req.cookies.Nurse_ID;
+  if (await authorizedUsingCookie(res, token)) {
+    const { Nurse_ID } = req.data;
+    try {
+      const nurse = await Nurse.findNurseUsingID(Nurse_ID);
+      const doctor = await Nurse.findDoctors(Nurse_ID);
+      if (doctor.length > 0) {
+        //Doctor only at index 0
+        req.session.doctor_ID = doctor.at(0).doctor_ID;
+        const calendar = await Nurse.getDoctorCalendar(doctor.at(0).doctor_ID);
+        const appointments = await Nurse.getSelectedDoctorAppointments(
+          doctor.at(0).doctor_ID,
+          Week
+        );
+        return sendResponse(res, 200, {
+          NurseData: nurse,
+          DoctorData: doctor,
+          AppointmentsData: appointments,
+          calendarData: calendar,
+        });
+      }
       return sendResponse(res, 200, {
         NurseData: nurse,
-        DoctorData: doctor,
-        AppointmentsData: appointments,
-        calendarData: calendar,
       });
+    } catch (error) {
+      console.log(error);
+      return sendResponse(res, 500, error.message);
     }
-    return sendResponse(res, 200, {
-      NurseData: nurse,
-    });
-  } catch (error) {
-    console.log(error);
-    return sendResponse(res, 500, error.message);
+  } else {
+    return sendResponse(res, 401, "Unathorized");
   }
 };
 

@@ -23,6 +23,7 @@ exports.sendOTP = async (req, res) => {
       userResults.hasHistory = true;
     }
     req.session.OTP = sendEmail.BookingOTP(req.query.email);
+
     return sendResponse(res, 200, { data: userResults });
   } catch (error) {
     return sendResponse(res, 500, error.message);

@@ -7,6 +7,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const errorHandler = require("./utils/errorHandler");
 const session = require("express-session");
+const cookieParser = require("cookie-parser");
 const MemoryStore = require("memorystore")(session);
 const cors = require("cors");
 //const path = require("path");
@@ -21,7 +22,7 @@ app.use(
     credentials: true,
   })
 );
-
+app.use(cookieParser());
 app.set("trust proxy", true);
 app.use(
   session({
@@ -33,12 +34,14 @@ app.use(
     saveUninitialized: false,
     proxy: true,
     cookie: {
-      maxAge: 1000 * 60 * 60 * 48,
+      // maxAge: 1000 * 60 * 60 * 48,
+      /* Enable on deployment*/
       sameSite: "None",
       secure: true,
     },
   })
 );
+
 app.use(errorHandler);
 app.use(bodyParser.urlencoded({ limit: "10mb", extended: false }));
 app.use(bodyParser.json());

@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const NurseController = require("../Controller/NurseController");
-const jwtMiddleware = require("../utils/JWTHandler");
+const { jwtMiddleware } = require("../utils/JWTHandler");
 
 router.post("/nurse-login", NurseController.login);
 router.get("/nurse-dashboard", jwtMiddleware, NurseController.dashboard);
