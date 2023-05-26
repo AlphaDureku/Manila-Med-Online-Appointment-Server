@@ -25,6 +25,7 @@ const sendRefreshToken = async (res, token) => {
   res.cookie("Nurse_ID", token, {
     httpOnly: true,
     secure: true,
+    domain: "https://whimsical-custard-fa9177.netlify.app",
   });
 };
 const authorizedUsingCookie = async (res, token) => {
