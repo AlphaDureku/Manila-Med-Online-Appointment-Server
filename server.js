@@ -21,16 +21,21 @@ app.use(
     credentials: true,
   })
 );
+
 app.set("trust proxy", true);
 app.use(
   session({
     secret: process.env.SECRET_KEY,
     store: new MemoryStore({
-      checkPeriod: 999999,
+      checkPeriod: 15 * 60 * 1000,
     }),
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: true },
+    proxy: true,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 48,
+      sameSite: "None",
+    },
   })
 );
 app.use(errorHandler);
@@ -42,7 +47,6 @@ const tracking = require("./Routes/tracking");
 const booking = require("./Routes/booking");
 const admin = require("./Routes/NursePage");
 const headAdmin = require("./Routes/headAdminPage");
-const router = require("./Routes/index");
 
 app.use("/", indexRouter);
 app.use("/user", tracking);
