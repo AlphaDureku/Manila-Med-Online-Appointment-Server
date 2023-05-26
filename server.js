@@ -17,13 +17,11 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://whimsical-custard-fa9177.netlify.app",
-      "https://client-v2-phi.vercel.app",
-      "https://client-v2-2xi8rdyr2-alphadureku.vercel.app",
     ],
     credentials: true,
   })
 );
-
+app.set("trust proxy", true);
 app.use(
   session({
     secret: process.env.SECRET_KEY,
@@ -32,12 +30,6 @@ app.use(
     }),
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      domain: "https://server-production-d8df.up.railway.app",
-      path: "/",
-      secure: true,
-      sameSite: "none",
-    },
   })
 );
 app.use(errorHandler);
