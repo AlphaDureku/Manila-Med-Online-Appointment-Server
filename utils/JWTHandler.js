@@ -22,7 +22,6 @@ const createRefreshToken = async (params) => {
 };
 
 const sendRefreshToken = async (res, token) => {
-  console.log("GENERATED ANOTHER TOKEN");
   res.cookie("Nurse_ID", token, {
     sameSite: "None",
     httpOnly: true,
