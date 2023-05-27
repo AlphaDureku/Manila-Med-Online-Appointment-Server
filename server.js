@@ -18,7 +18,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://whimsical-custard-fa9177.netlify.app",
-      "https://manilamed.netlify.app/",
+      "https://manilamed.netlify.app",
     ],
     credentials: true,
   })
