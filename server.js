@@ -34,10 +34,10 @@ app.use(
     saveUninitialized: false,
     proxy: true,
     cookie: {
-      // maxAge: 1000 * 60 * 60 * 48,
+      maxAge: 60 * 60 * 1000,
       /* Enable on deployment*/
-      sameSite: "None",
-      secure: true,
+      // sameSite: "None",
+      // secure: true,
     },
   })
 );

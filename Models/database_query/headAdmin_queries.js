@@ -44,6 +44,14 @@ exports.getDoctorsWithoutNurse = async function () {
     ],
   });
 };
+exports.findOneDoctor = async function (email) {
+  return await model.doctor.findOne({
+    raw: true,
+    where: {
+      doctor_email: email,
+    },
+  });
+};
 
 exports.getDoctorsWithNurse = async function () {
   return await model.doctor.findAll({

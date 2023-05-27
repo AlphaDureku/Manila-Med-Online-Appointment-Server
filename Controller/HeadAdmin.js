@@ -6,7 +6,10 @@ const uuid = require("uuid");
 const { hashSomething, unHashSomething } = require("../utils/Bcrypt");
 const { upperCaseFirstLetter } = require("../utils/collectionOfFunctions");
 const { sendEmail } = require("../utils/sendEmail");
-const { findNurse } = require("../Models/database_query/nurse_queries");
+const {
+  findNurse,
+  findDoctors,
+} = require("../Models/database_query/nurse_queries");
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
@@ -58,7 +61,13 @@ exports.addDoctor = async (req, res) => {
   try {
     const { Fname, Lname, gender, email, contact, specialization_ID, hmo_ID } =
       req.body;
-
+    const result = await HeadAdmin.findOneDoctor(email);
+    if (result) {
+      return sendResponse(res, 200, {
+        status: false,
+        message: "email already in use",
+      });
+    }
     let doctorModel = {
       doctor_ID: "MCM-" + uuid.v4(),
       doctor_first_name: upperCaseFirstLetter(Fname),
