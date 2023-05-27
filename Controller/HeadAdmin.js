@@ -7,9 +7,8 @@ const { hashSomething, unHashSomething } = require("../utils/Bcrypt");
 const { upperCaseFirstLetter } = require("../utils/collectionOfFunctions");
 const { sendEmail } = require("../utils/sendEmail");
 const {
-  findNurse,
-  findDoctors,
   findNurseUsingEmail,
+  findNurseUsingUsername,
 } = require("../Models/database_query/nurse_queries");
 
 exports.login = async (req, res) => {
