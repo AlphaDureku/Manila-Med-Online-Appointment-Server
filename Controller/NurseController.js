@@ -26,7 +26,7 @@ exports.login = async (req, res) => {
       Nurse_ID = result.doctor_Secretary_ID;
       //Prepare token for nurse login
       const token = await createAccessToken({ Nurse_ID });
-      sendRefreshToken(res, await createRefreshToken({ Nurse_ID }));
+
       return sendResponse(res, 200, { status: true, token: token });
     } else {
       return sendResponse(res, 200, false);
