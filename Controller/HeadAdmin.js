@@ -9,6 +9,7 @@ const { sendEmail } = require("../utils/sendEmail");
 const {
   findNurse,
   findDoctors,
+  findNurseUsingEmail,
 } = require("../Models/database_query/nurse_queries");
 
 exports.login = async (req, res) => {
@@ -98,11 +99,17 @@ exports.addNurse = async (req, res) => {
   try {
     const { username, password, Fname, Lname, email, contact_number } =
       req.body;
-    const result = await findNurse(username);
-    if (result) {
+    const nurse_Username = await findNurseUsingUsername(username);
+    const nurse_Email = await findNurseUsingEmail(email);
+    if (nurse_Username) {
       return sendResponse(res, 200, {
         status: false,
         message: "username already in use",
+      });
+    } else if (nurse_Email) {
+      return sendResponse(res, 200, {
+        status: false,
+        message: "email already in use",
       });
     }
     const nurseModel = {

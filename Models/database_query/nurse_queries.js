@@ -8,11 +8,20 @@ const age = Sequelize.fn(
   Sequelize.fn("NOW")
 );
 
-exports.findNurse = async function (username) {
+exports.findNurseUsingUsername = async function (username) {
   return await model.doctor_Secretary.findOne({
     raw: true,
     where: {
       doctor_Secretary_username: username,
+    },
+  });
+};
+
+exports.findNurseUsingEmail = async function (email) {
+  return await model.doctor_Secretary.findOne({
+    raw: true,
+    where: {
+      doctor_Secretary_email: email,
     },
   });
 };
