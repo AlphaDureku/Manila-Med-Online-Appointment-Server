@@ -17,7 +17,7 @@ const {
 exports.login = async (req, res) => {
   const { username, password } = req.body;
   try {
-    const result = await Nurse.findNurse(username);
+    const result = await Nurse.findNurseUsingEmail(username);
     if (!result) {
       return sendResponse(res, 200, false);
     }
