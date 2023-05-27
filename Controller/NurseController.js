@@ -36,27 +36,6 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.refreshToken = async (req, res) => {
-  const token = req.cookies.Nurse_ID;
-  if (!token) {
-    return sendResponse(res, 200, { ok: false, accessToken: "" });
-  }
-  let payload = null;
-  try {
-    payload = jwt.verify(token, process.env.JWT_SECRET_REFRESH);
-  } catch (err) {
-    console.log(err);
-    return sendResponse(res, 200, { ok: false, accessToken: "whu" });
-  }
-
-  const { Nurse_ID } = payload;
-  sendRefreshToken(res, await createRefreshToken({ Nurse_ID }));
-  return sendResponse(res, 200, {
-    ok: false,
-    accessToken: await createAccessToken({ Nurse_ID }),
-  });
-};
-
 //Default state of dashboard
 exports.dashboard = async (req, res) => {
   const token = req.cookies.Nurse_ID;
