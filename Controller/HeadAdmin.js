@@ -142,6 +142,16 @@ exports.removeNurse = async (req, res) => {
   }
 };
 
+exports.removeBind = async (req, res) => {
+  try {
+    await HeadAdmin.removeBind(req.body.doctor_ID);
+    return sendResponse(res, 200, "success");
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, error.message);
+  }
+};
+
 exports.updateNurse = async (req, res) => {
   try {
     await HeadAdmin.updateNurse(req.body.NurseModel);

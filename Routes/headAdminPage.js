@@ -10,6 +10,7 @@ router.post("/remove-doctor", jwtMiddleware, HeadAdmin.deleteDoctor);
 router.post("/add-nurse", jwtMiddleware, HeadAdmin.addNurse);
 router.get("/nurse-info", jwtMiddleware, HeadAdmin.nurseDetails);
 router.post("/update-nurse", jwtMiddleware, HeadAdmin.updateNurse);
+router.post("/remove-bind", jwtMiddleware, HeadAdmin.removeBind);
 router.get("/check-nursebinding", jwtMiddleware, HeadAdmin.checkNurseBinding);
 router.post("/remove-nurse", jwtMiddleware, HeadAdmin.removeNurse);
 router.post("/match-doctor", jwtMiddleware, HeadAdmin.matchDoctorNurse);

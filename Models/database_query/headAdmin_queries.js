@@ -222,3 +222,16 @@ exports.updateHead = async function (headModel) {
     },
   });
 };
+
+exports.removeBind = async function (doctorID) {
+  await model.doctor.update(
+    {
+      doctorSecretaryDoctorSecretaryID: null,
+    },
+    {
+      where: {
+        doctor_ID: doctorID,
+      },
+    }
+  );
+};
