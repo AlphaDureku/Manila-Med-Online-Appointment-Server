@@ -22,6 +22,7 @@ const createRefreshToken = async (params) => {
 };
 
 const sendRefreshToken = async (res, token) => {
+  console.log("GENERATED ANOTHER TOKEN");
   res.cookie("Nurse_ID", token, {
     sameSite: "None",
     httpOnly: true,
@@ -40,7 +41,7 @@ const authorizedUsingCookie = async (res, token) => {
     return { authorized: false };
   }
   const { Nurse_ID } = payload;
-  console.log("GENERATED ANOTHER TOKEN");
+
   sendRefreshToken(res, await createRefreshToken({ Nurse_ID }));
   return { authorized: true };
 };
