@@ -232,12 +232,27 @@ exports.getAppointmentsThatDate = async function (doctor_ID, date) {
   return await model.appointmentDetails.findAll({
     raw: true,
     attributes: [
-      "appointment_ID",
       "patient_ID",
-      [Sequelize.col("patient_first_name"), "patient_Fname"],
-      [Sequelize.col("patient_last_name"), "patient_Lname"],
-      [Sequelize.col("patient_contact_number"), "contact"],
-      [Sequelize.col("appointment_queue"), "queue"],
+      "appointment_ID",
+      [age, "patient_age"],
+      [Sequelize.col("user_email"), "email"],
+      [Sequelize.col("patient_first_name"), "Fname"],
+      [Sequelize.col("patient_last_name"), "Lname"],
+      [Sequelize.col("patient_gender"), "gender"],
+      [Sequelize.col("patient_address"), "patient_address"],
+      [Sequelize.col("patient_contact_number"), "Contact"],
+      [Sequelize.col("appointment_status"), "Status"],
+      [Sequelize.col("doctor_first_name"), "doctor_Fname"],
+      [Sequelize.col("specialization_Name"), "specialization"],
+      [Sequelize.col("doctor_last_name"), "doctor_Lname"],
+      [
+        Sequelize.fn(
+          "date_format",
+          Sequelize.col("appointmentDetails.createdAt"),
+          "%M %e, %Y"
+        ),
+        "createdAt",
+      ],
       [
         Sequelize.fn(
           "date_format",
@@ -249,7 +264,7 @@ exports.getAppointmentsThatDate = async function (doctor_ID, date) {
       [
         Sequelize.fn(
           "date_format",
-          Sequelize.col("appointment_start"),
+          Sequelize.col("doctor_schedule_start_time"),
           "%h:%i%p"
         ),
         "start",
@@ -257,7 +272,7 @@ exports.getAppointmentsThatDate = async function (doctor_ID, date) {
       [
         Sequelize.fn(
           "date_format",
-          Sequelize.col("doctor_schedule_end_time"),
+          Sequelize.col("doctor_schedule_start_time"),
           "%h:%i%p"
         ),
         "end",

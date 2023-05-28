@@ -43,19 +43,23 @@ exports.dashboard = async (req, res) => {
       const doctor = await Nurse.findDoctors(Nurse_ID);
       if (doctor.length > 0) {
         //Doctor only at index 0
-        req.session.doctor_ID = doctor.at(0).doctor_ID;
-        const calendar = await Nurse.getDoctorCalendar(doctor.at(0).doctor_ID);
+        const calendar = await Nurse.getDoctorCalendar(
+          req.session.doctor_ID || doctor.at(0).doctor_ID
+        );
         const appointments = await Nurse.getSelectedDoctorAppointments(
-          doctor.at(0).doctor_ID,
+          req.session.doctor_ID || doctor.at(0).doctor_ID,
           Week
         );
+        console.log(appointments);
         return sendResponse(res, 200, {
           NurseData: nurse,
           DoctorData: doctor,
           AppointmentsData: appointments,
           calendarData: calendar,
+          selectedDoctor: req.session.doctor_ID,
         });
       }
+
       return sendResponse(res, 200, {
         NurseData: nurse,
       });
