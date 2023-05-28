@@ -18,7 +18,7 @@ exports.findHeadAdmin = async function (username) {
 exports.getHeadAdmin = async function (ID) {
   return await model.head_Manager.findOne({
     raw: true,
-    attributes: ["head_Manager_Fname", "head_Manager_Lname"],
+    attributes: ["head_Manger_ID", "head_Manager_Fname", "head_Manager_Lname"],
     where: {
       head_Manager_ID: ID,
     },
