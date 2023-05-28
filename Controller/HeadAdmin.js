@@ -1,6 +1,5 @@
 const HeadAdmin = require("../Models/database_query/headAdmin_queries");
 const sendResponse = require("../utils/sendResponse");
-const jwt = require("jsonwebtoken");
 const Initialize = require("../Models/database_query/intialize_queries");
 const uuid = require("uuid");
 const { hashSomething, unHashSomething } = require("../utils/Bcrypt");
@@ -10,6 +9,12 @@ const {
   findNurseUsingEmail,
   findNurseUsingUsername,
 } = require("../Models/database_query/nurse_queries");
+const {
+  authorizedUsingCookie,
+  createAccessToken,
+  createRefreshToken,
+  sendRefreshToken,
+} = require("../utils/JWTHandler");
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
@@ -20,10 +25,12 @@ exports.login = async (req, res) => {
     }
     if (await unHashSomething(password, result.head_Manager_password)) {
       const head_Manager_ID = result.head_Manager_ID;
-      const token = jwt.sign({ head_Manager_ID }, process.env.JWT_SECRET, {
-        expiresIn: "10d",
-      });
-
+      const token = await createAccessToken({ head_Manager_ID });
+      sendRefreshToken(
+        res,
+        await createRefreshToken({ head_Manager_ID }),
+        "head_ID"
+      );
       return sendResponse(res, 200, { status: true, token: token });
     } else {
       return sendResponse(res, 200, { status: false });
@@ -35,26 +42,30 @@ exports.login = async (req, res) => {
 };
 
 exports.dashboard = async (req, res) => {
-  const { head_Manager_ID } = req.data;
-  try {
-    const AdminInfo = await HeadAdmin.getHeadAdmin(head_Manager_ID);
-    const DoctorsWithoutNurses = await HeadAdmin.getDoctorsWithoutNurse();
-    const DoctorsWithNurses = await HeadAdmin.getDoctorsWithNurse();
-    const HmoLists = await Initialize.setup_HMO();
-    const SpecializationList = await Initialize.setup_Specialization();
-    const Nurses = await HeadAdmin.getNurses();
-    return sendResponse(res, 200, {
-      AdminInfo: AdminInfo,
-      DoctorsWithNurses: DoctorsWithNurses,
-      DoctorsWithoutNurses: DoctorsWithoutNurses,
-      NurseLists: Nurses,
-      HmoLists: HmoLists,
-      SpecializationList: SpecializationList,
-    });
-  } catch (error) {
-    console.log(error);
-    return sendResponse(res, 500, error.message);
+  const token = req.cookies.head_ID;
+  if ((await authorizedUsingCookie(res, token, "head_ID")).authorized) {
+    const { head_Manager_ID } = req.data;
+    try {
+      const AdminInfo = await HeadAdmin.getHeadAdmin(head_Manager_ID);
+      const DoctorsWithoutNurses = await HeadAdmin.getDoctorsWithoutNurse();
+      const DoctorsWithNurses = await HeadAdmin.getDoctorsWithNurse();
+      const HmoLists = await Initialize.setup_HMO();
+      const SpecializationList = await Initialize.setup_Specialization();
+      const Nurses = await HeadAdmin.getNurses();
+      return sendResponse(res, 200, {
+        AdminInfo: AdminInfo,
+        DoctorsWithNurses: DoctorsWithNurses,
+        DoctorsWithoutNurses: DoctorsWithoutNurses,
+        NurseLists: Nurses,
+        HmoLists: HmoLists,
+        SpecializationList: SpecializationList,
+      });
+    } catch (error) {
+      console.log(error);
+      return sendResponse(res, 500, error.message);
+    }
   }
+  return sendResponse(res, 402, "Unathorized");
 };
 
 exports.addDoctor = async (req, res) => {

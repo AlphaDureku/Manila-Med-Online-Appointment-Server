@@ -1,8 +1,5 @@
 const sendResponse = require("../utils/sendResponse");
-const sendEmail = require("../utils/sendEmail");
-const bcrypt = require("bcrypt");
 const Nurse = require("../Models/database_query/nurse_queries");
-const jwt = require("jsonwebtoken");
 const { Day, Week, Year, Month } = require("../utils/DateObjects");
 const { NotifyPatients } = require("../utils/sendSMS");
 const uuid = require("uuid");
@@ -26,7 +23,7 @@ exports.login = async (req, res) => {
       Nurse_ID = result.doctor_Secretary_ID;
       //Prepare token for nurse login
       const token = await createAccessToken({ Nurse_ID });
-      sendRefreshToken(res, await createRefreshToken({ Nurse_ID }));
+      sendRefreshToken(res, await createRefreshToken({ Nurse_ID }), "Nurse_ID");
       return sendResponse(res, 200, { status: true, token: token });
     } else {
       return sendResponse(res, 200, false);
@@ -39,7 +36,7 @@ exports.login = async (req, res) => {
 //Default state of dashboard
 exports.dashboard = async (req, res) => {
   const token = req.cookies.Nurse_ID;
-  if ((await authorizedUsingCookie(res, token)).authorized) {
+  if ((await authorizedUsingCookie(res, token, "Nurse_ID")).authorized) {
     const { Nurse_ID } = req.data;
     try {
       const nurse = await Nurse.findNurseUsingID(Nurse_ID);
@@ -66,9 +63,8 @@ exports.dashboard = async (req, res) => {
       console.log(error);
       return sendResponse(res, 500, error.message);
     }
-  } else {
-    return sendResponse(res, 401, "Unathorized");
   }
+  return sendResponse(res, 401, "Unathorized");
 };
 
 exports.changeDoctor = async (req, res) => {

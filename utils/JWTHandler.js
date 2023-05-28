@@ -21,14 +21,14 @@ const createRefreshToken = async (params) => {
   return jwt.sign(params, process.env.JWT_SECRET_REFRESH, { expiresIn: "1d" });
 };
 
-const sendRefreshToken = async (res, token) => {
-  res.cookie("Nurse_ID", token, {
+const sendRefreshToken = async (res, token, tokenName) => {
+  res.cookie(tokenName, token, {
     sameSite: "None",
     httpOnly: true,
     secure: true,
   });
 };
-const authorizedUsingCookie = async (res, token) => {
+const authorizedUsingCookie = async (res, token, tokenName) => {
   if (!token) {
     return { authorized: false };
   }
@@ -41,7 +41,7 @@ const authorizedUsingCookie = async (res, token) => {
   }
   const { Nurse_ID } = payload;
 
-  sendRefreshToken(res, await createRefreshToken({ Nurse_ID }));
+  sendRefreshToken(res, await createRefreshToken({ Nurse_ID }), tokenName);
   return { authorized: true };
 };
 module.exports = {

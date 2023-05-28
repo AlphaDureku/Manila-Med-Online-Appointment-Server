@@ -26,6 +26,7 @@
     "jsonwebtoken": "^9.0.0",
     "memorystore": "^1.6.7",
     "moment": "^2.29.4",
+    "moment-timezone": "^0.5.43",
     "mysql2": "^3.1.2",
     "nodemailer": "^6.9.1",
     "npm": "^9.4.2",

@@ -1,23 +1,23 @@
-const moment = require("moment");
+const moment = require("moment-timezone");
 
 const Day = {
-  start: moment().startOf("day").toDate(),
-  end: moment().endOf("day").toDate(),
+  start: moment().tz("Asia/Manila").startOf("day").toDate(),
+  end: moment().tz("Asia/Manila").endOf("day").toDate(),
 };
 
 const Week = {
-  start: moment().startOf("week").toDate(),
-  end: moment().endOf("week").toDate(),
+  start: moment().tz("Asia/Manila").startOf("isoWeek").toDate(),
+  end: moment().tz("Asia/Manila").endOf("isoWeek").toDate(),
 };
 
 const Month = {
-  start: moment().startOf("month").toDate(),
-  end: moment().endOf("month").toDate(),
+  start: moment().tz("Asia/Manila").startOf("month").startOf("day").toDate(),
+  end: moment().tz("Asia/Manila").endOf("month").endOf("day").toDate(),
 };
 
 const Year = {
-  start: moment().startOf("year").toDate(),
-  end: moment().endOf("year").toDate(),
+  start: moment().tz("Asia/Manila").startOf("year").startOf("day").toDate(),
+  end: moment().tz("Asia/Manila").endOf("year").endOf("day").toDate(),
 };
 
 module.exports = { Day, Year, Month, Week };
