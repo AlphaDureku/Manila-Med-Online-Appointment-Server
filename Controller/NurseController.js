@@ -188,7 +188,7 @@ exports.updateAppointmentStatus = async (req, res) => {
           "HH:mm:ss"
         ).format("hh:mm A")}}`;
         await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
-        sendSMS(Contact, body);
+        // sendSMS(Contact, body);
         break;
       case "Cancelled":
         body = `Good Day! ${patient_Fname} ${patient_Lname}, Your appointment on ${date}, ${start} to ${end} has been cancelled. We deeply apologize for the inconvenience. Kindly call this 0239-139 if you wanted to reschedule your appointment.
@@ -200,7 +200,7 @@ exports.updateAppointmentStatus = async (req, res) => {
         Regards, 
         Medical Manila Center`;
         await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
-        sendSMS(Contact, body);
+        // sendSMS(Contact, body);
         break;
       case "Completed":
         await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
@@ -211,7 +211,7 @@ exports.updateAppointmentStatus = async (req, res) => {
         Regards, 
         Medical Manila Center`;
         await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
-        sendSMS(Contact, body);
+        // sendSMS(Contact, body);
         break;
       default:
         return sendResponse(res, 400, "invalid parameters");
