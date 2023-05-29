@@ -454,6 +454,7 @@ exports.getAvailableScheduleForUpdate = async function (doctor_ID) {
     raw: true,
     attributes: [
       "doctor_ID",
+      [Sequelize.col("doctor_schedule_ID"), "schedule_ID"],
       [Sequelize.col("doctor_schedule_max_patient"), "maxPatient"],
       [Sequelize.col("doctor_schedule_Interval"), "timeInterval"],
       [
@@ -490,6 +491,13 @@ exports.updateDoctorAvailability = async function (updatedModel) {
   );
 };
 
+exports.deleteDoctorAvailability = async function (schedule_ID) {
+  return await model.doctor_schedule_table.destroy({
+    where: {
+      doctor_schedule_ID: schedule_ID,
+    },
+  });
+};
 // exports.fetchDoctorPatientAppointments = async function (
 //   doctor_ID,
 //   startOfWhat,

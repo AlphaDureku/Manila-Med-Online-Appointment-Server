@@ -335,3 +335,14 @@ exports.updateDoctorAvailability = async (req, res) => {
     sendResponse(res, 500, error.message);
   }
 };
+
+exports.deleteDoctorAvailability = async (req, res) => {
+  const { schedule_ID } = req.body;
+
+  try {
+    const result = await Nurse.deleteDoctorAvailability(schedule_ID);
+    sendResponse(res, 200, result);
+  } catch (error) {
+    sendResponse(res, 500, error.message);
+  }
+};
