@@ -55,3 +55,7 @@ exports.NotifyPatientsThruSMSThatDoctorHasArrived = async (
 exports.NotifyPatientsThruSMSThatDoctorIsLate = async (appointmentDetails) => {
   console.log(appointmentDetails);
 };
+
+exports.NotifyPatientsThruSMSThatCancellAll = async (appointmentDetails) => {
+  console.log(appointmentDetails);
+};

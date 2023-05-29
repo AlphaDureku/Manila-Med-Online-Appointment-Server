@@ -449,6 +449,30 @@ exports.get_SetAppointment = async function (date, doctor_ID) {
   });
 };
 
+exports.getAvailableScheduleForUpdate = async function (doctor_ID) {
+  return await model.doctor_schedule_table.findAll({
+    raw: true,
+    attributes: [
+      "doctor_ID",
+      [Sequelize.col("doctor_schedule_max_patient"), "maxPatient"],
+      [
+        Sequelize.fn(
+          "date_format",
+          Sequelize.col("doctor_schedule_date"),
+          "%Y-%m-%d"
+        ),
+        "date",
+      ],
+      [Sequelize.col("doctor_schedule_start_time"), "start"],
+      [Sequelize.col("doctor_schedule_end_time"), "end"],
+    ],
+    where: {
+      doctor_ID,
+      doctor_schedule_current_queue: 1,
+    },
+  });
+};
+
 // exports.fetchDoctorPatientAppointments = async function (
 //   doctor_ID,
 //   startOfWhat,

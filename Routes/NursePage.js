@@ -41,4 +41,10 @@ router.post(
 
 router.post("/update-password", jwtMiddleware, NurseController.updatePassword);
 
+router.get(
+  "/avail-schedule-forUpdate",
+  jwtMiddleware,
+  NurseController.getAvailableScheduleForUpdate
+);
+
 module.exports = router;

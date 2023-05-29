@@ -3,6 +3,7 @@ const Nurse = require("../Models/database_query/nurse_queries");
 const { Day, Week, Year, Month } = require("../utils/DateObjects");
 const {
   NotifyPatientsThruSMSThatDoctorHasArrived,
+  NotifyPatientsThruSMSThatCancellAll,
   sendSingleSMS,
 } = require("../utils/sendSMS");
 const uuid = require("uuid");
@@ -17,6 +18,7 @@ const {
   notifyDoctor,
   notifyPatientsThruEmailThatDoctorHasArrived,
   notifyPatientsThruEmailThatDoctorIsLate,
+  notifyPatientsThruEmailThatCancelAll,
 } = require("../utils/sendEmail");
 const {
   getAppointmentDetailsUsingAppointmentID,
@@ -177,7 +179,6 @@ exports.updateAppointmentStatus = async (req, res) => {
     }
     const { Contact, patient_Fname, patient_Lname } =
       await getAppointmentDetailsUsingAppointmentID(appointment_ID);
-    console.log(patientDetails);
     let body = "";
     switch (updateStatus) {
       case "Confirmed":
@@ -235,6 +236,11 @@ exports.notifyPatientsForTodayThatDoctorHasArrived = async (req, res) => {
       appointments.forEach((AppointmentDetails) => {
         notifyPatientsThruEmailThatDoctorIsLate(AppointmentDetails);
         NotifyPatientsThruSMSThatDoctorHasArrived(AppointmentDetails);
+      });
+    } else {
+      appointments.forEach((AppointmentDetails) => {
+        notifyPatientsThruEmailThatCancelAll(AppointmentDetails);
+        NotifyPatientsThruSMSThatCancellAll(AppointmentDetails);
       });
     }
 
@@ -295,5 +301,17 @@ exports.updatePassword = async (req, res) => {
   } catch (error) {
     console.log(error);
     return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.getAvailableScheduleForUpdate = async (req, res) => {
+  try {
+    const result = await Nurse.getAvailableScheduleForUpdate(
+      req.session.doctor_ID
+    );
+    sendResponse(res, 200, result);
+  } catch (error) {
+    console.log(error.message);
+    sendResponse(res, 500, error.message);
   }
 };
