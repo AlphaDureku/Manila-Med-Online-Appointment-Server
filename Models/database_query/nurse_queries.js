@@ -455,6 +455,7 @@ exports.getAvailableScheduleForUpdate = async function (doctor_ID) {
     attributes: [
       "doctor_ID",
       [Sequelize.col("doctor_schedule_max_patient"), "maxPatient"],
+      [Sequelize.col("doctor_schedule_Interval"), "timeInterval"],
       [
         Sequelize.fn(
           "date_format",
