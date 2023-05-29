@@ -27,6 +27,12 @@ router.post(
   jwtMiddleware,
   NurseController.notifyPatientsForToday
 );
+
+router.post(
+  "/notify-doctorForToday",
+  jwtMiddleware,
+  NurseController.notifyDoctorOnTodaysAppointment
+);
 router.post(
   "/add-doctorAvailability",
   jwtMiddleware,

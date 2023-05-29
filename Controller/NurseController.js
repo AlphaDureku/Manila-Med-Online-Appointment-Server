@@ -1,7 +1,7 @@
 const sendResponse = require("../utils/sendResponse");
 const Nurse = require("../Models/database_query/nurse_queries");
 const { Day, Week, Year, Month } = require("../utils/DateObjects");
-const { NotifyPatients } = require("../utils/sendSMS");
+const { NotifyPatients, sendSingleSMS } = require("../utils/sendSMS");
 const uuid = require("uuid");
 const { unHashSomething, hashSomething } = require("../utils/Bcrypt");
 const {
@@ -10,6 +10,10 @@ const {
   sendRefreshToken,
   authorizedUsingCookie,
 } = require("../utils/JWTHandler");
+const { notifyDoctor } = require("../utils/sendEmail");
+const {
+  getAppointmentDetailsUsingAppointmentID,
+} = require("../Models/database_query/user_queries");
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
@@ -41,6 +45,7 @@ exports.dashboard = async (req, res) => {
     try {
       const nurse = await Nurse.findNurseUsingID(Nurse_ID);
       const doctor = await Nurse.findDoctors(Nurse_ID);
+
       if (doctor.length > 0) {
         //Doctor only at index 0
         const calendar = await Nurse.getDoctorCalendar(
@@ -50,7 +55,9 @@ exports.dashboard = async (req, res) => {
           req.session.doctor_ID || doctor.at(0).doctor_ID,
           Week
         );
-        console.log(appointments);
+        if (!req.session.doctor_ID) {
+          req.session.doctor_ID = doctor.at(0).doctor_ID;
+        }
         return sendResponse(res, 200, {
           NurseData: nurse,
           DoctorData: doctor,
@@ -74,11 +81,28 @@ exports.dashboard = async (req, res) => {
 exports.changeDoctor = async (req, res) => {
   req.session.doctor_ID = req.query.doctor_ID;
   const { doctor_ID } = req.session;
+  let selectedDateRange = Day;
+  switch (req.query.DateRange) {
+    case "Week":
+      selectedDateRange = Week;
+      break;
+    case "Month":
+      selectedDateRange = Month;
+      break;
+    case "Year":
+      selectedDateRange = Year;
+      break;
+    case "Day":
+      selectedDateRange = Day;
+      break;
+    default:
+      break;
+  }
   try {
     const calendar = await Nurse.getDoctorCalendar(doctor_ID);
     const appointments = await Nurse.getSelectedDoctorAppointments(
       doctor_ID,
-      Year
+      selectedDateRange
     );
     return sendResponse(res, 200, {
       calendarData: calendar,
@@ -144,26 +168,31 @@ exports.updateAppointmentStatus = async (req, res) => {
     if (!updateStatus) {
       return sendResponse(res, 400, "bad parameter");
     }
+    const { Contact, patient_Fname, patient_Lname } =
+      await getAppointmentDetailsUsingAppointmentID(appointment_ID);
+    console.log(patientDetails);
+    let body = "";
     switch (updateStatus) {
       case "Confirmed":
+        body = `Hello ${patient_Fname} ${patient_Lname}, We would like to inform that your appointment has been confirmed`;
         await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
         break;
       case "Cancelled":
+        body = `Hello ${patient_Fname} ${patient_Lname}, We would like to inform that your appointment has been cancelled`;
         await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
         break;
       case "Completed":
         await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
-        break;
+        return sendResponse(res, 200, "success");
       case "Rejected":
+        body = `Hello ${patient_Fname} ${patient_Lname}, We would like to inform that your appointment has been rejected`;
         await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
         break;
-      case "Pending":
-        await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
-        break;
-
       default:
         return sendResponse(res, 400, "invalid parameters");
     }
+
+    console.log(await sendSingleSMS(Contact, body, "Status"));
     return sendResponse(res, 200, "success");
   } catch (error) {
     console.log(error);
@@ -192,6 +221,21 @@ exports.notifyPatientsForToday = async (req, res) => {
       NotifyPatients(patient);
     });
     return sendResponse(res, 200, "success");
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.notifyDoctorOnTodaysAppointment = async (req, res) => {
+  const { date } = req.body;
+  const { doctor_ID } = req.session;
+  try {
+    const result = await Nurse.getAppointmentsToday(doctor_ID, date);
+    const email = await Nurse.getDoctorEmailUsingID(doctor_ID);
+    console.log(email);
+    notifyDoctor(email, result);
+    return sendResponse(res, 200, "successfully notified");
   } catch (error) {
     console.log(error);
     return sendResponse(res, 500, error.message);

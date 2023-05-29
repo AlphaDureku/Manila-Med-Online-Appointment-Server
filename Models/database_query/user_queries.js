@@ -196,6 +196,10 @@ exports.getAppointmentDetailsUsingAppointmentID = async function (
       [Sequelize.col("doctor_first_name"), "Fname"],
       [Sequelize.col("doctor_last_name"), "Lname"],
       [Sequelize.col("specialization_Name"), "specialization"],
+      [Sequelize.col("patient_first_name"), "patient_Fname"],
+      [Sequelize.col("patient_last_name"), "patient_Lname"],
+      [Sequelize.col("patient_contact_number"), "Contact"],
+
       [
         Sequelize.fn(
           "date_format",
@@ -223,6 +227,10 @@ exports.getAppointmentDetailsUsingAppointmentID = async function (
             required: false,
           },
         ],
+      },
+      {
+        model: model.patient,
+        attributes: [],
       },
     ],
   });

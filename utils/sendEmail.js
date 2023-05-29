@@ -4,7 +4,7 @@ function generateOTP() {
   return Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
 }
 
-exports.sendEmail = (email, body) => {
+exports.sendEmailSecretary = (email, body) => {
   async function main() {
     let transporter = mail.createTransport({
       service: "gmail",
@@ -110,4 +110,66 @@ exports.TrackingOTP = (email) => {
   }
   main().catch(console.error);
   return OTP;
+};
+
+exports.notifyDoctor = (email, table) => {
+  async function main() {
+    let transporter = mail.createTransport({
+      service: "gmail",
+      secure: false,
+      auth: {
+        user: "templanzamark2002@gmail.com",
+        pass: "koaowdqdigdcujwr",
+      },
+    });
+    let data_table = "";
+    table.forEach((data) => {
+      data_table += `<tr>
+            <td align = 'center'>${data.Fname} ${data.Lname}</td>
+            <td align = 'center'>${data.Contact}</td>
+            </tr>`;
+    });
+    let info = await transporter.sendMail({
+      from: '"templanzamark2002@gmail.com', // sender address
+      to: email.doctor_email, // list of receivers
+      subject: "Today's Schedule", // Subject line
+      html: `<div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
+            <div style="margin:50px auto;width:70%;padding:20px 0">
+              <div style="border-bottom:1px solid #eee">
+                <a href=""style="font-size:1.5em;color: #388440;text-decoration:none;font-weight:600"><img src="https://scontent.fmnl13-2.fna.fbcdn.net/v/t39.30808-6/323289895_721708059168068_7716967383321258182_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeFCtue87s6eVW82rSocbCt0kveEtFjVanKS94S0WNVqcoext4GgIfTr7acDsVwuhD-MtKlKPrsp8FxMs3V5ofie&_nc_ohc=z7SE0rt_lhgAX9WFSHd&_nc_ht=scontent.fmnl13-2.fna&oh=00_AfBqcvgJEcTKAO68VFxhKgAT7NfFEU2spxxcqEExEYrEIQ&oe=641D99AC" width="28" 
+               height="25"/> Medical Center Manila</a>
+              </div>
+              <p style="font-size:1.7em;"><b>Hi,</b></p>
+              <p>Here are the patient appointments for <b>${table[0].appointmentDate}</b> at<b> ${table[0].start} - ${table[0].end} </b></p>
+              <style>
+          table, th, td {
+            border:1px solid black;
+            text-align: center;
+          }
+          </style>
+          <body>
+          
+          <table style="width:100%" border="2">
+          <tr>
+          <th>Full Name</th><th>Contact Number</th>
+          <tr>
+          ${data_table}
+
+                
+          </table>
+              <p style="font-size:0.9em; padding:30px 0;">Regards,<br /><b>${email.Fname} ${email.Lname}</b></p>
+              <hr style="border:none;border-top:1px solid #eee" />
+              <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
+                <p>Medical Center Manila Inc</p>
+                <p>1002 PLM General luna</p>
+                <p>Manila</p>
+              </div>
+            </div>
+          </div>`,
+    });
+    console.log("Message sent: %s", info.messageId);
+    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+  }
+
+  main().catch(console.error);
 };

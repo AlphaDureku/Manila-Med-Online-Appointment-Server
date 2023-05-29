@@ -228,6 +228,26 @@ exports.updateAppointmentStatus = async function (
   );
 };
 
+exports.getDoctorEmailUsingID = async function (doctor_ID) {
+  return await model.doctor.findOne({
+    raw: true,
+    attributes: [
+      "doctor_email",
+      [Sequelize.col("doctor_Secretary_first_name"), "Fname"],
+      [Sequelize.col("doctor_Secretary_last_name"), "Lname"],
+    ],
+    include: [
+      {
+        model: model.doctor_Secretary,
+        attributes: [],
+      },
+    ],
+    where: {
+      doctor_ID: doctor_ID,
+    },
+  });
+};
+
 exports.getAppointmentsThatDate = async function (doctor_ID, date) {
   return await model.appointmentDetails.findAll({
     raw: true,
@@ -363,7 +383,7 @@ exports.updateProfile = async function (params) {
   );
 };
 
-exports.getAppointmentsToday = async function (ID, date) {
+exports.getAppointmentsToday = async function (doctor_ID, date) {
   return await model.appointmentDetails.findAll({
     raw: true,
     attributes: [
@@ -389,7 +409,7 @@ exports.getAppointmentsToday = async function (ID, date) {
       [
         Sequelize.fn(
           "date_format",
-          Sequelize.col("doctor_schedule_start_time"),
+          Sequelize.col("doctor_schedule_end_time"),
           "%h:%i%p"
         ),
         "end",
@@ -411,7 +431,7 @@ exports.getAppointmentsToday = async function (ID, date) {
     ],
     where: [
       {
-        doctor_ID: ID,
+        doctor_ID: doctor_ID,
         appointment_status: "Confirmed",
       },
     ],

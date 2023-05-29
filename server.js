@@ -20,6 +20,7 @@ app.use(
       "https://whimsical-custard-fa9177.netlify.app",
       "https://manilamed.netlify.app",
       "https://silly-youtiao-4309e4.netlify.app",
+      "192.168.1.10:3000",
     ],
     credentials: true,
   })
@@ -38,8 +39,8 @@ app.use(
     cookie: {
       maxAge: 60 * 60 * 1000,
       /* Enable on deployment*/
-      sameSite: "None",
-      secure: true,
+      // sameSite: "None",
+      // secure: true,
     },
   })
 );
