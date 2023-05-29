@@ -50,9 +50,6 @@ const User = sequelize.define("user", {
   user_contact_number: {
     type: DataTypes.STRING,
   },
-  user_OTP: {
-    type: DataTypes.INTEGER,
-  },
 });
 
 const Patient = sequelize.define("patient", {
@@ -207,10 +204,6 @@ const AppointmentDetails = sequelize.define(
     appointment_start: {
       type: DataTypes.TIME,
     },
-    appointment_type: {
-      type: Sequelize.ENUM,
-      values: ["Clinic", "Outpatient"],
-    },
     doctor_gender: {
       type: DataTypes.STRING(1),
     },
@@ -218,9 +211,6 @@ const AppointmentDetails = sequelize.define(
       type: Sequelize.ENUM,
       values: ["Pending", "Confirmed", "Rejected", "Cancelled", "Completed"],
       defaultValue: "Pending",
-    },
-    note: {
-      type: DataTypes.STRING,
     },
   },
   {
