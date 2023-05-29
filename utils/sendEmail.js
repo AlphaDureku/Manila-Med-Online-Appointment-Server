@@ -198,7 +198,6 @@ exports.notifyPatientsThruEmailThatDoctorHasArrived = (appointmentDetails) => {
                  height='25'/> Medical Center Manila</a>
                 </div>
                 <p style='font-size:1.7em;'><b>Hi,</b></p>
-                <p><b>Dont share this code to anyone.</b> </p>
                 <p> Good Day ${appointmentDetails.Fname} ${
         appointmentDetails.Lname
       }, Manila Medical Center would like to remind you that your doctor has arrived at the hospital. Your appointment will start at ${moment(
@@ -245,7 +244,6 @@ exports.notifyPatientsThruEmailThatDoctorIsLate = (appointmentDetails) => {
                  height='25'/> Medical Center Manila</a>
                 </div>
                 <p style='font-size:1.7em;'><b>Hi,</b></p>
-                <p><b>Dont share this code to anyone.</b> </p>
                 <p> Good Day ${appointmentDetails.Fname} ${
         appointmentDetails.Lname
       }, Manila Medical Center would like to remind you that your doctor is going to be late for a while. Rest assured that we will try our best not to alter your appointment start time at ${moment(
@@ -292,7 +290,6 @@ exports.notifyPatientsThruEmailThatCancelAll = (appointmentDetails) => {
                  height='25'/> Medical Center Manila</a>
                 </div>
                 <p style='font-size:1.7em;'><b>Hi,</b></p>
-                <p><b>Dont share this code to anyone.</b> </p>
                 <p> Good Day ${appointmentDetails.Fname} ${appointmentDetails.Lname}, Manila Medical Center would like to remind you that your appointment has been cancelled, we deeply apologize for the inconvenience. Thank you for your understanding!</p>
                 <p style='font-size:0.9em;'>Regards,<br />Medical Center Manila</p>
                 <hr style='border:none;border-top:1px solid #eee' />

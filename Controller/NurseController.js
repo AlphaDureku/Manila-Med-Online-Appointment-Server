@@ -4,7 +4,8 @@ const { Day, Week, Year, Month } = require("../utils/DateObjects");
 const {
   NotifyPatientsThruSMSThatDoctorHasArrived,
   NotifyPatientsThruSMSThatCancellAll,
-  sendSingleSMS,
+  sendSMSUpdate,
+  sendSMS,
 } = require("../utils/sendSMS");
 const uuid = require("uuid");
 const { unHashSomething, hashSomething } = require("../utils/Bcrypt");
@@ -199,8 +200,8 @@ exports.updateAppointmentStatus = async (req, res) => {
       default:
         return sendResponse(res, 400, "invalid parameters");
     }
-
-    console.log(await sendSingleSMS(Contact, body, "Status"));
+    sendSMS(Contact, body);
+    // console.log(sendSMSUpdate(Contact, body, "Status"));
     return sendResponse(res, 200, "success");
   } catch (error) {
     console.log(error);
@@ -225,22 +226,21 @@ exports.notifyPatientsForTodayThatDoctorHasArrived = async (req, res) => {
   const { date, notificationType } = req.body;
   try {
     const appointments = await Nurse.getAppointmentsThatDate(doctor_ID, date);
-    console.log(appointments);
-
     if (notificationType === "Arrived") {
       appointments.forEach((AppointmentDetails) => {
         notifyPatientsThruEmailThatDoctorHasArrived(AppointmentDetails);
-        NotifyPatientsThruSMSThatDoctorHasArrived(AppointmentDetails);
+
+        // NotifyPatientsThruSMSThatDoctorHasArrived(AppointmentDetails);
       });
     } else if (notificationType === "Late") {
       appointments.forEach((AppointmentDetails) => {
         notifyPatientsThruEmailThatDoctorIsLate(AppointmentDetails);
-        NotifyPatientsThruSMSThatDoctorHasArrived(AppointmentDetails);
+        // NotifyPatientsThruSMSThatDoctorHasArrived(AppointmentDetails);
       });
     } else {
       appointments.forEach((AppointmentDetails) => {
         notifyPatientsThruEmailThatCancelAll(AppointmentDetails);
-        NotifyPatientsThruSMSThatCancellAll(AppointmentDetails);
+        // NotifyPatientsThruSMSThatCancellAll(AppointmentDetails);
       });
     }
 
