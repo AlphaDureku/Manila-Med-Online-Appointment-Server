@@ -44,9 +44,9 @@ const myAppointmentAttributes = [
   "patient_ID",
   "patient_first_name",
   "patient_last_name",
+  "patient_address",
   [age, "patient_age"],
   [Sequelize.col("patient_gender"), "gender"],
-  "patient_address",
   [Sequelize.col("patient_contact_number"), "contact"],
   [Sequelize.col("user_email"), "email"],
   [Sequelize.col("doctor_first_name"), "doctor_Fname"],
@@ -174,7 +174,7 @@ exports.insertUser = async function (email) {
     user_ID: "USER-" + uuid.v4(),
     user_email: email,
   };
-  const newUser = await model.user.create(userModel);
+  await model.user.create(userModel);
   return userModel;
 };
 
@@ -192,14 +192,13 @@ exports.getAppointmentDetailsUsingAppointmentID = async function (
   return await model.appointmentDetails.findOne({
     raw: true,
     attributes: [
-      [Sequelize.col("appointment_start"), "start"],
       [Sequelize.col("doctor_first_name"), "Fname"],
       [Sequelize.col("doctor_last_name"), "Lname"],
       [Sequelize.col("specialization_Name"), "specialization"],
       [Sequelize.col("patient_first_name"), "patient_Fname"],
       [Sequelize.col("patient_last_name"), "patient_Lname"],
       [Sequelize.col("patient_contact_number"), "Contact"],
-
+      [Sequelize.col("appointment_start"), "start"],
       [
         Sequelize.fn(
           "date_format",

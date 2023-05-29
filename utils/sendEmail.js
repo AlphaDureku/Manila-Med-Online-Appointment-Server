@@ -4,21 +4,26 @@ function generateOTP() {
   return Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
 }
 
+const EmailObjects = {
+  address: process.env.GOOGLE_ADDRESS,
+  password: process.env.GOOGLE_PASSWORD,
+  from: "Manila Medical Center",
+};
 exports.sendEmailSecretary = (email, body) => {
   async function main() {
     let transporter = mail.createTransport({
       service: "gmail",
       secure: false,
       auth: {
-        user: "templanzamark2002@gmail.com",
-        pass: "koaowdqdigdcujwr",
+        user: EmailObjects.address,
+        pass: EmailObjects.password,
       },
     });
 
     let info = await transporter.sendMail({
-      from: '"templanzamark2002@gmail.com',
+      from: EmailObjects.from,
       to: email,
-      subject: "Your account details",
+      subject: "Account Details",
       html: `username: ${body.username}<br>password:${body.password}`,
     });
     console.log("Message sent: %s", info.messageId);
@@ -33,21 +38,20 @@ exports.BookingOTP = (email) => {
       service: "gmail",
       secure: false,
       auth: {
-        user: "templanzamark2002@gmail.com",
-        pass: "koaowdqdigdcujwr",
+        user: EmailObjects.address,
+        pass: EmailObjects.password,
       },
     });
 
     let info = await transporter.sendMail({
-      from: '"templanzamark2002@gmail.com',
+      from: EmailObjects.from,
       to: email,
       subject: "Security Verification",
       html: `
             <div style='font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2'>
               <div style='margin:50px auto;width:70%;padding:20px 0'>
                 <div style='border-bottom:1px solid #eee'>
-                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src='https://scontent.fmnl4-2.fna.fbcdn.net/v/t39.30808-6/323289895_721708059168068_7716967383321258182_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeFCtue87s6eVW82rSocbCt0kveEtFjVanKS94S0WNVqcoext4GgIfTr7acDsVwuhD-MtKlKPrsp8FxMs3V5ofie&_nc_ohc=mbGVH1UEvjEAX_1Hg8n&_nc_ht=scontent.fmnl4-2.fna&oh=00_AfAfheaUrnMEEQkZrrkpY3XWUcFeCZg9SdU6nSOvQPbm3g&oe=643554AC' width='28' 
-                 height='25'/> Medical Center Manila</a>
+                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src="https://imgtr.ee/images/2023/05/29/1bETL.png" alt="1bETL.png" border="0" /> Medical Center Manila</a>
                 </div>
                 <p style='font-size:1.7em;'><b>Hi,</b></p>
                 <p><b>Dont share this code to anyone.</b> </p>
@@ -57,8 +61,8 @@ exports.BookingOTP = (email) => {
                 <hr style='border:none;border-top:1px solid #eee' />
                 <div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>
                   <p>Medical Center Manila Inc</p>
-                  <p>1002 PLM General luna</p>
-                  <p>Manila</p>
+                  <p>850 United Nations Ave, Paco</p>
+                  <p>Manila, Metro Manila</p>
                 </div>
               </div>
             </div>`,
@@ -76,21 +80,20 @@ exports.TrackingOTP = (email) => {
       service: "gmail",
       secure: false,
       auth: {
-        user: "templanzamark2002@gmail.com",
-        pass: "koaowdqdigdcujwr",
+        user: EmailObjects.address,
+        pass: EmailObjects.password,
       },
     });
 
     let info = await transporter.sendMail({
-      from: '"templanzamark2002@gmail.com',
+      from: EmailObjects.from,
       to: email,
       subject: "Security Verification",
       html: `
             <div style='font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2'>
               <div style='margin:50px auto;width:70%;padding:20px 0'>
                 <div style='border-bottom:1px solid #eee'>
-                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src='https://scontent.fmnl4-2.fna.fbcdn.net/v/t39.30808-6/323289895_721708059168068_7716967383321258182_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeFCtue87s6eVW82rSocbCt0kveEtFjVanKS94S0WNVqcoext4GgIfTr7acDsVwuhD-MtKlKPrsp8FxMs3V5ofie&_nc_ohc=mbGVH1UEvjEAX_1Hg8n&_nc_ht=scontent.fmnl4-2.fna&oh=00_AfAfheaUrnMEEQkZrrkpY3XWUcFeCZg9SdU6nSOvQPbm3g&oe=643554AC' width='28' 
-                 height='25'/> Medical Center Manila</a>
+                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src="https://imgtr.ee/images/2023/05/29/1bETL.png" alt="1bETL.png" border="0" /> Medical Center Manila</a>
                 </div>
                 <p style='font-size:1.7em;'><b>Hi,</b></p>
                 <p><b>Dont share this code to anyone.</b> </p>
@@ -100,8 +103,8 @@ exports.TrackingOTP = (email) => {
                 <hr style='border:none;border-top:1px solid #eee' />
                 <div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>
                   <p>Medical Center Manila Inc</p>
-                  <p>1002 PLM General luna</p>
-                  <p>Manila</p>
+                  <p>850 United Nations Ave, Paco</p>
+                  <p>Manila, Metro Manila</p>
                 </div>
               </div>
             </div>`,
@@ -118,8 +121,8 @@ exports.notifyDoctor = (email, table) => {
       service: "gmail",
       secure: false,
       auth: {
-        user: "templanzamark2002@gmail.com",
-        pass: "koaowdqdigdcujwr",
+        user: EmailObjects.address,
+        pass: EmailObjects.password,
       },
     });
     let data_table = "";
@@ -130,14 +133,13 @@ exports.notifyDoctor = (email, table) => {
             </tr>`;
     });
     let info = await transporter.sendMail({
-      from: '"templanzamark2002@gmail.com', // sender address
-      to: email.doctor_email, // list of receivers
-      subject: "Today's Schedule", // Subject line
+      from: EmailObjects.from,
+      to: email.doctor_email,
+      subject: "Today's Schedule",
       html: `<div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
             <div style="margin:50px auto;width:70%;padding:20px 0">
               <div style="border-bottom:1px solid #eee">
-                <a href=""style="font-size:1.5em;color: #388440;text-decoration:none;font-weight:600"><img src="https://scontent.fmnl13-2.fna.fbcdn.net/v/t39.30808-6/323289895_721708059168068_7716967383321258182_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeFCtue87s6eVW82rSocbCt0kveEtFjVanKS94S0WNVqcoext4GgIfTr7acDsVwuhD-MtKlKPrsp8FxMs3V5ofie&_nc_ohc=z7SE0rt_lhgAX9WFSHd&_nc_ht=scontent.fmnl13-2.fna&oh=00_AfBqcvgJEcTKAO68VFxhKgAT7NfFEU2spxxcqEExEYrEIQ&oe=641D99AC" width="28" 
-               height="25"/> Medical Center Manila</a>
+                <a href=""style="font-size:1.5em;color: #388440;text-decoration:none;font-weight:600"><img src="https://imgtr.ee/images/2023/05/29/1bETL.png" alt="1bETL.png" border="0" /> Medical Center Manila</a>
               </div>
               <p style="font-size:1.7em;"><b>Hi,</b></p>
               <p>Here are the patient appointments for <b>${table[0].appointmentDate}</b> at<b> ${table[0].start} - ${table[0].end} </b></p>
@@ -161,14 +163,13 @@ exports.notifyDoctor = (email, table) => {
               <hr style="border:none;border-top:1px solid #eee" />
               <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
                 <p>Medical Center Manila Inc</p>
-                <p>1002 PLM General luna</p>
-                <p>Manila</p>
+                <p>850 United Nations Ave, Paco</p>
+                <p>Manila, Metro Manila</p>
               </div>
             </div>
           </div>`,
     });
     console.log("Message sent: %s", info.messageId);
-    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
   }
 
   main().catch(console.error);
@@ -181,21 +182,20 @@ exports.notifyPatientsThruEmailThatDoctorHasArrived = (appointmentDetails) => {
       service: "gmail",
       secure: false,
       auth: {
-        user: "templanzamark2002@gmail.com",
-        pass: "koaowdqdigdcujwr",
+        user: EmailObjects.address,
+        pass: EmailObjects.password,
       },
     });
 
     let info = await transporter.sendMail({
-      from: '"templanzamark2002@gmail.com',
+      from: EmailObjects.from,
       to: appointmentDetails.email,
       subject: "Hospital Appointment",
       html: `
             <div style='font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2'>
               <div style='margin:50px auto;width:70%;padding:20px 0'>
                 <div style='border-bottom:1px solid #eee'>
-                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src='https://scontent.fmnl4-2.fna.fbcdn.net/v/t39.30808-6/323289895_721708059168068_7716967383321258182_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeFCtue87s6eVW82rSocbCt0kveEtFjVanKS94S0WNVqcoext4GgIfTr7acDsVwuhD-MtKlKPrsp8FxMs3V5ofie&_nc_ohc=mbGVH1UEvjEAX_1Hg8n&_nc_ht=scontent.fmnl4-2.fna&oh=00_AfAfheaUrnMEEQkZrrkpY3XWUcFeCZg9SdU6nSOvQPbm3g&oe=643554AC' width='28' 
-                 height='25'/> Medical Center Manila</a>
+                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src="https://imgtr.ee/images/2023/05/29/1bETL.png" alt="1bETL.png" border="0" /> Medical Center Manila</a>
                 </div>
                 <p style='font-size:1.7em;'><b>Hi,</b></p>
                 <p> Good Day ${appointmentDetails.Fname} ${
@@ -208,8 +208,8 @@ exports.notifyPatientsThruEmailThatDoctorHasArrived = (appointmentDetails) => {
                 <hr style='border:none;border-top:1px solid #eee' />
                 <div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>
                   <p>Medical Center Manila Inc</p>
-                  <p>1002 PLM General luna</p>
-                  <p>Manila</p>
+                  <p>850 United Nations Ave, Paco</p>
+                  <p>Manila, Metro Manila</p>
                 </div>
               </div>
             </div>`,
@@ -227,21 +227,20 @@ exports.notifyPatientsThruEmailThatDoctorIsLate = (appointmentDetails) => {
       service: "gmail",
       secure: false,
       auth: {
-        user: "templanzamark2002@gmail.com",
-        pass: "koaowdqdigdcujwr",
+        user: EmailObjects.address,
+        pass: EmailObjects.password,
       },
     });
 
     let info = await transporter.sendMail({
-      from: '"templanzamark2002@gmail.com',
+      from: EmailObjects.from,
       to: appointmentDetails.email,
       subject: "Hospital Appointment",
       html: `
             <div style='font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2'>
               <div style='margin:50px auto;width:70%;padding:20px 0'>
                 <div style='border-bottom:1px solid #eee'>
-                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src='https://scontent.fmnl4-2.fna.fbcdn.net/v/t39.30808-6/323289895_721708059168068_7716967383321258182_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeFCtue87s6eVW82rSocbCt0kveEtFjVanKS94S0WNVqcoext4GgIfTr7acDsVwuhD-MtKlKPrsp8FxMs3V5ofie&_nc_ohc=mbGVH1UEvjEAX_1Hg8n&_nc_ht=scontent.fmnl4-2.fna&oh=00_AfAfheaUrnMEEQkZrrkpY3XWUcFeCZg9SdU6nSOvQPbm3g&oe=643554AC' width='28' 
-                 height='25'/> Medical Center Manila</a>
+                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src="https://imgtr.ee/images/2023/05/29/1bETL.png" alt="1bETL.png" border="0" /> Medical Center Manila</a>
                 </div>
                 <p style='font-size:1.7em;'><b>Hi,</b></p>
                 <p> Good Day ${appointmentDetails.Fname} ${
@@ -254,8 +253,8 @@ exports.notifyPatientsThruEmailThatDoctorIsLate = (appointmentDetails) => {
                 <hr style='border:none;border-top:1px solid #eee' />
                 <div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>
                   <p>Medical Center Manila Inc</p>
-                  <p>1002 PLM General luna</p>
-                  <p>Manila</p>
+                  <p>850 United Nations Ave, Paco</p>
+                  <p>Manila, Metro Manila</p>
                 </div>
               </div>
             </div>`,
@@ -273,21 +272,20 @@ exports.notifyPatientsThruEmailThatCancelAll = (appointmentDetails) => {
       service: "gmail",
       secure: false,
       auth: {
-        user: "templanzamark2002@gmail.com",
-        pass: "koaowdqdigdcujwr",
+        user: EmailObjects.address,
+        pass: EmailObjects.password,
       },
     });
 
     let info = await transporter.sendMail({
-      from: '"templanzamark2002@gmail.com',
+      from: EmailObjects.from,
       to: appointmentDetails.email,
       subject: "Hospital Appointment",
       html: `
             <div style='font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2'>
               <div style='margin:50px auto;width:70%;padding:20px 0'>
                 <div style='border-bottom:1px solid #eee'>
-                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src='https://scontent.fmnl4-2.fna.fbcdn.net/v/t39.30808-6/323289895_721708059168068_7716967383321258182_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=09cbfe&_nc_eui2=AeFCtue87s6eVW82rSocbCt0kveEtFjVanKS94S0WNVqcoext4GgIfTr7acDsVwuhD-MtKlKPrsp8FxMs3V5ofie&_nc_ohc=mbGVH1UEvjEAX_1Hg8n&_nc_ht=scontent.fmnl4-2.fna&oh=00_AfAfheaUrnMEEQkZrrkpY3XWUcFeCZg9SdU6nSOvQPbm3g&oe=643554AC' width='28' 
-                 height='25'/> Medical Center Manila</a>
+                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src="https://imgtr.ee/images/2023/05/29/1bETL.png" alt="1bETL.png" border="0" /> Medical Center Manila</a>
                 </div>
                 <p style='font-size:1.7em;'><b>Hi,</b></p>
                 <p> Good Day ${appointmentDetails.Fname} ${appointmentDetails.Lname}, Manila Medical Center would like to remind you that your appointment has been cancelled, we deeply apologize for the inconvenience. Thank you for your understanding!</p>
@@ -295,8 +293,8 @@ exports.notifyPatientsThruEmailThatCancelAll = (appointmentDetails) => {
                 <hr style='border:none;border-top:1px solid #eee' />
                 <div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>
                   <p>Medical Center Manila Inc</p>
-                  <p>1002 PLM General luna</p>
-                  <p>Manila</p>
+                  <p>850 United Nations Ave, Paco</p>
+                  <p>Manila, Metro Manila</p>
                 </div>
               </div>
             </div>`,

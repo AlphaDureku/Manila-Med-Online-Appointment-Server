@@ -178,29 +178,44 @@ exports.updateAppointmentStatus = async (req, res) => {
     if (!updateStatus) {
       return sendResponse(res, 400, "bad parameter");
     }
-    const { Contact, patient_Fname, patient_Lname } =
+    const { Contact, patient_Fname, patient_Lname, start, date } =
       await getAppointmentDetailsUsingAppointmentID(appointment_ID);
     let body = "";
     switch (updateStatus) {
       case "Confirmed":
-        body = `Hello ${patient_Fname} ${patient_Lname}, We would like to inform that your appointment has been confirmed`;
+        body = `Hello ${patient_Fname} ${patient_Lname}, We would like to inform that your appointment has been confirmed. We will be waiting for you at the hospital at ${moment(
+          start,
+          "HH:mm:ss"
+        ).format("hh:mm A")}}`;
         await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
+        sendSMS(Contact, body);
         break;
       case "Cancelled":
-        body = `Hello ${patient_Fname} ${patient_Lname}, We would like to inform that your appointment has been cancelled`;
+        body = `Good Day! ${patient_Fname} ${patient_Lname}, Your appointment on ${date}, ${start} to ${end} has been cancelled. We deeply apologize for the inconvenience. Kindly call this 0239-139 if you wanted to reschedule your appointment.
+        
+        Please be noted that your rescheduled appointment will be in our priority.
+        Thank you for understanding.
+        
+        
+        Regards, 
+        Medical Manila Center`;
         await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
+        sendSMS(Contact, body);
         break;
       case "Completed":
         await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
         return sendResponse(res, 200, "success");
       case "Rejected":
-        body = `Hello ${patient_Fname} ${patient_Lname}, We would like to inform that your appointment has been rejected`;
+        body = `Good Day! ${patient_Fname} ${patient_Lname}, We regret to inform that your appointment has been rejected. We deeply apologize for the inconvenience. Kindly call this 0239-139 if you wanted to reschedule your appointment. 
+        
+        Regards, 
+        Medical Manila Center`;
         await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
+        sendSMS(Contact, body);
         break;
       default:
         return sendResponse(res, 400, "invalid parameters");
     }
-    sendSMS(Contact, body);
     // console.log(sendSMSUpdate(Contact, body, "Status"));
     return sendResponse(res, 200, "success");
   } catch (error) {
@@ -229,7 +244,6 @@ exports.notifyPatientsForTodayThatDoctorHasArrived = async (req, res) => {
     if (notificationType === "Arrived") {
       appointments.forEach((AppointmentDetails) => {
         notifyPatientsThruEmailThatDoctorHasArrived(AppointmentDetails);
-
         // NotifyPatientsThruSMSThatDoctorHasArrived(AppointmentDetails);
       });
     } else if (notificationType === "Late") {
