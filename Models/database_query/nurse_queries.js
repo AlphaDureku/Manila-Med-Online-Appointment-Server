@@ -474,6 +474,22 @@ exports.getAvailableScheduleForUpdate = async function (doctor_ID) {
   });
 };
 
+exports.updateDoctorAvailability = async function (updatedModel) {
+  return await model.doctor_schedule_table.update(
+    {
+      doctor_schedule_start_time: updatedModel.startTime,
+      doctor_schedule_end_time: updatedModel.endTime,
+      doctor_schedule_Interval: updatedModel.intervalTime,
+      doctor_schedule_max_patient: updatedModel.maxPatient,
+    },
+    {
+      where: {
+        doctor_schedule_ID: updatedModel.schedule_ID,
+      },
+    }
+  );
+};
+
 // exports.fetchDoctorPatientAppointments = async function (
 //   doctor_ID,
 //   startOfWhat,

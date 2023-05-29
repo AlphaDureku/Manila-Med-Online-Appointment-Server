@@ -47,4 +47,10 @@ router.get(
   NurseController.getAvailableScheduleForUpdate
 );
 
+router.post(
+  "/update-availability",
+  jwtMiddleware,
+  NurseController.updateDoctorAvailability
+);
+
 module.exports = router;

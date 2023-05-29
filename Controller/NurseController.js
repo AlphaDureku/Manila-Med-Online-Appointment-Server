@@ -315,3 +315,23 @@ exports.getAvailableScheduleForUpdate = async (req, res) => {
     sendResponse(res, 500, error.message);
   }
 };
+
+exports.updateDoctorAvailability = async (req, res) => {
+  const { startTime, endTime, intervalTime, maxPatient, schedule_ID } =
+    req.body;
+
+  const updateModel = {
+    schedule_ID,
+    startTime,
+    endTime,
+    intervalTime,
+    maxPatient,
+  };
+  console.log(updateModel);
+  try {
+    const result = await Nurse.updateDoctorAvailability(updateModel);
+    sendResponse(res, 200, result);
+  } catch (error) {
+    sendResponse(res, 500, error.message);
+  }
+};

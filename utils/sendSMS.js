@@ -9,7 +9,7 @@ exports.sendSMS = async (phonenumber, body) => {
   await client.messages
     .create({
       body: body,
-      messagingServiceSid: "MG0c15962647fa6ff788b2cfee7d891c43",
+      from: "MG0c15962647fa6ff788b2cfee7d891c43",
       to: phonenumber,
     })
     .then((message) => console.log(message));
