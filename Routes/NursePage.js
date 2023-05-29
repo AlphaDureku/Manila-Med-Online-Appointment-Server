@@ -39,7 +39,7 @@ router.post(
   NurseController.addDoctorAvailability
 );
 
-router.post("/update-password", jwtMiddleware, NurseController.updatePassword);
+router.post("/update-nurse", jwtMiddleware, NurseController.updateNurse);
 
 router.get(
   "/avail-schedule-forUpdate",

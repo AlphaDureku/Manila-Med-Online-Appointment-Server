@@ -305,18 +305,39 @@ exports.addDoctorAvailability = async (req, res) => {
   }
 };
 
-exports.updatePassword = async (req, res) => {
-  const { oldPassword, newPassword } = req.body;
+exports.updateNurse = async (req, res) => {
+  const { oldPassword, newPassword, username } = req.body;
   const { Nurse_ID } = req.data;
   try {
     const { doctor_Secretary_password } =
       await Nurse.findNurseUsingIDReturnPassword(Nurse_ID);
+    const isDuplicate = await Nurse.findNurseUsingUsername(username);
+    console.log(isDuplicate);
     if (await unHashSomething(oldPassword, doctor_Secretary_password)) {
-      await Nurse.updatePassword(await hashSomething(newPassword), Nurse_ID);
+      if (isDuplicate) {
+        return sendResponse(res, 200, {
+          samePassword: true,
+          duplicate: true,
+          message: "Username already in use",
+        });
+      } else {
+        await Nurse.updateNurse(
+          await hashSomething(newPassword),
+          Nurse_ID,
+          username
+        );
+        return sendResponse(res, 200, {
+          samePassword: true,
+          duplicate: false,
+          message: "Update Success",
+        });
+      }
     } else {
-      return sendResponse(res, 200, { status: false });
+      return sendResponse(res, 200, {
+        samePassword: false,
+        message: "Password different from old",
+      });
     }
-    return sendResponse(res, 200, { status: true });
   } catch (error) {
     console.log(error);
     return sendResponse(res, 500, error.message);

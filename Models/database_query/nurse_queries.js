@@ -294,17 +294,19 @@ exports.insertDoctorAvailability = async function (schedule_tableModel) {
   return await model.doctor_schedule_table.create(schedule_tableModel);
 };
 
-exports.updatePassword = async function (newPassword, nurse_ID) {
-  await model.doctor_Secretary.update(
-    {
-      doctor_Secretary_password: newPassword,
+exports.updateNurse = async function (newPassword, nurse_ID, username) {
+  const NurseModel = {
+    doctor_Secretary_username: username,
+  };
+
+  if (newPassword) {
+    NurseModel.doctor_Secretary_password = newPassword;
+  }
+  await model.doctor_Secretary.update(NurseModel, {
+    where: {
+      doctor_Secretary_ID: nurse_ID,
     },
-    {
-      where: {
-        doctor_Secretary_ID: nurse_ID,
-      },
-    }
-  );
+  });
 };
 
 //Still havent implemented yet
