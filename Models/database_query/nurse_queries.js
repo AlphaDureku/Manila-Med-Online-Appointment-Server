@@ -57,7 +57,7 @@ const AppointmentDetailsObject = [
   ],
 ];
 exports.findNurseUsingUsername = async function (username) {
-  return await model.doctor_Secretary.count({
+  return await model.doctor_Secretary.findOne({
     raw: true,
     where: {
       doctor_Secretary_username: username,
@@ -75,7 +75,7 @@ exports.findNurseUsingEmail = async function (email) {
 };
 
 exports.findNurseUsingUsernameNOT = async function (username, nurse_ID) {
-  return await model.doctor_Secretary.count({
+  return await model.doctor_Secretary.findOne({
     raw: true,
     where: {
       doctor_Secretary_username: username,
