@@ -18,7 +18,11 @@ exports.NotifyPatients = async (patientinfo) => {
   const { contact, patient_Fname, patient_Lname, start, end } = patientinfo;
   sendSMS(
     contact,
-    `Good Day ${patient_Fname} ${patient_Lname}, Manila Medical Center would like to remind you of your appointment for today at ${start} to ${end}`
+    `Good Day ${patient_Fname} ${patient_Lname}, Manila Medical Center would like to remind you of your appointment for today at ${start} to ${end}
+    
+
+    Regards, 
+    Medical Manila Center`
   );
 };
 
@@ -32,7 +36,11 @@ exports.NotifyPatientsThruSMSThatDoctorHasArrived = async (
       }, Manila Medical Center would like to remind you that your doctor has arrived at the hospital. Your appointment will start at ${moment(
         appointmentDetails.appointmentStart,
         "HH:mm:ss"
-      ).format("hh:mm A")}. Thank you!`,
+      ).format("hh:mm A")}. Thank you!
+
+
+      Regards, 
+      Medical Manila Center`,
       from: TWILIO_MSGSID,
       to: appointmentDetails.Contact,
     })
@@ -47,7 +55,11 @@ exports.NotifyPatientsThruSMSThatDoctorIsLate = async (appointmentDetails) => {
       }, Manila Medical Center would like to remind you that your doctor is going to be late for a while. Rest assured that we will try our best not to alter your appointment start time at ${moment(
         appointmentDetails.appointmentStart,
         "HH:mm:ss"
-      ).format("hh:mm A")}. Thank you for your cooperation!`,
+      ).format("hh:mm A")}. Thank you for your cooperation!
+      
+
+      Regards, 
+      Medical Manila Center`,
       from: TWILIO_MSGSID,
       to: appointmentDetails.Contact,
     })
@@ -62,7 +74,10 @@ exports.NotifyPatientsThruSMSThatCancellAll = async (appointmentDetails) => {
       }, Manila Medical Center would like to remind you that your doctor is going to be late for a while. Rest assured that we will try our best not to alter your appointment start time at ${moment(
         appointmentDetails.appointmentStart,
         "HH:mm:ss"
-      ).format("hh:mm A")}. Thank you for your cooperation!`,
+      ).format("hh:mm A")}. Thank you for your cooperation!
+      
+      Regards, 
+      Medical Manila Center`,
       from: TWILIO_MSGSID,
       to: appointmentDetails.Contact,
     })

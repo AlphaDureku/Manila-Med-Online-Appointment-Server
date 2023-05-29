@@ -4,7 +4,7 @@ const { Day, Week, Year, Month } = require("../utils/DateObjects");
 const {
   NotifyPatientsThruSMSThatDoctorHasArrived,
   NotifyPatientsThruSMSThatCancellAll,
-  sendSMSUpdate,
+  NotifyPatientsThruSMSThatDoctorIsLate,
   sendSMS,
 } = require("../utils/sendSMS");
 const uuid = require("uuid");
@@ -24,6 +24,7 @@ const {
 const {
   getAppointmentDetailsUsingAppointmentID,
 } = require("../Models/database_query/user_queries");
+const moment = require("moment");
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
@@ -186,12 +187,12 @@ exports.updateAppointmentStatus = async (req, res) => {
         body = `Hello ${patient_Fname} ${patient_Lname}, We would like to inform that your appointment has been confirmed. We will be waiting for you at the hospital at ${moment(
           start,
           "HH:mm:ss"
-        ).format("hh:mm A")}}`;
+        ).format("hh:mm A")}`;
         await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
-        // sendSMS(Contact, body);
+        // await sendSMS(Contact, body);
         break;
       case "Cancelled":
-        body = `Good Day! ${patient_Fname} ${patient_Lname}, Your appointment on ${date}, ${start} to ${end} has been cancelled. We deeply apologize for the inconvenience. Kindly call this 0239-139 if you wanted to reschedule your appointment.
+        body = `Good Day! ${patient_Fname} ${patient_Lname}, Your appointment on ${date} has been cancelled. We deeply apologize for the inconvenience. Kindly call this 0239-139 if you wanted to reschedule your appointment.
         
         Please be noted that your rescheduled appointment will be in our priority.
         Thank you for understanding.
@@ -200,7 +201,7 @@ exports.updateAppointmentStatus = async (req, res) => {
         Regards, 
         Medical Manila Center`;
         await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
-        // sendSMS(Contact, body);
+        // await sendSMS(Contact, body);
         break;
       case "Completed":
         await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
@@ -211,7 +212,7 @@ exports.updateAppointmentStatus = async (req, res) => {
         Regards, 
         Medical Manila Center`;
         await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
-        // sendSMS(Contact, body);
+        // await sendSMS(Contact, body);
         break;
       default:
         return sendResponse(res, 400, "invalid parameters");
@@ -249,10 +250,14 @@ exports.notifyPatientsForTodayThatDoctorHasArrived = async (req, res) => {
     } else if (notificationType === "Late") {
       appointments.forEach((AppointmentDetails) => {
         notifyPatientsThruEmailThatDoctorIsLate(AppointmentDetails);
-        // NotifyPatientsThruSMSThatDoctorHasArrived(AppointmentDetails);
+        // NotifyPatientsThruSMSThatDoctorIsLate(AppointmentDetails);
       });
     } else {
       appointments.forEach((AppointmentDetails) => {
+        Nurse.updateAppointmentStatus(
+          "Cancelled",
+          AppointmentDetails.appointment_ID
+        );
         notifyPatientsThruEmailThatCancelAll(AppointmentDetails);
         // NotifyPatientsThruSMSThatCancellAll(AppointmentDetails);
       });
@@ -309,9 +314,9 @@ exports.updatePassword = async (req, res) => {
     if (await unHashSomething(oldPassword, doctor_Secretary_password)) {
       await Nurse.updatePassword(await hashSomething(newPassword), Nurse_ID);
     } else {
-      return sendResponse(res, 200, { message: "Wrong password" });
+      return sendResponse(res, 200, { status: false });
     }
-    return sendResponse(res, 200, { message: "Success!" });
+    return sendResponse(res, 200, { status: true });
   } catch (error) {
     console.log(error);
     return sendResponse(res, 500, error.message);
