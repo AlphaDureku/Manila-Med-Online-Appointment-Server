@@ -1,7 +1,10 @@
 const sendResponse = require("../utils/sendResponse");
 const Nurse = require("../Models/database_query/nurse_queries");
 const { Day, Week, Year, Month } = require("../utils/DateObjects");
-const { NotifyPatients, sendSingleSMS } = require("../utils/sendSMS");
+const {
+  NotifyPatientsThruSMSThatDoctorHasArrived,
+  sendSingleSMS,
+} = require("../utils/sendSMS");
 const uuid = require("uuid");
 const { unHashSomething, hashSomething } = require("../utils/Bcrypt");
 const {
@@ -10,7 +13,11 @@ const {
   sendRefreshToken,
   authorizedUsingCookie,
 } = require("../utils/JWTHandler");
-const { notifyDoctor } = require("../utils/sendEmail");
+const {
+  notifyDoctor,
+  notifyPatientsThruEmailThatDoctorHasArrived,
+  notifyPatientsThruEmailThatDoctorIsLate,
+} = require("../utils/sendEmail");
 const {
   getAppointmentDetailsUsingAppointmentID,
 } = require("../Models/database_query/user_queries");
@@ -212,14 +219,25 @@ exports.confirmedAppointmentsThatDay = async (req, res) => {
   }
 };
 
-exports.notifyPatientsForToday = async (req, res) => {
+exports.notifyPatientsForTodayThatDoctorHasArrived = async (req, res) => {
   const { doctor_ID } = req.session;
-  const { date } = req.body;
+  const { date, notificationType } = req.body;
   try {
     const appointments = await Nurse.getAppointmentsThatDate(doctor_ID, date);
-    appointments.forEach((patient) => {
-      NotifyPatients(patient);
-    });
+    console.log(appointments);
+
+    if (notificationType === "Arrived") {
+      appointments.forEach((AppointmentDetails) => {
+        notifyPatientsThruEmailThatDoctorHasArrived(AppointmentDetails);
+        NotifyPatientsThruSMSThatDoctorHasArrived(AppointmentDetails);
+      });
+    } else if (notificationType === "Late") {
+      appointments.forEach((AppointmentDetails) => {
+        notifyPatientsThruEmailThatDoctorIsLate(AppointmentDetails);
+        NotifyPatientsThruSMSThatDoctorHasArrived(AppointmentDetails);
+      });
+    }
+
     return sendResponse(res, 200, "success");
   } catch (error) {
     console.log(error);

@@ -21,7 +21,7 @@ exports.NotifyPatients = async (patientinfo) => {
   );
 };
 
-exports.sendSingleSMS = async (phonenumber, body, subject) => {
+exports.sendSingleSMS = async (phonenumber, body) => {
   var params = {
     Message: body,
     PhoneNumber: phonenumber,
@@ -44,4 +44,14 @@ exports.sendSingleSMS = async (phonenumber, body, subject) => {
     .catch(function (err) {
       return JSON.stringify({ Error: err });
     });
+};
+
+exports.NotifyPatientsThruSMSThatDoctorHasArrived = async (
+  appointmentDetails
+) => {
+  console.log(appointmentDetails);
+};
+
+exports.NotifyPatientsThruSMSThatDoctorIsLate = async (appointmentDetails) => {
+  console.log(appointmentDetails);
 };

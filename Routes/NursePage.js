@@ -25,7 +25,7 @@ router.post(
 router.post(
   "/notify-patientForToday",
   jwtMiddleware,
-  NurseController.notifyPatientsForToday
+  NurseController.notifyPatientsForTodayThatDoctorHasArrived
 );
 
 router.post(

@@ -265,6 +265,7 @@ exports.getAppointmentsThatDate = async function (doctor_ID, date) {
       [Sequelize.col("doctor_first_name"), "doctor_Fname"],
       [Sequelize.col("specialization_Name"), "specialization"],
       [Sequelize.col("doctor_last_name"), "doctor_Lname"],
+      [Sequelize.col("appointment_start"), "appointmentStart"],
       [
         Sequelize.fn(
           "date_format",
@@ -292,7 +293,7 @@ exports.getAppointmentsThatDate = async function (doctor_ID, date) {
       [
         Sequelize.fn(
           "date_format",
-          Sequelize.col("doctor_schedule_start_time"),
+          Sequelize.col("doctor_schedule_end_time"),
           "%h:%i%p"
         ),
         "end",
