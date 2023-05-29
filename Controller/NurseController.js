@@ -313,7 +313,9 @@ exports.updateNurse = async (req, res) => {
       await Nurse.findNurseUsingIDReturnPassword(Nurse_ID);
     const isDuplicate = await Nurse.findNurseUsingUsername(username);
     console.log(isDuplicate);
+    //check if the old password is the same as the one saved in the database
     if (await unHashSomething(oldPassword, doctor_Secretary_password)) {
+      //check if username duplicate
       if (isDuplicate) {
         return sendResponse(res, 200, {
           samePassword: true,
@@ -321,6 +323,7 @@ exports.updateNurse = async (req, res) => {
           message: "Username already in use",
         });
       } else {
+        //else update the old password and username, if password is "" don't change else change
         await Nurse.updateNurse(
           await hashSomething(newPassword),
           Nurse_ID,
@@ -333,6 +336,7 @@ exports.updateNurse = async (req, res) => {
         });
       }
     } else {
+      //Password different from database so dont do anything
       return sendResponse(res, 200, {
         samePassword: false,
         message: "Password different from old",

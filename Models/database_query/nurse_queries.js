@@ -79,6 +79,7 @@ exports.findNurseUsingID = async function (sec_ID) {
   return await model.doctor_Secretary.findOne({
     raw: true,
     attributes: [
+      "doctor_Secretary_username",
       "doctor_Secretary_first_name",
       "doctor_Secretary_middle_name",
       "doctor_Secretary_last_name",

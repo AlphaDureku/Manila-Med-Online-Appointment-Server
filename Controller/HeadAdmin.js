@@ -179,9 +179,30 @@ exports.removeBind = async (req, res) => {
 };
 
 exports.updateNurse = async (req, res) => {
+  const { NurseModel } = req.body;
   try {
-    await HeadAdmin.updateNurse(req.body.NurseModel);
-    return sendResponse(res, 200, "success");
+    const duplicateUserName = await findNurseUsingUsername(
+      NurseModel.nurse_Username
+    );
+    const duplicateEmail = await findNurseUsingEmail(NurseModel.nurse_Email);
+    console.log(duplicateEmail);
+    if (!duplicateUserName && !duplicateEmail) {
+      await HeadAdmin.updateNurse(NurseModel);
+      return sendResponse(res, 200, {
+        duplicate: "",
+        message: "successfully edited",
+      });
+    } else if (duplicateEmail) {
+      return sendResponse(res, 200, {
+        duplicate: "email",
+        messasge: "edit failed",
+      });
+    } else {
+      return sendResponse(res, 200, {
+        duplicate: "username",
+        messasge: "edit failed",
+      });
+    }
   } catch (error) {
     console.log(error);
     return sendResponse(res, 500, error.message);
