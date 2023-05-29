@@ -8,6 +8,8 @@ const { sendEmailSecretary } = require("../utils/sendEmail");
 const {
   findNurseUsingEmail,
   findNurseUsingUsername,
+  findNurseUsingUsernameNOT,
+  findNurseUsingEmailNOT,
 } = require("../Models/database_query/nurse_queries");
 const {
   authorizedUsingCookie,
@@ -181,10 +183,14 @@ exports.removeBind = async (req, res) => {
 exports.updateNurse = async (req, res) => {
   const { NurseModel } = req.body;
   try {
-    const duplicateUserName = await findNurseUsingUsername(
-      NurseModel.nurse_Username
+    const duplicateUserName = await findNurseUsingUsernameNOT(
+      NurseModel.nurse_Username,
+      NurseModel.nurse_ID
     );
-    const duplicateEmail = await findNurseUsingEmail(NurseModel.nurse_Email);
+    const duplicateEmail = await findNurseUsingEmailNOT(
+      NurseModel.nurse_Email,
+      NurseModel.nurse_ID
+    );
     console.log(duplicateEmail);
     if (!duplicateUserName && !duplicateEmail) {
       await HeadAdmin.updateNurse(NurseModel);

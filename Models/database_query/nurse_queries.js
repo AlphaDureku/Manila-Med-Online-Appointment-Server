@@ -56,9 +56,8 @@ const AppointmentDetailsObject = [
     "end",
   ],
 ];
-
 exports.findNurseUsingUsername = async function (username) {
-  return await model.doctor_Secretary.findOne({
+  return await model.doctor_Secretary.count({
     raw: true,
     where: {
       doctor_Secretary_username: username,
@@ -71,6 +70,26 @@ exports.findNurseUsingEmail = async function (email) {
     raw: true,
     where: {
       doctor_Secretary_email: email,
+    },
+  });
+};
+
+exports.findNurseUsingUsernameNOT = async function (username, nurse_ID) {
+  return await model.doctor_Secretary.count({
+    raw: true,
+    where: {
+      doctor_Secretary_username: username,
+      doctor_Secretary_ID: { [Sequelize.Op.not]: nurse_ID },
+    },
+  });
+};
+
+exports.findNurseUsingEmailNOT = async function (email, nurse_ID) {
+  return await model.doctor_Secretary.findOne({
+    raw: true,
+    where: {
+      doctor_Secretary_email: email,
+      doctor_Secretary_ID: { [Sequelize.Op.not]: nurse_ID },
     },
   });
 };
