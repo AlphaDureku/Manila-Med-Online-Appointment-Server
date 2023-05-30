@@ -308,12 +308,11 @@ exports.addDoctorAvailability = async (req, res) => {
 exports.updateNurse = async (req, res) => {
   const { oldPassword, newPassword, username } = req.body;
   const { Nurse_ID } = req.data;
-  c;
   try {
     const { doctor_Secretary_password } =
       await Nurse.findNurseUsingIDReturnPassword(Nurse_ID);
     const isDuplicate = await Nurse.findNurseUsingUsernameNOT(username);
-    console.log(isDuplicate);
+    console.log(doctor_Secretary_password);
     //check if the old password is the same as the one saved in the database
     if (await unHashSomething(oldPassword, doctor_Secretary_password)) {
       //check if username duplicate
@@ -325,11 +324,16 @@ exports.updateNurse = async (req, res) => {
         });
       } else {
         //else update the old password and username, if password is "" don't change else change
-        await Nurse.updateNurse(
-          await hashSomething(newPassword),
-          Nurse_ID,
-          username
-        );
+        if (newPassword) {
+          await Nurse.updateNurse(
+            await hashSomething(newPassword),
+            Nurse_ID,
+            username
+          );
+        } else {
+          await Nurse.updateNurse(newPassword, Nurse_ID, username);
+        }
+
         return sendResponse(res, 200, {
           samePassword: true,
           duplicate: false,

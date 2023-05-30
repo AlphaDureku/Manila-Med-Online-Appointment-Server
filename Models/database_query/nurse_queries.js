@@ -319,7 +319,8 @@ exports.updateNurse = async function (newPassword, nurse_ID, username) {
     doctor_Secretary_username: username,
   };
 
-  if (newPassword) {
+  if (newPassword && newPassword.trim() !== "") {
+    console.log(newPassword + "whu");
     NurseModel.doctor_Secretary_password = newPassword;
   }
   await model.doctor_Secretary.update(NurseModel, {
