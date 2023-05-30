@@ -24,7 +24,28 @@ exports.sendEmailSecretary = (email, body) => {
       from: EmailObjects.from,
       to: email,
       subject: "Account Details",
-      html: `username: ${body.username}<br>password:${body.password}`,
+      html: `
+      <div style='font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2'>
+        <div style='margin:50px auto;width:70%;padding:20px 0'>
+          <div style='border-bottom:1px solid #eee'>
+            <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src="https://imgtr.ee/images/2023/05/29/1bETL.png" alt="1bETL.png" border="0" /> Medical Center Manila</a>
+          </div>
+          <p style='font-size:1.7em;'><b>Hi,</b></p>
+          <p>Hello, <br>
+          Here are your admin account details:<br><br>
+          Username: ${body.username}<br>
+          Password: ${body.password}</p>
+          <br>
+          <b>Please change your password after login.</b>
+          <p style='font-size:0.9em;'>Regards,<br />Medical Center Manila Head Administrator</p>
+          <hr style='border:none;border-top:1px solid #eee' />
+          <div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>
+            <p>Medical Center Manila Inc</p>
+            <p>850 United Nations Ave, Paco</p>
+            <p>Manila, Metro Manila</p>
+          </div>
+        </div>
+      </div>`,
     });
     console.log("Message sent: %s", info.messageId);
   }
