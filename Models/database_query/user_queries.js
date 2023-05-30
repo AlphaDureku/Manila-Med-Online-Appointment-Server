@@ -189,7 +189,7 @@ exports.insertAppointment = async function (appointmentDetailsModel) {
 exports.getAppointmentDetailsUsingAppointmentID = async function (
   appointmentID
 ) {
-  return await model.appointmentDetails.findOne({
+  return await model.appointmentDetails.findAll({
     raw: true,
     attributes: [
       [Sequelize.col("doctor_first_name"), "Fname"],
@@ -199,40 +199,104 @@ exports.getAppointmentDetailsUsingAppointmentID = async function (
       [Sequelize.col("patient_last_name"), "patient_Lname"],
       [Sequelize.col("patient_contact_number"), "Contact"],
       [Sequelize.col("appointment_start"), "start"],
+      "doctor_schedule_table.doctor_schedule_ID",
       [
         Sequelize.fn(
           "date_format",
-          Sequelize.col("doctor_schedule_date"),
+          Sequelize.col("doctor_schedule_table.doctor_schedule_date"),
           "%M %e, %Y"
         ),
         "date",
       ],
     ],
     where: { appointment_ID: appointmentID },
-
     include: [
+      {
+        model: model.patient,
+        attributes: [],
+      },
+      {
+        model: model.doctor_schedule_table,
+        attributes: [],
+      },
       {
         model: model.doctor,
         attributes: [],
-        required: true,
         include: [
           {
             model: model.doctor_specialization,
             attributes: [],
           },
-          {
-            model: model.doctor_schedule_table,
-            attributes: [],
-            required: false,
-          },
         ],
       },
-      {
-        model: model.patient,
-        attributes: [],
-      },
     ],
+    // include: [
+    //   //     {
+    //   //       model: model.doctor,
+    //   //       attributes: [],
+    //   //       required: true,
+    //   //       include: [
+    //   //         {
+    //   //           model: model.doctor_specialization,
+    //   //           attributes: [],
+    //   //         },
+    //   //         {
+    //   //           model: model.doctor_schedule_table,
+    //   //           attributes: [],
+    //   //           required: true,
+    //   //         },
+    //   //       ],
+    //   //     },
+    //   //     {
+    //   //       model: model.patient,
+    //   //       attributes: [],
+    //   //     },
+    //   //   ],
   });
+  // return await model.appointmentDetails.findAll({
+  //   raw: true,
+  //   attributes: [
+  //     [Sequelize.col("doctor_first_name"), "Fname"],
+  //     [Sequelize.col("doctor_last_name"), "Lname"],
+  //     [Sequelize.col("specialization_Name"), "specialization"],
+  //     [Sequelize.col("patient_first_name"), "patient_Fname"],
+  //     [Sequelize.col("patient_last_name"), "patient_Lname"],
+  //     [Sequelize.col("patient_contact_number"), "Contact"],
+  //     [Sequelize.col("appointment_start"), "start"],
+  //     [
+  //       Sequelize.fn(
+  //         "date_format",
+  //         Sequelize.col("doctor_schedule_date"),
+  //         "%M %e, %Y"
+  //       ),
+  //       "date",
+  //     ],
+  //   ],
+  //   where: { appointment_ID: appointmentID },
+
+  //   include: [
+  //     {
+  //       model: model.doctor,
+  //       attributes: [],
+  //       required: true,
+  //       include: [
+  //         {
+  //           model: model.doctor_specialization,
+  //           attributes: [],
+  //         },
+  //         {
+  //           model: model.doctor_schedule_table,
+  //           attributes: [],
+  //           required: true,
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       model: model.patient,
+  //       attributes: [],
+  //     },
+  //   ],
+  // });
 };
 
 exports.checkIfConflict = async function (patient_ID, date) {

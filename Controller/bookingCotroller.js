@@ -79,6 +79,7 @@ exports.checkConflict = async (req, res) => {
 exports.setAppointment = async (req, res) => {
   const { schedule_ID, email, patient_ID, doctor_ID, recom_Time } =
     req.body.appointmentDetails;
+  console.log(req.body.appointmentDetails);
   try {
     let user_ID = await User.findUserUsingEmail(email);
     const queue_number = await getQueueInstance(schedule_ID);
@@ -162,7 +163,6 @@ exports.updatePatientInfo = async (req, res) => {
 
 exports.getAppointmentDetails = async (req, res) => {
   const { appointment_ID } = req.query;
-
   const result = await User.getAppointmentDetailsUsingAppointmentID(
     appointment_ID
   );

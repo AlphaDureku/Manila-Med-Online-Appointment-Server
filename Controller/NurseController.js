@@ -308,6 +308,7 @@ exports.addDoctorAvailability = async (req, res) => {
 exports.updateNurse = async (req, res) => {
   const { oldPassword, newPassword, username } = req.body;
   const { Nurse_ID } = req.data;
+  c;
   try {
     const { doctor_Secretary_password } =
       await Nurse.findNurseUsingIDReturnPassword(Nurse_ID);
