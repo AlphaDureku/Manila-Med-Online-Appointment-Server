@@ -21,8 +21,8 @@ exports.NotifyPatients = async (patientinfo) => {
     `Good Day ${patient_Fname} ${patient_Lname}, Manila Medical Center would like to remind you of your appointment for today at ${start} to ${end}
     
 
-    Regards, 
-    Medical Manila Center`
+Regards, 
+Medical Manila Center`
   );
 };
 
@@ -39,8 +39,8 @@ exports.NotifyPatientsThruSMSThatDoctorHasArrived = async (
       ).format("hh:mm A")}. Thank you!
 
 
-      Regards, 
-      Medical Manila Center`,
+Regards, 
+Medical Manila Center`,
       from: TWILIO_MSGSID,
       to: appointmentDetails.Contact,
     })
@@ -58,8 +58,8 @@ exports.NotifyPatientsThruSMSThatDoctorIsLate = async (appointmentDetails) => {
       ).format("hh:mm A")}. Thank you for your cooperation!
       
 
-      Regards, 
-      Medical Manila Center`,
+Regards, 
+Medical Manila Center`,
       from: TWILIO_MSGSID,
       to: appointmentDetails.Contact,
     })
@@ -76,8 +76,8 @@ exports.NotifyPatientsThruSMSThatCancellAll = async (appointmentDetails) => {
         "HH:mm:ss"
       ).format("hh:mm A")}. Thank you for your cooperation!
       
-      Regards, 
-      Medical Manila Center`,
+Regards, 
+Medical Manila Center`,
       from: TWILIO_MSGSID,
       to: appointmentDetails.Contact,
     })
