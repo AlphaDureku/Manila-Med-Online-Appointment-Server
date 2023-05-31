@@ -181,6 +181,7 @@ exports.updateAppointmentStatus = async (req, res) => {
     }
     const { Contact, patient_Fname, patient_Lname, start, date } =
       await getAppointmentDetailsUsingAppointmentID(appointment_ID);
+
     let body = "";
     switch (updateStatus) {
       case "Confirmed":
@@ -217,7 +218,6 @@ exports.updateAppointmentStatus = async (req, res) => {
       default:
         return sendResponse(res, 400, "invalid parameters");
     }
-    console.log(sendSMSUpdate(Contact, body, "Status"));
     return sendResponse(res, 200, "success");
   } catch (error) {
     console.log(error);

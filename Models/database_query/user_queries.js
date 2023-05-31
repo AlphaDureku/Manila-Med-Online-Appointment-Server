@@ -189,7 +189,7 @@ exports.insertAppointment = async function (appointmentDetailsModel) {
 exports.getAppointmentDetailsUsingAppointmentID = async function (
   appointmentID
 ) {
-  return await model.appointmentDetails.findAll({
+  return await model.appointmentDetails.findOne({
     raw: true,
     attributes: [
       [Sequelize.col("doctor_first_name"), "Fname"],
