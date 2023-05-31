@@ -238,7 +238,7 @@ exports.updateAppointmentStatus = async function (
   updateStatus,
   appointment_ID
 ) {
-  await model.appointmentDetails.update(
+  return await model.appointmentDetails.update(
     {
       appointment_status: updateStatus,
     },
@@ -521,20 +521,23 @@ exports.findDoctorsNurse = async function (doctor_ID) {
   });
 };
 
-exports.getGraphData = async function (doctor_ID, Nurse_ID) {
+exports.getGraphData = async function (doctor_ID, Nurse_ID, DateRange) {
   return await model.Status_Update_Logbook.findAll({
     raw: true,
     attributes: [
       "updatedFrom",
       "updatedTo",
       [
-        Sequelize.fn("date_format", Sequelize.col("createdAt"), "%Y-%m-%d"),
+        Sequelize.fn("date_format", Sequelize.col("createdAt"), "%M %e, %Y"),
         "updatedAt",
       ],
     ],
     where: {
       doctor_ID: doctor_ID,
       doctor_Secretary_ID: Nurse_ID,
+      createdAt: {
+        [Sequelize.Op.between]: [DateRange.start, DateRange.end],
+      },
     },
     order: [["createdAt", "ASC"]],
   });

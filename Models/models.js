@@ -11,6 +11,7 @@ const sequelize = new Sequelize(
     port: process.env.MYSQLPORT,
     dialect: "mysql",
     logging: false,
+    timezone: "+08:00",
     define: {
       freezeTableName: true,
       timestamps: false,
@@ -357,5 +358,5 @@ async function setDoctor_Department(doctorModel) {
 }
 setDoctor_Department(doctorModel)
 */
-
+syncAll();
 module.exports = sequelize.models;

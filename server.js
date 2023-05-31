@@ -37,7 +37,7 @@ app.use(
     proxy: true,
     cookie: {
       maxAge: 60 * 60 * 1000,
-      /* Enable on deployment*/
+      // /* Enable on deployment*/
       sameSite: "None",
       secure: true,
     },

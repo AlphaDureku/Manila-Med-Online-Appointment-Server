@@ -69,7 +69,8 @@ exports.dashboard = async (req, res) => {
         );
         const graphData = await Nurse.getGraphData(
           req.session.doctor_ID || doctor.at(0).doctor_ID,
-          Nurse_ID
+          Nurse_ID,
+          Week
         );
         if (!req.session.doctor_ID) {
           req.session.doctor_ID = doctor.at(0).doctor_ID;
@@ -122,7 +123,7 @@ exports.changeDoctor = async (req, res) => {
       doctor_ID,
       selectedDateRange
     );
-    const graphData = await Nurse.getGraphData(doctor_ID, Nurse_ID);
+    const graphData = await Nurse.getGraphData(doctor_ID, Nurse_ID, Week);
     return sendResponse(res, 200, {
       calendarData: calendar,
       appointmentsData: appointments,
@@ -208,18 +209,18 @@ exports.updateAppointmentStatus = async (req, res) => {
         // await sendSMS(Contact, body);
         break;
       case "Completed":
-        return sendResponse(res, 200, "success");
+        break;
       case "Rejected":
         body = `Good Day! ${patient_Fname} ${patient_Lname}, We regret to inform that your appointment has been rejected. We deeply apologize for the inconvenience. Kindly call this 0239-139 if you wanted to reschedule your appointment. 
         
         Regards, 
         Medical Manila Center`;
-
         // await sendSMS(Contact, body);
         break;
       default:
         return sendResponse(res, 400, "invalid parameters");
     }
+
     await Nurse.updateAppointmentStatus(updatedTo, appointment_ID);
     await LogBookFunction({
       doctor_ID: req.session.doctor_ID,
