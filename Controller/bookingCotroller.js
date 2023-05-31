@@ -11,7 +11,12 @@ const moment = require("moment");
 const {
   upperCaseFirstLetter,
   formatContactNumber,
+  LogBookFunction,
 } = require("../utils/collectionOfFunctions");
+const {
+  updateAppointmentStatusLogBook,
+  findDoctorsNurse,
+} = require("../Models/database_query/nurse_queries");
 exports.sendOTP = async (req, res) => {
   try {
     const userResults = {
@@ -95,7 +100,11 @@ exports.setAppointment = async (req, res) => {
         };
         await User.insertAppointment(appointmentDetailsModel);
         await incrementQueue(schedule_ID);
-
+        await LogBookFunction({
+          doctor_ID: doctor_ID,
+          updatedFrom: null,
+          updatedTo: "Pending",
+        });
         return sendResponse(res, 200, {
           message: "userExist but old patient",
           appointment_ID: appointmentDetailsModel.appointment_ID,
@@ -113,13 +122,11 @@ exports.setAppointment = async (req, res) => {
       }
     } else {
       user_ID = await User.insertUser(email);
-
       const appointment_ID = await preparePatientAndAppointment(
         req.body.appointmentDetails,
         user_ID,
         queue_number
       );
-      console.log(appointment_ID);
       return sendResponse(res, 200, {
         message: "new User so new patient",
         appointment_ID: appointment_ID,
@@ -174,7 +181,8 @@ const preparePatientAndAppointment = async (
   user_ID,
   queue_number
 ) => {
-  const { patient_info, recom_Time } = appointmentDetails;
+  const { patient_info, recom_Time, schedule_ID, doctor_ID } =
+    appointmentDetails;
   const patientModel = {
     patient_ID: "PATIENT-" + uuid.v4(),
     user_ID: user_ID.user_ID,
@@ -189,14 +197,18 @@ const preparePatientAndAppointment = async (
   const appointmentDetailsModel = {
     appointment_ID: "APP-" + uuid.v4(),
     patient_ID: patientModel.patient_ID,
-    doctor_schedule_ID: appointmentDetails.schedule_ID,
-    doctor_ID: appointmentDetails.doctor_ID,
+    doctor_schedule_ID: schedule_ID,
+    doctor_ID: doctor_ID,
     appointment_start: moment(recom_Time, "h:mm A").format("HH:mm:ss"),
     appointment_queue: queue_number,
   };
   await User.insertPatient(patientModel);
   await User.insertAppointment(appointmentDetailsModel);
   await incrementQueue(appointmentDetails.schedule_ID);
-  console.log(appointmentDetailsModel);
+  await LogBookFunction({
+    doctor_ID: doctor_ID,
+    updatedFrom: null,
+    updatedTo: "Pending",
+  });
   return appointmentDetailsModel.appointment_ID;
 };

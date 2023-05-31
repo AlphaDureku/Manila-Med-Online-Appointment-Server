@@ -39,7 +39,7 @@ exports.getDoctorsWithoutNurse = async function () {
       ["doctor_last_name", "DLname"],
     ],
     where: {
-      doctorSecretaryDoctorSecretaryID: null,
+      doctor_Secretary_ID: null,
     },
     order: [
       [
@@ -65,7 +65,7 @@ exports.getDoctorsWithNurse = async function () {
       "doctor_ID",
       ["doctor_first_name", "DFname"],
       ["doctor_last_name", "DLname"],
-      [Sequelize.col("doctor_Secretary_ID"), "nurse_ID"],
+      [Sequelize.col("doctor_Secretary.doctor_Secretary_ID"), "nurse_ID"],
       [Sequelize.col("doctor_Secretary_first_name"), "nurse_Fname"],
       [Sequelize.col("doctor_Secretary_last_name"), "nurse_Lname"],
     ],
@@ -76,7 +76,7 @@ exports.getDoctorsWithNurse = async function () {
       },
     ],
     where: {
-      doctorSecretaryDoctorSecretaryID: {
+      doctor_Secretary_ID: {
         [Sequelize.Op.ne]: null,
       },
     },
@@ -132,7 +132,7 @@ exports.nurseBindings = async function (nurse_ID) {
       ["doctor_last_name", "DLname"],
     ],
     where: {
-      doctorSecretaryDoctorSecretaryID: nurse_ID,
+      doctor_Secretary_ID: nurse_ID,
     },
   });
 };
@@ -190,7 +190,7 @@ exports.updateNurse = async function (NurseModel) {
 exports.matchDoctorNurse = async function (doctor_ID, nurse_ID) {
   await model.doctor.update(
     {
-      doctorSecretaryDoctorSecretaryID: nurse_ID,
+      doctor_Secretary_ID: nurse_ID,
     },
     {
       where: {
@@ -239,7 +239,7 @@ exports.updateHead = async function (headModel) {
 exports.removeBind = async function (doctorID) {
   await model.doctor.update(
     {
-      doctorSecretaryDoctorSecretaryID: null,
+      doctor_Secretary_ID: null,
     },
     {
       where: {

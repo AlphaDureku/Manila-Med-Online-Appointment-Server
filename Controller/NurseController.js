@@ -25,6 +25,7 @@ const {
   getAppointmentDetailsUsingAppointmentID,
 } = require("../Models/database_query/user_queries");
 const moment = require("moment");
+const { LogBookFunction } = require("../utils/collectionOfFunctions");
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
@@ -66,6 +67,10 @@ exports.dashboard = async (req, res) => {
           req.session.doctor_ID || doctor.at(0).doctor_ID,
           Week
         );
+        const graphData = await Nurse.getGraphData(
+          req.session.doctor_ID || doctor.at(0).doctor_ID,
+          Nurse_ID
+        );
         if (!req.session.doctor_ID) {
           req.session.doctor_ID = doctor.at(0).doctor_ID;
         }
@@ -74,6 +79,7 @@ exports.dashboard = async (req, res) => {
           DoctorData: doctor,
           AppointmentsData: appointments,
           calendarData: calendar,
+          graphData: graphData,
           selectedDoctor: req.session.doctor_ID,
         });
       }
@@ -91,6 +97,7 @@ exports.dashboard = async (req, res) => {
 
 exports.changeDoctor = async (req, res) => {
   req.session.doctor_ID = req.query.doctor_ID;
+  const { Nurse_ID } = req.data;
   const { doctor_ID } = req.session;
   let selectedDateRange = Day;
   switch (req.query.DateRange) {
@@ -115,9 +122,11 @@ exports.changeDoctor = async (req, res) => {
       doctor_ID,
       selectedDateRange
     );
+    const graphData = await Nurse.getGraphData(doctor_ID, Nurse_ID);
     return sendResponse(res, 200, {
       calendarData: calendar,
       appointmentsData: appointments,
+      graphData: graphData,
     });
   } catch (error) {
     console.log(error);
@@ -174,23 +183,18 @@ exports.searchAppointments = async (req, res) => {
 };
 
 exports.updateAppointmentStatus = async (req, res) => {
-  const { updateStatus, appointment_ID } = req.body;
+  const { updatedFrom, updatedTo, appointment_ID } = req.body;
   try {
-    if (!updateStatus) {
-      return sendResponse(res, 400, "bad parameter");
-    }
     const { Contact, patient_Fname, patient_Lname, start, date } =
       await getAppointmentDetailsUsingAppointmentID(appointment_ID);
-
     let body = "";
-    switch (updateStatus) {
+    switch (updatedTo) {
       case "Confirmed":
         body = `Hello ${patient_Fname} ${patient_Lname}, We would like to inform that your appointment has been confirmed. We will be waiting for you at the hospital at ${moment(
           start,
           "HH:mm:ss"
         ).format("hh:mm A")}`;
-        await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
-        await sendSMS(Contact, body);
+        // await sendSMS(Contact, body);
         break;
       case "Cancelled":
         body = `Good Day! ${patient_Fname} ${patient_Lname}, Your appointment on ${date} has been cancelled. We deeply apologize for the inconvenience. Kindly call this 0239-139 if you wanted to reschedule your appointment.
@@ -201,23 +205,27 @@ exports.updateAppointmentStatus = async (req, res) => {
         
         Regards, 
         Medical Manila Center`;
-        await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
-        await sendSMS(Contact, body);
+        // await sendSMS(Contact, body);
         break;
       case "Completed":
-        await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
         return sendResponse(res, 200, "success");
       case "Rejected":
         body = `Good Day! ${patient_Fname} ${patient_Lname}, We regret to inform that your appointment has been rejected. We deeply apologize for the inconvenience. Kindly call this 0239-139 if you wanted to reschedule your appointment. 
         
         Regards, 
         Medical Manila Center`;
-        await Nurse.updateAppointmentStatus(updateStatus, appointment_ID);
-        await sendSMS(Contact, body);
+
+        // await sendSMS(Contact, body);
         break;
       default:
         return sendResponse(res, 400, "invalid parameters");
     }
+    await Nurse.updateAppointmentStatus(updatedTo, appointment_ID);
+    await LogBookFunction({
+      doctor_ID: req.session.doctor_ID,
+      updatedFrom: updatedFrom,
+      updatedTo: updatedTo,
+    });
     return sendResponse(res, 200, "success");
   } catch (error) {
     console.log(error);
@@ -245,12 +253,12 @@ exports.notifyPatientsForTodayThatDoctorHasArrived = async (req, res) => {
     if (notificationType === "Arrived") {
       appointments.forEach((AppointmentDetails) => {
         notifyPatientsThruEmailThatDoctorHasArrived(AppointmentDetails);
-        NotifyPatientsThruSMSThatDoctorHasArrived(AppointmentDetails);
+        // NotifyPatientsThruSMSThatDoctorHasArrived(AppointmentDetails);
       });
     } else if (notificationType === "Late") {
       appointments.forEach((AppointmentDetails) => {
         notifyPatientsThruEmailThatDoctorIsLate(AppointmentDetails);
-        NotifyPatientsThruSMSThatDoctorIsLate(AppointmentDetails);
+        // NotifyPatientsThruSMSThatDoctorIsLate(AppointmentDetails);
       });
     } else {
       appointments.forEach((AppointmentDetails) => {
@@ -259,7 +267,7 @@ exports.notifyPatientsForTodayThatDoctorHasArrived = async (req, res) => {
           AppointmentDetails.appointment_ID
         );
         notifyPatientsThruEmailThatCancelAll(AppointmentDetails);
-        NotifyPatientsThruSMSThatCancellAll(AppointmentDetails);
+        // NotifyPatientsThruSMSThatCancellAll(AppointmentDetails);
       });
     }
 

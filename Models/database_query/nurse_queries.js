@@ -1,6 +1,6 @@
 const model = require("../models");
 const Sequelize = require("sequelize");
-
+const uuid = require("uuid");
 const age = Sequelize.fn(
   "TIMESTAMPDIFF",
   Sequelize.literal("YEAR"),
@@ -330,8 +330,6 @@ exports.updateNurse = async function (newPassword, nurse_ID, username) {
   });
 };
 
-//Still havent implemented yet
-
 exports.getContactUsingApp_ID = async function (ID) {
   return await model.appointmentDetails.findOne({
     raw: true,
@@ -474,5 +472,70 @@ exports.deleteDoctorAvailability = async function (schedule_ID) {
     where: {
       doctor_schedule_ID: schedule_ID,
     },
+  });
+};
+
+exports.doctorAvailabilityData = async function (doctor_ID) {
+  return await model.doctor_schedule_table.findAll({
+    raw: true,
+    attributes: [
+      "doctor_ID",
+      [Sequelize.col("doctor_schedule_ID"), "schedule_ID"],
+      [Sequelize.col("doctor_schedule_max_patient"), "maxPatient"],
+      [Sequelize.col("doctor_schedule_Interval"), "timeInterval"],
+      [Sequelize.col("doctor_schedule_current_queue"), "slotsTaken"],
+    ],
+    where: {
+      doctor_ID: doctor_ID,
+      doctor_schedule_date: {
+        [Op.gte]: moment().startOf("day").toDate(),
+      },
+    },
+  });
+};
+
+exports.updateAppointmentStatusLogBook = async function (
+  doctor_ID,
+  Nurse_ID,
+  updatedFrom,
+  updatedTo
+) {
+  const Status_Update_Logbook_Model = {
+    Process_ID: "LOG-" + uuid.v4(),
+    doctor_ID: doctor_ID,
+    doctor_Secretary_ID: Nurse_ID,
+    updatedFrom: updatedFrom,
+    updatedTo: updatedTo,
+  };
+
+  return await model.Status_Update_Logbook.create(Status_Update_Logbook_Model);
+};
+
+exports.findDoctorsNurse = async function (doctor_ID) {
+  return await model.doctor.findOne({
+    raw: true,
+    attributes: ["doctor_Secretary_ID"],
+    wheer: {
+      doctor_ID: doctor_ID,
+    },
+  });
+};
+
+exports.getGraphData = async function (doctor_ID, Nurse_ID) {
+  return await model.Status_Update_Logbook.findAll({
+    raw: true,
+    attributes: [
+      "updatedFrom",
+      "updatedTo",
+      [
+        Sequelize.fn("date_format", Sequelize.col("createdAt"), "%Y-%m-%d"),
+        "updatedAt",
+      ],
+    ],
+    where: {
+      doctor_ID: doctor_ID,
+      doctor_Secretary_ID: Nurse_ID,
+    },
+    order: [["createdAt", "ASC"]],
   });
 };

@@ -1,3 +1,8 @@
+const {
+  findDoctorsNurse,
+  updateAppointmentStatusLogBook,
+} = require("../Models/database_query/nurse_queries");
+
 exports.upperCaseFirstLetter = (params) => {
   const words = params.split(" ");
   const capitalizedWords = words.map((word) => {
@@ -18,4 +23,16 @@ exports.formatContactNumber = (contactNumber) => {
   } else {
     return contactNumber;
   }
+};
+
+exports.LogBookFunction = async (UpdateStatus) => {
+  const { doctor_ID, updatedFrom, updatedTo } = UpdateStatus;
+  const { doctor_Secretary_ID } = await findDoctorsNurse(doctor_ID);
+  const result = await updateAppointmentStatusLogBook(
+    doctor_ID,
+    doctor_Secretary_ID,
+    updatedFrom,
+    updatedTo
+  );
+  return result;
 };

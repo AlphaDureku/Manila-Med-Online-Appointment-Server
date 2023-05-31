@@ -10,6 +10,7 @@ const sequelize = new Sequelize(
     host: process.env.MYSQLHOST,
     port: process.env.MYSQLPORT,
     dialect: "mysql",
+    logging: false,
     define: {
       freezeTableName: true,
       timestamps: false,
@@ -252,6 +253,43 @@ const Doctor_schedule_table = sequelize.define("doctor_schedule_table", {
   },
 });
 
+const Status_Update_Logbook = sequelize.define(
+  "Status_Update_Logbook",
+  {
+    Process_ID: {
+      type: DataTypes.STRING(50),
+      primaryKey: true,
+    },
+    doctor_ID: {
+      type: DataTypes.STRING(50),
+      references: {
+        model: Doctor,
+        key: "doctor_ID",
+      },
+    },
+    doctor_Secretary_ID: {
+      type: DataTypes.STRING(50),
+      references: {
+        model: Doctor_Secretary,
+        key: "doctor_Secretary_ID",
+      },
+    },
+    updatedFrom: {
+      type: Sequelize.ENUM,
+      values: ["Pending", "Confirmed", "Rejected", "Cancelled", "Completed"],
+      defaultValue: "Pending",
+    },
+    updatedTo: {
+      type: Sequelize.ENUM,
+      values: ["Pending", "Confirmed", "Rejected", "Cancelled", "Completed"],
+      defaultValue: "Pending",
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 //Table controller
 async function syncAll() {
   await sequelize.sync({ force: true }).then(() => {
@@ -270,8 +308,14 @@ async function clearTable(table) {
 
 Doctor.hasMany(Doctor_schedule_table, { foreignKey: "doctor_ID" });
 Doctor_schedule_table.belongsTo(Doctor, { foreignKey: "doctor_ID" });
-Doctor_Secretary.hasMany(Doctor);
-Doctor.belongsTo(Doctor_Secretary);
+Doctor_Secretary.hasMany(Doctor, {
+  foreignKey: "doctor_Secretary_ID",
+  as: "doctors",
+});
+
+Doctor.belongsTo(Doctor_Secretary, {
+  foreignKey: "doctor_Secretary_ID",
+});
 Doctor.hasMany(AppointmentDetails, { foreignKey: "doctor_ID" });
 AppointmentDetails.belongsTo(Doctor, { foreignKey: "doctor_ID" });
 User.hasMany(Patient, { foreignKey: "user_ID" });
@@ -313,5 +357,5 @@ async function setDoctor_Department(doctorModel) {
 }
 setDoctor_Department(doctorModel)
 */
-
+syncAll();
 module.exports = sequelize.models;
