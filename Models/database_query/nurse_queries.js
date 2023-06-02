@@ -521,7 +521,7 @@ exports.findDoctorsNurse = async function (doctor_ID) {
   });
 };
 
-exports.getGraphData = async function (doctor_ID, Nurse_ID, DateRange) {
+exports.getGraphData = async function (doctor_ID, Nurse_ID) {
   return await model.Status_Update_Logbook.findAll({
     raw: true,
     attributes: [
@@ -535,9 +535,6 @@ exports.getGraphData = async function (doctor_ID, Nurse_ID, DateRange) {
     where: {
       doctor_ID: doctor_ID,
       doctor_Secretary_ID: Nurse_ID,
-      createdAt: {
-        [Sequelize.Op.between]: [DateRange.start, DateRange.end],
-      },
     },
     order: [["createdAt", "ASC"]],
   });

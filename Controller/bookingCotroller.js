@@ -13,10 +13,6 @@ const {
   formatContactNumber,
   LogBookFunction,
 } = require("../utils/collectionOfFunctions");
-const {
-  updateAppointmentStatusLogBook,
-  findDoctorsNurse,
-} = require("../Models/database_query/nurse_queries");
 exports.sendOTP = async (req, res) => {
   try {
     const userResults = {
@@ -40,10 +36,15 @@ exports.sendOTP = async (req, res) => {
 
 exports.verifyOTP = async (req, res) => {
   try {
-    if (req.session.OTP == req.query.inputOTP || req.query.inputOTP == 1) {
-      return sendResponse(res, 200, { isVerified: true });
+    if (req.query.hasExpired === "true") {
+      return sendResponse(res, 200, { isVerified: false });
+    } else {
+      console.log("whu");
+      if (req.session.OTP == req.query.inputOTP || req.query.inputOTP == 1) {
+        return sendResponse(res, 200, { isVerified: true });
+      }
+      return sendResponse(res, 200, { isVerified: false });
     }
-    return sendResponse(res, 200, { isVerified: false });
   } catch (error) {
     return sendResponse(res, 500, error.message);
   }

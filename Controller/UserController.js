@@ -28,6 +28,9 @@ exports.checkIfExistsAndSendOTP = async (req, res) => {
 exports.verifyOTP = async (req, res) => {
   console.log(req.session.OTP);
   try {
+    if (req.body.hasExpired) {
+      return sendResponse(res, 200, { isVerified: false });
+    }
     if (req.session.OTP == req.body.inputOTP || req.body.inputOTP == 1) {
       const { user_ID } = req.body;
       const token = jwt.sign({ user_ID }, process.env.JWT_SECRET, {

@@ -69,8 +69,7 @@ exports.dashboard = async (req, res) => {
         );
         const graphData = await Nurse.getGraphData(
           req.session.doctor_ID || doctor.at(0).doctor_ID,
-          Nurse_ID,
-          Week
+          Nurse_ID
         );
         if (!req.session.doctor_ID) {
           req.session.doctor_ID = doctor.at(0).doctor_ID;
@@ -87,6 +86,9 @@ exports.dashboard = async (req, res) => {
 
       return sendResponse(res, 200, {
         NurseData: nurse,
+        DoctorData: [],
+        AppointmentsData: [],
+        calendarData: [],
       });
     } catch (error) {
       console.log(error);
