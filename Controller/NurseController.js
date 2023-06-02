@@ -54,6 +54,7 @@ exports.dashboard = async (req, res) => {
   const token = req.cookies.Nurse_ID;
   if ((await authorizedUsingCookie(res, token, "Nurse_ID")).authorized) {
     const { Nurse_ID } = req.data;
+    console.log(Nurse_ID);
     try {
       const nurse = await Nurse.findNurseUsingID(Nurse_ID);
       const doctor = await Nurse.findDoctors(Nurse_ID);
