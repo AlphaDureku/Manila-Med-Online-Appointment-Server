@@ -92,6 +92,30 @@ exports.getDoctorsWithNurse = async function () {
 exports.getNurses = async function () {
   return await model.doctor_Secretary.findAll({
     raw: true,
+    attributes: [
+      [Sequelize.fn("COUNT", Sequelize.col("doctor_ID")), "doctorCount"],
+      "doctor_Secretary_ID",
+      "doctor_Secretary_first_name",
+      "doctor_Secretary_last_name",
+      "doctor_Secretary_email",
+      "doctor_Secretary_contact_number",
+      "doctor_Secretary_username",
+    ],
+    include: [
+      {
+        model: model.doctor,
+        as: "doctors",
+        attributes: [],
+      },
+    ],
+    group: [
+      "doctor_Secretary.doctor_Secretary_ID",
+      "doctor_Secretary.doctor_Secretary_first_name",
+      "doctor_Secretary.doctor_Secretary_last_name",
+      "doctor_Secretary.doctor_Secretary_email",
+      "doctor_Secretary.doctor_Secretary_contact_number",
+      "doctor_Secretary.doctor_Secretary_username",
+    ],
     order: [
       [
         Sequelize.literal(

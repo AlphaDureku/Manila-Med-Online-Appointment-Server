@@ -1,7 +1,8 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
-
+const Chance = require("chance");
+const fs = require("fs");
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");

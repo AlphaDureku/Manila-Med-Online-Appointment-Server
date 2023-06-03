@@ -54,6 +54,7 @@ exports.dashboard = async (req, res) => {
       const HmoLists = await Initialize.setup_HMO();
       const SpecializationList = await Initialize.setup_Specialization();
       const Nurses = await HeadAdmin.getNurses();
+
       return sendResponse(res, 200, {
         AdminInfo: AdminInfo,
         DoctorsWithNurses: DoctorsWithNurses,
