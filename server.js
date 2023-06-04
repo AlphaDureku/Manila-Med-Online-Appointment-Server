@@ -141,7 +141,9 @@ const NurseData = [];
 //       date: randomDate.format("MM/DD/YY"), // Assuming current date is used
 //       startTime: randomStartTime.format("HH:mm:ss"),
 //       endTime: randomEndTime.format("HH:mm:ss"),
-//       intervalTime: intervalTime.hours().toString(),
+//       intervalTime: moment
+//         .utc(intervalTime.asMilliseconds())
+//         .format("HH:mm:ss"),
 //       maxPatient: maxPatient.toString(),
 //     };
 //     availArray.push(availObject);
