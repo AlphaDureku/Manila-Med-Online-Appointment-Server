@@ -1,4 +1,4 @@
-HMOList = [
+exports.HMOList = [
   //List All HMO
   { HMO_Name: "AMAPHIL" },
   { HMO_Name: "Ayala AON" },
@@ -39,6 +39,4 @@ HMOList = [
   { HMO_Name: "Star Healthcare" },
   { HMO_Name: "Sun Life" },
   { HMO_Name: "Valuecare" },
-  
-  
 ];

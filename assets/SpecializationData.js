@@ -1,4 +1,4 @@
-SpecializationData = [
+exports.SpecializationData = [
   //List All Specializations
   { specialization_Name: "Anesthesiology" },
   { specialization_Name: "Cardiology" },
@@ -71,6 +71,4 @@ SpecializationData = [
   { specialization_Name: "Thoracic / Cardiovascular Surgery" },
   { specialization_Name: "Ultrasound" },
   { specialization_Name: "Urology" },
-  
-  
 ];
