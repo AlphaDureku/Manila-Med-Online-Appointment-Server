@@ -1,4 +1,4 @@
-exports.HMOList = [
+exports.HMOData = [
   //List All HMO
   { HMO_Name: "AMAPHIL" },
   { HMO_Name: "Ayala AON" },
