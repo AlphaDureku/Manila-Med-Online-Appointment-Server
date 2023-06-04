@@ -1,7 +1,7 @@
 exports.HMOData = [
   //List All HMO
   { HMO_Name: "AMAPHIL" },
-  { HMO_Name: "AON Insurance Reinsurance / Ayala AON" },
+  { HMO_Name: "AON Insurance Reinsurance" },
   { HMO_Name: "Asianlife and General Assurance" },
   { HMO_Name: "Avega Healthcare Management" },
   { HMO_Name: "Benlife" },
@@ -17,7 +17,7 @@ exports.HMOData = [
   { HMO_Name: "Fortune Care Healthcare" },
   { HMO_Name: "Generali Pilipinas" },
   { HMO_Name: "Health Care & Development" },
-  { HMO_Name: "Health First (Health Delivery System, Inc.)" },
+  { HMO_Name: "Health Delivery System, Inc." },
   { HMO_Name: "Health Maintenance Inc. (HMI)" },
   { HMO_Name: "Health Plan Philippines Inc. (HPPI)" },
   { HMO_Name: "Healthsheild" },
@@ -34,7 +34,7 @@ exports.HMOData = [
   { HMO_Name: "Medilink Network Inc." },
   { HMO_Name: "Medocare" },
   { HMO_Name: "Pacific Cross" },
-  { HMO_Name: "PAGCOR - Philippine Amusement and Gaming Corporation" },
+  { HMO_Name: "Philippine Amusement and Gaming Corporation" },
   { HMO_Name: "PhilCare" },
   { HMO_Name: "Star Healthcare" },
   { HMO_Name: "Sun Life" },
