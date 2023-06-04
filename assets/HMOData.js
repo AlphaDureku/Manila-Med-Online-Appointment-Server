@@ -19,7 +19,7 @@ exports.HMOData = [
   { HMO_Name: "Health Care & Development" },
   { HMO_Name: "Health First" },
   { HMO_Name: "HMI" },
-  { HMO_Name: "Health Plan Philippines Inc." },
+  { HMO_Name: "HPPI" },
   { HMO_Name: "Healthsheild" },
   { HMO_Name: "I - care" },
   { HMO_Name: "Insular Care" },
