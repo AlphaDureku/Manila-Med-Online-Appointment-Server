@@ -13,9 +13,6 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const MemoryStore = require("memorystore")(session);
 const cors = require("cors");
-const uuid = require("uuid");
-const moment = require("moment");
-const bcrypt = require("bcrypt");
 // const { SpecializationData } = require("../SpecializationData");
 // const { HMOData } = require("../HMOData");
 // const { DoctorData } = require("../DoctorsData");
@@ -156,7 +153,6 @@ const tracking = require("./Routes/tracking");
 const booking = require("./Routes/booking");
 const admin = require("./Routes/NursePage");
 const headAdmin = require("./Routes/headAdminPage");
-const { hashSomething } = require("./utils/Bcrypt");
 
 app.use("/", indexRouter);
 app.use("/user", tracking);
