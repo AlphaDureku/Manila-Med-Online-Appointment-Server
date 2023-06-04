@@ -13,6 +13,7 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const MemoryStore = require("memorystore")(session);
 const cors = require("cors");
+const moment = require("moment");
 // const { SpecializationData } = require("../SpecializationData");
 // const { HMOData } = require("../HMOData");
 // const { DoctorData } = require("../DoctorsData");
@@ -92,6 +93,7 @@ const NurseData = [];
 // const currentDate = moment();
 // const nextMonthDate = moment().add(1, "month");
 
+// let marked = [];
 // const availArray = [];
 // for (let i = 1; i < 100; i++) {
 //   // Generate random start hour between 7 and 14 (7 AM to 2 PM)
@@ -103,43 +105,48 @@ const NurseData = [];
 //     minute: 0,
 //     second: 0,
 //   });
-
 //   const randomDate = moment(
 //     Math.random() * (nextMonthDate - currentDate) + currentDate
 //   );
-//   // Generate random duration between 4 and 8 hours
-//   const randomDuration = Math.floor(Math.random() * 5) + 4;
 
-//   // Calculate the end time based on random start time and duration, limited to the day range
-//   const randomEndTime = randomStartTime.clone().add(randomDuration, "hours");
-//   if (randomEndTime.isAfter(moment().set({ hour: 18, minute: 0, second: 0 }))) {
-//     randomEndTime.set({ hour: 18, minute: 0, second: 0 });
+//   if (!marked.includes(randomDate.format("MM/DD/YY"))) {
+//     // Generate random duration between 4 and 8 hours
+//     const randomDuration = Math.floor(Math.random() * 5) + 4;
+
+//     // Calculate the end time based on random start time and duration, limited to the day range
+//     const randomEndTime = randomStartTime.clone().add(randomDuration, "hours");
+//     if (
+//       randomEndTime.isAfter(moment().set({ hour: 18, minute: 0, second: 0 }))
+//     ) {
+//       randomEndTime.set({ hour: 18, minute: 0, second: 0 });
+//     }
+
+//     // Ensure there is at least a 3-hour separation between start time and end time
+//     const minEndTime = randomStartTime.clone().add(3, "hours");
+//     if (randomEndTime.isBefore(minEndTime)) {
+//       randomEndTime.set(minEndTime.toObject());
+//     }
+
+//     // Calculate the interval between start time and end time
+//     const duration = moment.duration(randomEndTime.diff(randomStartTime));
+//     const intervalTime = moment.duration(1, "hours");
+//     const intervalCount = Math.ceil(
+//       duration.asMilliseconds() / intervalTime.asMilliseconds()
+//     );
+
+//     // Calculate the maxPatient based on the interval count
+//     const maxPatient = intervalCount;
+
+//     const availObject = {
+//       date: randomDate.format("MM/DD/YY"), // Assuming current date is used
+//       startTime: randomStartTime.format("HH:mm:ss"),
+//       endTime: randomEndTime.format("HH:mm:ss"),
+//       intervalTime: intervalTime.hours().toString(),
+//       maxPatient: maxPatient.toString(),
+//     };
+//     availArray.push(availObject);
+//     marked.push(randomDate.format("MM/DD/YY"));
 //   }
-
-//   // Ensure there is at least a 3-hour separation between start time and end time
-//   const minEndTime = randomStartTime.clone().add(3, "hours");
-//   if (randomEndTime.isBefore(minEndTime)) {
-//     randomEndTime.set(minEndTime.toObject());
-//   }
-
-//   // Calculate the interval between start time and end time
-//   const duration = moment.duration(randomEndTime.diff(randomStartTime));
-//   const intervalTime = moment.duration(1, "hours");
-//   const intervalCount = Math.ceil(
-//     duration.asMilliseconds() / intervalTime.asMilliseconds()
-//   );
-
-//   // Calculate the maxPatient based on the interval count
-//   const maxPatient = intervalCount;
-
-//   const availObject = {
-//     date: randomDate.format("MM/DD/YY"), // Assuming current date is used
-//     startTime: randomStartTime.format("HH:mm:ss"),
-//     endTime: randomEndTime.format("HH:mm:ss"),
-//     intervalTime: intervalTime.hours().toString(),
-//     maxPatient: maxPatient.toString(),
-//   };
-//   availArray.push(availObject);
 // }
 
 // console.log(JSON.stringify(availArray));

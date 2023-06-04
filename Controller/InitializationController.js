@@ -52,22 +52,31 @@ exports.InsertAllPreMadeDataSet = async (req, res) => {
         NurseData[i].doctor_Secretary_ID
       );
     }
-
-    for (let i = 0; i < 1000; i++) {
-      const randomAvail = Math.floor(Math.random() * 99);
-      const randomDoctor = Math.floor(Math.random() * 100);
-      const availObject = {
-        doctor_schedule_ID: "SCHED-" + uuid.v4(),
-        doctor_ID: DoctorsData[randomDoctor].doctor_ID,
-        doctor_schedule_date: AvailData[randomAvail].date,
-        doctor_schedule_start_time: AvailData[randomAvail].startTime,
-        doctor_schedule_end_time: AvailData[randomAvail].endTime,
-        doctor_schedule_Interval: AvailData[randomAvail].intervalTime,
-        doctor_schedule_max_patient: AvailData[randomAvail].maxPatient,
-      };
-      await insertDoctorAvailability(availObject);
+    let counter = 0;
+    let marked = [];
+    for (let i = 0; i < 100; i++) {
+      for (let j = 0; j < 6; j++) {
+        const randomAvail = Math.floor(Math.random() * AvailData.length);
+        if (!marked.includes(randomAvail)) {
+          const availObject = {
+            doctor_schedule_ID: "SCHED-" + uuid.v4(),
+            doctor_ID: DoctorsData[i].doctor_ID,
+            doctor_schedule_date: AvailData[randomAvail].date,
+            doctor_schedule_start_time: AvailData[randomAvail].startTime,
+            doctor_schedule_end_time: AvailData[randomAvail].endTime,
+            doctor_schedule_Interval: AvailData[randomAvail].intervalTime,
+            doctor_schedule_max_patient: AvailData[randomAvail].maxPatient,
+          };
+          await insertDoctorAvailability(availObject);
+          marked.push(randomAvail);
+        } else {
+          j--;
+        }
+      }
+      marked = [];
     }
-    console.table(resultHMO + resultSpec + resultNurse);
+    console.log(marked);
+
     return sendResponse(res, 200, "Success");
   } catch (error) {
     console.log(error);
