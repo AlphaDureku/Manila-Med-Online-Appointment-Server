@@ -11,5 +11,6 @@ router.get("/doctors/search", DoctorController.searchDoctor);
 router.post("/trackMe", UserController.checkIfExistsAndSendOTP);
 router.get("/initialize", InitializationController.initialize);
 router.post("/verifyOTP", UserController.verifyOTP);
+router.post("/insert", InitializationController.InsertAllPreMadeDataSet);
 
 module.exports = router;

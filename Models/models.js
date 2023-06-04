@@ -105,9 +105,6 @@ const Doctor = sequelize.define("doctor", {
   doctor_contact_number: {
     type: DataTypes.STRING,
   },
-  doctor_dateOfBirth: {
-    type: DataTypes.DATE,
-  },
   doctor_room: {
     type: DataTypes.STRING,
   },
@@ -359,4 +356,5 @@ async function setDoctor_Department(doctorModel) {
 setDoctor_Department(doctorModel)
 */
 
+syncAll();
 module.exports = sequelize.models;

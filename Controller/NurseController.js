@@ -54,7 +54,6 @@ exports.dashboard = async (req, res) => {
   const token = req.cookies.Nurse_ID;
   if ((await authorizedUsingCookie(res, token, "Nurse_ID")).authorized) {
     const { Nurse_ID } = req.data;
-    console.log(Nurse_ID);
     try {
       const nurse = await Nurse.findNurseUsingID(Nurse_ID);
       const doctor = await Nurse.findDoctors(Nurse_ID);
@@ -72,6 +71,7 @@ exports.dashboard = async (req, res) => {
           req.session.doctor_ID || doctor.at(0).doctor_ID,
           Nurse_ID
         );
+
         if (!req.session.doctor_ID) {
           req.session.doctor_ID = doctor.at(0).doctor_ID;
         }
@@ -127,6 +127,7 @@ exports.changeDoctor = async (req, res) => {
       selectedDateRange
     );
     const graphData = await Nurse.getGraphData(doctor_ID, Nurse_ID, Week);
+
     return sendResponse(res, 200, {
       calendarData: calendar,
       appointmentsData: appointments,

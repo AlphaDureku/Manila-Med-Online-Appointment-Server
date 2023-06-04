@@ -28,6 +28,7 @@ exports.formatContactNumber = (contactNumber) => {
 exports.LogBookFunction = async (UpdateStatus) => {
   const { doctor_ID, updatedFrom, updatedTo } = UpdateStatus;
   const { doctor_Secretary_ID } = await findDoctorsNurse(doctor_ID);
+  console.log(doctor_Secretary_ID);
   const result = await updateAppointmentStatusLogBook(
     doctor_ID,
     doctor_Secretary_ID,

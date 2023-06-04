@@ -320,7 +320,6 @@ exports.updateNurse = async function (newPassword, nurse_ID, username) {
   };
 
   if (newPassword && newPassword.trim() !== "") {
-    console.log(newPassword + "whu");
     NurseModel.doctor_Secretary_password = newPassword;
   }
   await model.doctor_Secretary.update(NurseModel, {
@@ -515,7 +514,7 @@ exports.findDoctorsNurse = async function (doctor_ID) {
   return await model.doctor.findOne({
     raw: true,
     attributes: ["doctor_Secretary_ID"],
-    wheer: {
+    where: {
       doctor_ID: doctor_ID,
     },
   });
