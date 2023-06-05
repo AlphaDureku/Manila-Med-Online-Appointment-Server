@@ -32,6 +32,7 @@ const {
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
+  req.session.doctor_ID = null;
   try {
     const result = await Nurse.findNurseUsingUsername(username);
     if (!result) {

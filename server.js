@@ -13,7 +13,7 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const MemoryStore = require("memorystore")(session);
 const cors = require("cors");
-const moment = require("moment");
+
 // const { SpecializationData } = require("../SpecializationData");
 // const { HMOData } = require("../HMOData");
 // const { DoctorData } = require("../DoctorsData");
@@ -47,8 +47,8 @@ app.use(
   })
 );
 
-const DoctorData = [];
-const NurseData = [];
+// const DoctorData = [];
+// const NurseData = [];
 
 // for (let i = 1; i < 122; i++) {
 //   const DoctorObject = {
