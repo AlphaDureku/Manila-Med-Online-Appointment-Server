@@ -153,6 +153,7 @@ exports.getSelectedDoctorAppointments = async function (
             attributes: [],
           },
         ],
+
         where: nameQuery
           ? [
               {
@@ -188,6 +189,7 @@ exports.getSelectedDoctorAppointments = async function (
         ],
       },
     ],
+
     where: [
       {
         doctor_ID: doctor_ID,
@@ -196,6 +198,7 @@ exports.getSelectedDoctorAppointments = async function (
         },
       },
     ],
+    order: [[{ model: model.patient }, "patient_first_name", "ASC"]],
   });
 };
 
@@ -524,7 +527,6 @@ exports.getGraphData = async function (doctor_ID, Nurse_ID) {
   return await model.Status_Update_Logbook.findAll({
     raw: true,
     attributes: [
-      "updatedFrom",
       "updatedTo",
       [
         Sequelize.fn("date_format", Sequelize.col("createdAt"), "%M %e, %Y"),
