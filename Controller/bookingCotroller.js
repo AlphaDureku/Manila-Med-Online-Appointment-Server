@@ -105,6 +105,8 @@ exports.setAppointment = async (req, res) => {
           updatedFrom: null,
           updatedTo: "Pending",
         });
+        const io = req.io;
+        io.emit("newAppointment", { message: "inserted" });
         return sendResponse(res, 200, {
           message: "userExist but old patient",
           appointment_ID: appointmentDetailsModel.appointment_ID,
@@ -115,6 +117,8 @@ exports.setAppointment = async (req, res) => {
           user_ID,
           queue_number
         );
+        const io = req.io;
+        io.emit("newAppointment", { message: "inserted" });
         return sendResponse(res, 200, {
           message: "userExist but new patient",
           appointment_ID: appointment_ID,
@@ -127,6 +131,8 @@ exports.setAppointment = async (req, res) => {
         user_ID,
         queue_number
       );
+      const io = req.io;
+      io.emit("newAppointment", { message: "inserted" });
       return sendResponse(res, 200, {
         message: "new User so new patient",
         appointment_ID: appointment_ID,

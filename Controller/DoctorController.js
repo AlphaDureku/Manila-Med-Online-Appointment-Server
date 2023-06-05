@@ -9,7 +9,6 @@ exports.searchDoctor = async (req, res) => {
       Specialization: req.query.specialization,
       doctor_HMO: req.query.HMO,
     };
-    console.log(searchOption);
     if (
       !searchOption.Fname &&
       !searchOption.Lname &&
