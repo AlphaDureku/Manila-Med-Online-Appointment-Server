@@ -16,10 +16,12 @@ const doctorAttributes = [
 const doctorSchedAttributes = [
   "doctor_ID",
   [Sequelize.col("doctor_schedule_ID"), "schedule_ID"],
-  [Sequelize.col("doctor_schedule_start_time"), "start"],
+  [Sequelize.col("doctor_first_name"), "doctorFname"],
+  [Sequelize.col("doctor_last_name"), "doctorLname"],
   [Sequelize.col("doctor_schedule_end_time"), "end"],
   [Sequelize.col("doctor_schedule_current_queue"), "queue"],
   [Sequelize.col("doctor_schedule_Interval"), "time_interval"],
+  [Sequelize.col("specialization_Name"), "specialization"],
   [
     Sequelize.fn(
       "date_format",
@@ -27,6 +29,14 @@ const doctorSchedAttributes = [
       "%b %e, %Y"
     ),
     "date",
+  ],
+  [
+    Sequelize.fn(
+      "date_format",
+      Sequelize.col("doctor_schedule_date"),
+      "%Y-%m-%d"
+    ),
+    "date2",
   ],
   [
     Sequelize.fn("date_format", Sequelize.col("doctor_schedule_date"), "%W"),
@@ -60,6 +70,10 @@ const doctorSchedInclude = [
         doctor_schedule_status: "available",
       },
     ],
+  },
+
+  {
+    model: model.doctor_specialization,
   },
 ];
 
@@ -429,4 +443,15 @@ exports.incrementQueue = async function (doctor_schedule_ID) {
       },
     }
   );
+};
+
+exports.getDoctorScheduleUsingID = async function (doctor_ID) {
+  return await model.doctor.findAll({
+    raw: true,
+    attributes: doctorSchedAttributes,
+    include: doctorSchedInclude,
+    where: {
+      doctor_ID: doctor_ID,
+    },
+  });
 };

@@ -85,7 +85,6 @@ exports.checkConflict = async (req, res) => {
 exports.setAppointment = async (req, res) => {
   const { schedule_ID, email, patient_ID, doctor_ID, recom_Time } =
     req.body.appointmentDetails;
-  console.log(req.body.appointmentDetails);
   try {
     let user_ID = await User.findUserUsingEmail(email);
     const queue_number = await getQueueInstance(schedule_ID);
@@ -175,6 +174,48 @@ exports.getAppointmentDetails = async (req, res) => {
     appointment_ID
   );
   sendResponse(res, 200, result);
+};
+
+exports.InsertAnAppointment = async (req, res) => {
+  const { schedule_ID, recom_Time, patient_info, doctor_ID } =
+    req.body.insertAppointmentDetails;
+
+  try {
+    user_ID = await User.insertUser(patient_info.email);
+    const queue_number = await getQueueInstance(schedule_ID);
+    const patientModel = {
+      patient_ID: "PATIENT-" + uuid.v4(),
+      user_ID: user_ID.user_ID,
+      patient_first_name: upperCaseFirstLetter(patient_info.patient_first_name),
+      patient_middle_name: upperCaseFirstLetter(patient_info.middle_name),
+      patient_last_name: upperCaseFirstLetter(patient_info.patient_last_name),
+      patient_contact_number: formatContactNumber(patient_info.contact_number),
+      patient_dateOfBirth: patient_info.dateOfBirth,
+      patient_address: patient_info.address,
+      patient_gender: patient_info.gender,
+    };
+    const appointmentDetailsModel = {
+      appointment_ID: "APP-" + uuid.v4(),
+      patient_ID: patientModel.patient_ID,
+      doctor_schedule_ID: schedule_ID,
+      doctor_ID: doctor_ID,
+      appointment_start: moment(recom_Time, "h:mm A").format("HH:mm:ss"),
+      appointment_queue: queue_number,
+    };
+
+    await incrementQueue(schedule_ID);
+    await User.insertPatient(patientModel);
+    await User.insertAppointment(appointmentDetailsModel);
+    await LogBookFunction({
+      doctor_ID: doctor_ID,
+      updatedFrom: null,
+      updatedTo: "Pending",
+    });
+    sendResponse(res, 200, "success");
+  } catch (error) {
+    console.log(error);
+    return sendResponse(res, 500, error.message);
+  }
 };
 
 const preparePatientAndAppointment = async (

@@ -26,6 +26,9 @@ const {
 } = require("../Models/database_query/user_queries");
 const moment = require("moment");
 const { LogBookFunction } = require("../utils/collectionOfFunctions");
+const {
+  getDoctorScheduleUsingID,
+} = require("../Models/database_query/doctor_queries");
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;
@@ -405,6 +408,16 @@ exports.deleteDoctorAvailability = async (req, res) => {
     const result = await Nurse.deleteDoctorAvailability(schedule_ID);
     sendResponse(res, 200, result);
   } catch (error) {
+    sendResponse(res, 500, error.message);
+  }
+};
+
+exports.doctorScheduleForInsertAppointment = async (req, res) => {
+  try {
+    const result = await getDoctorScheduleUsingID(req.session.doctor_ID);
+    sendResponse(res, 200, result);
+  } catch (error) {
+    console.log(error);
     sendResponse(res, 500, error.message);
   }
 };

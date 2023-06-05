@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const NurseController = require("../Controller/NurseController");
 const { jwtMiddleware } = require("../utils/JWTHandler");
+const { InsertAnAppointment } = require("../Controller/bookingCotroller");
 
 router.post("/nurse-login", NurseController.login);
 router.get("/nurse-dashboard", jwtMiddleware, NurseController.dashboard);
@@ -55,4 +56,11 @@ router.post(
   NurseController.deleteDoctorAvailability
 );
 
+router.get(
+  "/doctorScheduleForInsertAppointment",
+  jwtMiddleware,
+  NurseController.doctorScheduleForInsertAppointment
+);
+
+router.post("/insertAppointment", jwtMiddleware, InsertAnAppointment);
 module.exports = router;
