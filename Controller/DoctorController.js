@@ -17,14 +17,15 @@ exports.searchDoctor = async (req, res) => {
     ) {
       const result = await Doctor.getDoctor();
       const schedule = await Doctor.getSchedule();
+      console.log(result);
       return sendResponse(res, 200, { result: result, schedule: schedule });
 
       //Using specs only
     } else if (
       !searchOption.Fname &&
       !searchOption.Lname &&
-      searchOption.Specialization != undefined &&
-      searchOption.doctor_HMO != undefined
+      searchOption.Specialization &&
+      searchOption.doctor_HMO
     ) {
       console.log("get by spec and hmo");
       const result = await Doctor.getDoctor_Using_Spec_HMO(
@@ -36,6 +37,34 @@ exports.searchDoctor = async (req, res) => {
         searchOption.doctor_HMO
       );
       console.log(result);
+      return sendResponse(res, 200, { result: result, schedule: schedule });
+    } else if (
+      !searchOption.Fname &&
+      !searchOption.Lname &&
+      searchOption.Specialization &&
+      !searchOption.doctor_HMO
+    ) {
+      console.log("get by Spec only");
+      const result = await Doctor.getDoctor_Using_SpecOnly(
+        searchOption.Specialization
+      );
+      const schedule = await Doctor.getSchedule_Using_SpecOnly(
+        searchOption.Specialization
+      );
+      return sendResponse(res, 200, { result: result, schedule: schedule });
+    } else if (
+      !searchOption.Fname &&
+      !searchOption.Lname &&
+      !searchOption.Specialization &&
+      searchOption.doctor_HMO
+    ) {
+      console.log("get by HMO only");
+      const result = await Doctor.getDoctor_Using_hmoOnly(
+        searchOption.doctor_HMO
+      );
+      const schedule = await Doctor.getSchedule_Using_hmoOnly(
+        searchOption.doctor_HMO
+      );
       return sendResponse(res, 200, { result: result, schedule: schedule });
     } else if (
       (searchOption.Fname != undefined || searchOption.Lname != undefined) &&

@@ -74,6 +74,7 @@ const doctorSchedInclude = [
 
   {
     model: model.doctor_specialization,
+    attributes: [],
   },
 ];
 
@@ -93,10 +94,10 @@ exports.getDoctor = async function () {
       {
         model: model.HMO,
         through: "doctor_HMO_JunctionTable",
-        attributes: [],
       },
       {
         model: model.doctor_specialization,
+        attributes: [],
       },
     ],
     group: groupDoctorInfo,
@@ -251,17 +252,98 @@ exports.getSchedule_Using_Fname_Lname = async function (Fname, Lname) {
   });
 };
 
-exports.getDoctor_Using_Spec_HMO = async function (specialization, HMO) {
+exports.getDoctor_Using_SpecOnly = async function (specialization) {
   return await model.doctor.findAll({
     raw: true,
     attributes: doctorAttributes,
+    include: [
+      {
+        model: model.HMO,
+        attributes: [],
+        where: [
+          {
+            "$doctor.doctorSpecializationSpecializationID$": specialization,
+          },
+        ],
+      },
+      {
+        model: model.doctor_specialization,
+      },
+    ],
+
+    order: [["doctor_last_name", "ASC"]],
+    group: groupDoctorInfo,
+  });
+};
+
+exports.getSchedule_Using_SpecOnly = async function (specialization, HMO) {
+  return await model.doctor.findAll({
+    raw: true,
+    attributes: doctorSchedAttributes,
 
     include: [
       {
         model: model.HMO,
+        attributes: [],
         where: [
           {
-            [Sequelize.Op.or]: [
+            "$doctor.doctorSpecializationSpecializationID$": specialization,
+          },
+        ],
+      },
+    ],
+
+    include: doctorSchedInclude,
+  });
+};
+
+exports.getDoctor_Using_hmoOnly = async function (HMO) {
+  return await model.doctor.findAll({
+    raw: true,
+    attributes: doctorAttributes,
+    include: [
+      {
+        model: model.HMO,
+        attributes: [],
+        where: { HMO_ID: HMO },
+      },
+      {
+        model: model.doctor_specialization,
+      },
+    ],
+
+    order: [["doctor_last_name", "ASC"]],
+    group: groupDoctorInfo,
+  });
+};
+
+exports.getSchedule_Using_hmoOnly = async function (specialization, HMO) {
+  return await model.doctor.findAll({
+    raw: true,
+    attributes: doctorSchedAttributes,
+
+    include: [
+      {
+        model: model.HMO,
+        attributes: [],
+        where: { HMO_ID: HMO },
+      },
+    ],
+
+    include: doctorSchedInclude,
+  });
+};
+exports.getDoctor_Using_Spec_HMO = async function (specialization, HMO) {
+  return await model.doctor.findAll({
+    raw: true,
+    attributes: doctorAttributes,
+    include: [
+      {
+        model: model.HMO,
+        attributes: [],
+        where: [
+          {
+            [Sequelize.Op.and]: [
               { HMO_ID: HMO },
               {
                 "$doctor.doctorSpecializationSpecializationID$": specialization,
@@ -288,6 +370,7 @@ exports.getSchedule_Using_Spec_HMO = async function (specialization, HMO) {
     include: [
       {
         model: model.HMO,
+        attributes: [],
         where: [
           {
             [Sequelize.Op.or]: [
