@@ -90,7 +90,6 @@ exports.getDoctor = async function () {
   return await model.doctor.findAll({
     raw: true,
     attributes: doctorAttributes,
-    limit: 50,
     include: [
       {
         model: model.HMO,
