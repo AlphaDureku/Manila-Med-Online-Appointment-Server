@@ -5,6 +5,8 @@ const { jwtMiddleware } = require("../utils/JWTHandler");
 const { InsertAnAppointment } = require("../Controller/bookingCotroller");
 
 router.post("/nurse-login", NurseController.login);
+router.post("/verify-otp", NurseController.verifyOTP);
+router.post("/resend-otp", NurseController.resendOTP);
 router.get("/nurse-dashboard", jwtMiddleware, NurseController.dashboard);
 router.get("/change-doctor", jwtMiddleware, NurseController.changeDoctor);
 router.get("/change-dateRange", jwtMiddleware, NurseController.changeDateRange);

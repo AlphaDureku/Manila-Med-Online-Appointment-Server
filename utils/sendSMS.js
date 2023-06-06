@@ -18,7 +18,7 @@ exports.NotifyPatients = async (patientinfo) => {
   const { contact, patient_Fname, patient_Lname, start, end } = patientinfo;
   sendSMS(
     contact,
-    `Good Day ${patient_Fname} ${patient_Lname}, Manila Medical Center would like to remind you of your appointment for today at ${start} to ${end}
+    `Good Day ${patient_Fname} ${patient_Lname}, Medical Center Manila would like to remind you of your appointment for today at ${start} to ${end}
     
 
 Regards, 
@@ -33,7 +33,7 @@ exports.NotifyPatientsThruSMSThatDoctorHasArrived = async (
     .create({
       body: `Good Day ${appointmentDetails.Fname} ${
         appointmentDetails.Lname
-      }, Manila Medical Center would like to remind you that your doctor has arrived at the hospital. Your appointment will start at ${moment(
+      }, Medical Center Manila would like to remind you that your doctor has arrived at the hospital. Your appointment will start at ${moment(
         appointmentDetails.appointmentStart,
         "HH:mm:ss"
       ).format("hh:mm A")}. Thank you!
@@ -52,7 +52,7 @@ exports.NotifyPatientsThruSMSThatDoctorIsLate = async (appointmentDetails) => {
     .create({
       body: `Good Day ${appointmentDetails.Fname} ${
         appointmentDetails.Lname
-      }, Manila Medical Center would like to remind you that your doctor is going to be late for a while. Rest assured that we will try our best not to alter your appointment start time at ${moment(
+      }, Medical Center Manila would like to remind you that your doctor is going to be late for a while. Rest assured that we will try our best not to alter your appointment start time at ${moment(
         appointmentDetails.appointmentStart,
         "HH:mm:ss"
       ).format("hh:mm A")}. Thank you for your cooperation!
@@ -71,7 +71,7 @@ exports.NotifyPatientsThruSMSThatCancellAll = async (appointmentDetails) => {
     .create({
       body: `Good Day ${appointmentDetails.Fname} ${
         appointmentDetails.Lname
-      }, Manila Medical Center would like to remind you that your doctor is going to be late for a while. Rest assured that we will try our best not to alter your appointment start time at ${moment(
+      }, Medical Center Manila would like to remind you that your doctor is going to be late for a while. Rest assured that we will try our best not to alter your appointment start time at ${moment(
         appointmentDetails.appointmentStart,
         "HH:mm:ss"
       ).format("hh:mm A")}. Thank you for your cooperation!
@@ -91,7 +91,7 @@ Medical Manila Center`,
 //   var params = {
 //     Message: `Good Day ${appointmentDetails.Fname} ${
 //       appointmentDetails.Lname
-//     }, Manila Medical Center would like to remind you that your doctor has arrived at the hospital. Your appointment will start at ${moment(
+//     }, Medical Center Manila would like to remind you that your doctor has arrived at the hospital. Your appointment will start at ${moment(
 //       appointmentDetails.appointmentStart,
 //       "HH:mm:ss"
 //     ).format("hh:mm A")}. Thank you!`,
@@ -121,7 +121,7 @@ Medical Manila Center`,
 //   var params = {
 //     Message: `Good Day ${appointmentDetails.Fname} ${
 //       appointmentDetails.Lname
-//     }, Manila Medical Center would like to remind you that your doctor is going to be late for a while. Rest assured that we will try our best not to alter your appointment start time at ${moment(
+//     }, Medical Center Manila would like to remind you that your doctor is going to be late for a while. Rest assured that we will try our best not to alter your appointment start time at ${moment(
 //       appointmentDetails.appointmentStart,
 //       "HH:mm:ss"
 //     ).format("hh:mm A")}. Thank you for your cooperation!`,
@@ -149,7 +149,7 @@ Medical Manila Center`,
 
 // exports.NotifyPatientsThruSMSThatCancellAll = (appointmentDetails) => {
 //   var params = {
-//     Message: `Good Day ${appointmentDetails.Fname} ${appointmentDetails.Lname}, Manila Medical Center would like to remind you that your appointment has been cancelled, we deeply apologize for the inconvenience. Thank you for your understanding!`,
+//     Message: `Good Day ${appointmentDetails.Fname} ${appointmentDetails.Lname}, Medical Center Manila would like to remind you that your appointment has been cancelled, we deeply apologize for the inconvenience. Thank you for your understanding!`,
 //     PhoneNumber: appointmentDetails.Contact,
 //     MessageAttributes: {
 //       "AWS.SNS.SMS.SenderID": {

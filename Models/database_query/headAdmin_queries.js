@@ -8,6 +8,7 @@ exports.findHeadAdmin = async function (username) {
       "head_Manager_ID",
       "head_Manager_username",
       "head_Manager_password",
+      "head_Manager_email",
     ],
     where: {
       head_Manager_username: username,

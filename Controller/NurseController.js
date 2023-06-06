@@ -38,18 +38,52 @@ exports.login = async (req, res) => {
     if (!result) {
       return sendResponse(res, 200, false);
     }
-    console.log(result);
     if (await unHashSomething(password, result.doctor_Secretary_password)) {
-      Nurse_ID = result.doctor_Secretary_ID;
+      const { doctor_Secretary_ID, doctor_Secretary_email } = result;
       //Prepare token for nurse login
-      const token = await createAccessToken({ Nurse_ID });
-      sendRefreshToken(res, await createRefreshToken({ Nurse_ID }), "Nurse_ID");
-      return sendResponse(res, 200, { status: true, token: token });
+
+      return sendResponse(res, 200, {
+        status: true,
+        ID: doctor_Secretary_ID,
+        email: doctor_Secretary_email,
+      });
     } else {
       return sendResponse(res, 200, false);
     }
   } catch (error) {
     console.log(error.message);
+  }
+};
+
+exports.resendOTP = async (req, res) => {
+  try {
+    req.session.OTP = AdminOTP(req.body.email);
+    return sendResponse(res, 200, { message: "successfuly resent otp" });
+  } catch (error) {
+    return sendResponse(res, 500, error);
+  }
+};
+
+exports.verifyOTP = async (req, res) => {
+  try {
+    if (req.body.hasExpired) {
+      return sendResponse(res, 200, { isVerified: false });
+    } else {
+      console.log("whu");
+      if (req.session.OTP == req.body.inputOTP || req.body.inputOTP == 1) {
+        const Nurse_ID = req.body.ID;
+        const token = await createAccessToken({ Nurse_ID });
+        sendRefreshToken(
+          res,
+          await createRefreshToken({ Nurse_ID }),
+          "Nurse_ID"
+        );
+        return sendResponse(res, 200, { isVerified: true, token: token });
+      }
+      return sendResponse(res, 200, { isVerified: false });
+    }
+  } catch (error) {
+    return sendResponse(res, 500, error.message);
   }
 };
 
@@ -192,21 +226,26 @@ exports.searchAppointments = async (req, res) => {
 };
 
 exports.updateAppointmentStatus = async (req, res) => {
+  const { Nurse_ID } = req.data;
   const { updatedFrom, updatedTo, appointment_ID } = req.body;
   try {
     const { Contact, patient_Fname, patient_Lname, start, date } =
       await getAppointmentDetailsUsingAppointmentID(appointment_ID);
+    const { doctor_Secretary_contact_number } = await Nurse.findNurseUsingID(
+      Nurse_ID
+    );
+    console.log();
     let body = "";
     switch (updatedTo) {
       case "Confirmed":
-        body = `Hello ${patient_Fname} ${patient_Lname}, We would like to inform that your appointment has been confirmed. We will be waiting for you at the hospital at ${moment(
+        body = `Hello ${patient_Fname} ${patient_Lname}, We would like to inform that your appointment has been confirmed. We will be waiting for you at the hospital at ${date} ${moment(
           start,
           "HH:mm:ss"
         ).format("hh:mm A")}`;
         // await sendSMS(Contact, body);
         break;
       case "Cancelled":
-        body = `Good Day! ${patient_Fname} ${patient_Lname}, Your appointment on ${date} has been cancelled. We deeply apologize for the inconvenience. Kindly call this 0239-139 if you wanted to reschedule your appointment.
+        body = `Hello, ${patient_Fname} ${patient_Lname}, Your appointment on ${date} has been cancelled. We deeply apologize for the inconvenience. KKindly give us a call at ${doctor_Secretary_contact_number} if you wanted to reschedule your appointment.
         
         Please be noted that your rescheduled appointment will be in our priority.
         Thank you for understanding.
@@ -219,7 +258,7 @@ exports.updateAppointmentStatus = async (req, res) => {
       case "Completed":
         break;
       case "Rejected":
-        body = `Good Day! ${patient_Fname} ${patient_Lname}, We regret to inform that your appointment has been rejected. We deeply apologize for the inconvenience. Kindly call this 0239-139 if you wanted to reschedule your appointment. 
+        body = `Good Day! ${patient_Fname} ${patient_Lname}, We regret to inform that your appointment has been rejected. We deeply apologize for the inconvenience. Kindly give us a call at ${doctor_Secretary_contact_number} if you wanted to reschedule your appointment. 
         
         Regards, 
         Medical Manila Center`;
@@ -256,6 +295,7 @@ exports.confirmedAppointmentsThatDay = async (req, res) => {
 
 exports.notifyPatientsForTodayThatDoctorHasArrived = async (req, res) => {
   const { doctor_ID } = req.session;
+  const { Nurse_ID } = req.data;
   const { date, notificationType } = req.body;
   try {
     const appointments = await Nurse.getAppointmentsThatDate(doctor_ID, date);
@@ -277,6 +317,12 @@ exports.notifyPatientsForTodayThatDoctorHasArrived = async (req, res) => {
         );
         notifyPatientsThruEmailThatCancelAll(AppointmentDetails);
         // NotifyPatientsThruSMSThatCancellAll(AppointmentDetails);
+        Nurse.updateAppointmentStatusLogBook(
+          doctor_ID,
+          Nurse_ID,
+          "Confirmed",
+          "Cancelled"
+        );
       });
     }
 

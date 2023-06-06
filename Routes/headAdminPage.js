@@ -4,6 +4,8 @@ const HeadAdmin = require("../Controller/HeadAdmin");
 const { jwtMiddleware } = require("../utils/JWTHandler");
 
 router.post("/login", HeadAdmin.login);
+router.post("/verify-otp", HeadAdmin.verifyOTP);
+router.post("/resend-otp", HeadAdmin.resendOTP);
 router.get("/dashboard", jwtMiddleware, HeadAdmin.dashboard);
 router.post("/add-doctor", jwtMiddleware, HeadAdmin.addDoctor);
 router.post("/remove-doctor", jwtMiddleware, HeadAdmin.deleteDoctor);

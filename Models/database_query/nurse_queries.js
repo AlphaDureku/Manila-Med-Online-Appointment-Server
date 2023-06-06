@@ -103,6 +103,7 @@ exports.findNurseUsingID = async function (sec_ID) {
       "doctor_Secretary_first_name",
       "doctor_Secretary_middle_name",
       "doctor_Secretary_last_name",
+      "doctor_Secretary_contact_number",
     ],
     where: {
       doctor_Secretary_ID: sec_ID,

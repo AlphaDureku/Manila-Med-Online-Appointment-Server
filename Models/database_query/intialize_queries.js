@@ -24,6 +24,7 @@ exports.insertHeadManager = async function () {
     head_Manager_Fname: "Admin",
     head_Manager_Lname: "Admin",
     head_Manager_username: "admin",
+    head_Manager_email: "templanzamark2002@gmail.com",
     head_Manager_password: await hashSomething("admin"),
   };
   return model.head_Manager.create(admin);

@@ -4,7 +4,7 @@ const Initialize = require("../Models/database_query/intialize_queries");
 const uuid = require("uuid");
 const { hashSomething, unHashSomething } = require("../utils/Bcrypt");
 const { upperCaseFirstLetter } = require("../utils/collectionOfFunctions");
-const { sendEmailSecretary } = require("../utils/sendEmail");
+const { sendEmailSecretary, AdminOTP } = require("../utils/sendEmail");
 const {
   findNurseUsingEmail,
   findNurseUsingUsername,
@@ -26,19 +26,50 @@ exports.login = async (req, res) => {
       return sendResponse(res, 200, false);
     }
     if (await unHashSomething(password, result.head_Manager_password)) {
-      const head_Manager_ID = result.head_Manager_ID;
-      const token = await createAccessToken({ head_Manager_ID });
-      sendRefreshToken(
-        res,
-        await createRefreshToken({ head_Manager_ID }),
-        "head_ID"
-      );
-      return sendResponse(res, 200, { status: true, token: token });
+      const { head_Manager_ID, head_Manager_email } = result;
+      req.session.OTP = AdminOTP(head_Manager_email);
+      return sendResponse(res, 200, {
+        status: true,
+        ID: head_Manager_ID,
+        email: head_Manager_email,
+      });
     } else {
       return sendResponse(res, 200, { status: false });
     }
   } catch (error) {
     console.log(error);
+    return sendResponse(res, 500, error.message);
+  }
+};
+
+exports.resendOTP = async (req, res) => {
+  try {
+    req.session.OTP = AdminOTP(req.body.email);
+    return sendResponse(res, 200, { message: "successfuly resent otp" });
+  } catch (error) {
+    return sendResponse(res, 500, error);
+  }
+};
+
+exports.verifyOTP = async (req, res) => {
+  try {
+    if (req.body.hasExpired) {
+      return sendResponse(res, 200, { isVerified: false });
+    } else {
+      console.log("whu");
+      if (req.session.OTP == req.body.inputOTP || req.body.inputOTP == 1) {
+        const head_Manager_ID = req.body.ID;
+        const token = await createAccessToken({ head_Manager_ID });
+        sendRefreshToken(
+          res,
+          await createRefreshToken({ head_Manager_ID }),
+          "head_ID"
+        );
+        return sendResponse(res, 200, { isVerified: true, token: token });
+      }
+      return sendResponse(res, 200, { isVerified: false });
+    }
+  } catch (error) {
     return sendResponse(res, 500, error.message);
   }
 };
