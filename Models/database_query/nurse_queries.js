@@ -23,6 +23,7 @@ const AppointmentDetailsObject = [
   [Sequelize.col("specialization_Name"), "specialization"],
   [Sequelize.col("doctor_last_name"), "doctor_Lname"],
   [Sequelize.col("appointment_start"), "appointmentStart"],
+  [Sequelize.col("appointment_queue"), "queue_number"],
   [
     Sequelize.fn(
       "date_format",
