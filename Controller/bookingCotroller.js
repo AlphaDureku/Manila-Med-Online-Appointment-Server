@@ -95,6 +95,7 @@ exports.setAppointment = async (req, res) => {
     if (luckySlot.length !== 0) {
       queue_number = luckySlot[0].queque_vacancy_number;
       await destroyVacantUsingID(luckySlot[0].vacancy_ID);
+      console.log("whu");
     } else {
       queue_number = await getQueueInstance(schedule_ID);
       await incrementQueue(schedule_ID);

@@ -63,7 +63,15 @@ const myAppointmentAttributes = [
   ],
   [
     Sequelize.fn("date_format", Sequelize.col("appointment_start"), "%h:%i%p"),
-    "start",
+    "appointment_start",
+  ],
+  [
+    Sequelize.fn(
+      "date_format",
+      Sequelize.col("doctor_schedule_start_time"),
+      "%h:%i%p"
+    ),
+    "schedule_start",
   ],
   [
     Sequelize.fn(
