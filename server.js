@@ -42,8 +42,8 @@ app.use(
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
       // /* Enable on deployment*/
-      // sameSite: "None",
-      // secure: true,
+      sameSite: "None",
+      secure: true,
     },
   })
 );
