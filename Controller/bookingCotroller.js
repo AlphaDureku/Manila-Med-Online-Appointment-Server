@@ -92,7 +92,7 @@ exports.setAppointment = async (req, res) => {
     let user_ID = await User.findUserUsingEmail(email);
     let luckySlot = await getVacantSlotsUsingSchedule_ID(schedule_ID);
     let queue_number;
-    if (luckySlot[0].vacancy_ID) {
+    if (luckySlot.length !== 0) {
       queue_number = luckySlot[0].queque_vacancy_number;
       await destroyVacantUsingID(luckySlot[0].vacancy_ID);
     } else {
