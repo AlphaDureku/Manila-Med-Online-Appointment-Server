@@ -538,3 +538,37 @@ exports.getDoctorScheduleUsingID = async function (doctor_ID) {
     },
   });
 };
+
+exports.getVacantSlotsUsingDoctor_ID = async function (doctor_ID) {
+  return await model.QueueVacancy.findAll({
+    raw: true,
+    include: {
+      model: model.doctor_schedule_table,
+      attributes: [],
+      required: true,
+      where: {
+        doctor_ID: doctor_ID,
+      },
+    },
+    order: [["queque_vacancy_number", "ASC"]],
+  });
+};
+
+exports.getVacantSlotsUsingSchedule_ID = async function (doctor_schedule_ID) {
+  return await model.QueueVacancy.findAll({
+    raw: true,
+    attributes: ["vacancy_ID", "queque_vacancy_number"],
+    where: {
+      doctor_schedule_ID: doctor_schedule_ID,
+    },
+    order: [["queque_vacancy_number", "ASC"]],
+  });
+};
+
+exports.destroyVacantUsingID = async function (vacancy_ID) {
+  await model.QueueVacancy.destroy({
+    where: {
+      vacancy_ID: vacancy_ID,
+    },
+  });
+};

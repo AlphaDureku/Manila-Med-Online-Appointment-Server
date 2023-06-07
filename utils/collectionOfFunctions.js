@@ -1,7 +1,12 @@
 const {
   findDoctorsNurse,
   updateAppointmentStatusLogBook,
+  addQueueVacancy,
 } = require("../Models/database_query/nurse_queries");
+const {
+  getAppointmentDetailsUsingAppointmentID,
+  getQueueInstanceUsingAppointmentID,
+} = require("../Models/database_query/user_queries");
 
 exports.upperCaseFirstLetter = (params) => {
   const words = params.split(" ");
@@ -24,16 +29,20 @@ exports.formatContactNumber = (contactNumber) => {
     return contactNumber;
   }
 };
+exports.addQueueVacancy = async (appointment_ID) => {
+  const { appointment_queue, doctor_schedule_ID } =
+    await getQueueInstanceUsingAppointmentID(appointment_ID);
+  await addQueueVacancy(appointment_queue, doctor_schedule_ID);
+  return;
+};
 
 exports.LogBookFunction = async (UpdateStatus) => {
-  const { doctor_ID, updatedFrom, updatedTo } = UpdateStatus;
-  const { doctor_Secretary_ID } = await findDoctorsNurse(doctor_ID);
-  console.log(doctor_Secretary_ID);
+  const { appointment_ID, updatedFrom, updatedTo } = UpdateStatus;
   const result = await updateAppointmentStatusLogBook(
-    doctor_ID,
-    doctor_Secretary_ID,
+    appointment_ID,
     updatedFrom,
     updatedTo
   );
+
   return result;
 };

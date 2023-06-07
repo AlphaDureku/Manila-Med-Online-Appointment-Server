@@ -52,6 +52,7 @@ const myAppointmentAttributes = [
   [Sequelize.col("doctor_first_name"), "doctor_Fname"],
   [Sequelize.col("specialization_Name"), "specialization"],
   [Sequelize.col("doctor_last_name"), "doctor_Lname"],
+  [Sequelize.col("appointment_queue"), "queue_number"],
   [
     Sequelize.fn(
       "date_format",
@@ -255,5 +256,15 @@ exports.checkIfConflict = async function (patient_ID, date) {
         },
       },
     ],
+  });
+};
+
+exports.getQueueInstanceUsingAppointmentID = async function (appointment_ID) {
+  return await model.appointmentDetails.findOne({
+    raw: true,
+    attributes: ["appointment_queue", "doctor_schedule_ID"],
+    where: {
+      appointment_ID: appointment_ID,
+    },
   });
 };

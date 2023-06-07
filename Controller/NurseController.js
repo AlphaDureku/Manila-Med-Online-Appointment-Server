@@ -25,7 +25,10 @@ const {
   getAppointmentDetailsUsingAppointmentID,
 } = require("../Models/database_query/user_queries");
 const moment = require("moment");
-const { LogBookFunction } = require("../utils/collectionOfFunctions");
+const {
+  LogBookFunction,
+  addQueueVacancy,
+} = require("../utils/collectionOfFunctions");
 const {
   getDoctorScheduleUsingID,
 } = require("../Models/database_query/doctor_queries");
@@ -106,8 +109,7 @@ exports.dashboard = async (req, res) => {
           Week
         );
         const graphData = await Nurse.getGraphData(
-          req.session.doctor_ID || doctor.at(0).doctor_ID,
-          Nurse_ID
+          req.session.doctor_ID || doctor.at(0).doctor_ID
         );
 
         if (!req.session.doctor_ID) {
@@ -164,7 +166,7 @@ exports.changeDoctor = async (req, res) => {
       doctor_ID,
       selectedDateRange
     );
-    const graphData = await Nurse.getGraphData(doctor_ID, Nurse_ID, Week);
+    const graphData = await Nurse.getGraphData(doctor_ID);
 
     return sendResponse(res, 200, {
       calendarData: calendar,
@@ -253,6 +255,7 @@ exports.updateAppointmentStatus = async (req, res) => {
         
         Regards, 
         Medical Manila Center`;
+        addQueueVacancy(appointment_ID);
         // await sendSMS(Contact, body);
         break;
       case "Completed":
@@ -270,7 +273,7 @@ exports.updateAppointmentStatus = async (req, res) => {
 
     await Nurse.updateAppointmentStatus(updatedTo, appointment_ID);
     await LogBookFunction({
-      doctor_ID: req.session.doctor_ID,
+      appointment_ID: appointment_ID,
       updatedFrom: updatedFrom,
       updatedTo: updatedTo,
     });

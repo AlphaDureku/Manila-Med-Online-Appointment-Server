@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const {
   updateAppointmentStatus,
 } = require("../Models/database_query/nurse_queries");
+const { addQueueVacancy } = require("../utils/collectionOfFunctions");
 
 /*****Home******/
 /* User Validation*/
@@ -121,6 +122,9 @@ exports.cancelAppointment = async (req, res) => {
   console.log(req.body);
   try {
     await updateAppointmentStatus("Cancelled", appointment_ID);
+
+    await addQueueVacancy(appointment_ID);
+
     return sendResponse(res, 200, "success");
   } catch (error) {
     console.log(error);

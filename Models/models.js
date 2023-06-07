@@ -203,9 +203,7 @@ const AppointmentDetails = sequelize.define(
     appointment_start: {
       type: DataTypes.TIME,
     },
-    doctor_gender: {
-      type: DataTypes.STRING(1),
-    },
+
     appointment_status: {
       type: Sequelize.ENUM,
       values: ["Pending", "Confirmed", "Rejected", "Cancelled", "Completed"],
@@ -258,18 +256,11 @@ const Status_Update_Logbook = sequelize.define(
       type: DataTypes.STRING(50),
       primaryKey: true,
     },
-    doctor_ID: {
+    appointment_ID: {
       type: DataTypes.STRING(50),
       references: {
-        model: Doctor,
-        key: "doctor_ID",
-      },
-    },
-    doctor_Secretary_ID: {
-      type: DataTypes.STRING(50),
-      references: {
-        model: Doctor_Secretary,
-        key: "doctor_Secretary_ID",
+        model: AppointmentDetails,
+        key: "appointment_ID",
       },
     },
     updatedFrom: {
@@ -287,6 +278,27 @@ const Status_Update_Logbook = sequelize.define(
     timestamps: true,
   }
 );
+
+Status_Update_Logbook.belongsTo(AppointmentDetails, {
+  foreignKey: "appointment_ID",
+});
+
+const QueueVacancy = sequelize.define("QueueVacancy", {
+  vacancy_ID: {
+    type: DataTypes.STRING(50),
+    primaryKey: true,
+  },
+  queque_vacancy_number: {
+    type: DataTypes.INTEGER,
+  },
+});
+
+Doctor_schedule_table.hasMany(QueueVacancy, {
+  foreignKey: "doctor_schedule_ID",
+});
+QueueVacancy.belongsTo(Doctor_schedule_table, {
+  foreignKey: "doctor_schedule_ID",
+});
 
 //Table controller
 async function syncAll() {
@@ -355,5 +367,4 @@ async function setDoctor_Department(doctorModel) {
 }
 setDoctor_Department(doctorModel)
 */
-
 module.exports = sequelize.models;

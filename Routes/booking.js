@@ -13,5 +13,6 @@ router.post("/update-info", bookingController.updatePatientInfo);
 router.get("/get-patientInfo", bookingController.getOnePatientDetails);
 router.post("/set-appointment", bookingController.setAppointment);
 router.get("/get-appointment", bookingController.getAppointmentDetails);
+router.get("/getVacantSlots", bookingController.getVacantSlots);
 
 module.exports = router;

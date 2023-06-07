@@ -6,6 +6,9 @@ const {
   getOneDoctorCalendar,
   getQueueInstance,
   incrementQueue,
+  getVacantSlotsUsingDoctor_ID,
+  getVacantSlotsUsingSchedule_ID,
+  destroyVacantUsingID,
 } = require("../Models/database_query/doctor_queries");
 const moment = require("moment");
 const {
@@ -87,7 +90,16 @@ exports.setAppointment = async (req, res) => {
     req.body.appointmentDetails;
   try {
     let user_ID = await User.findUserUsingEmail(email);
-    const queue_number = await getQueueInstance(schedule_ID);
+    let luckySlot = await getVacantSlotsUsingSchedule_ID(schedule_ID);
+    let queue_number;
+    if (luckySlot[0].vacancy_ID) {
+      queue_number = luckySlot[0].queque_vacancy_number;
+      await destroyVacantUsingID(luckySlot[0].vacancy_ID);
+    } else {
+      queue_number = await getQueueInstance(schedule_ID);
+      await incrementQueue(schedule_ID);
+    }
+
     if (user_ID !== null) {
       if (patient_ID) {
         const appointmentDetailsModel = {
@@ -99,9 +111,8 @@ exports.setAppointment = async (req, res) => {
           appointment_queue: queue_number,
         };
         await User.insertAppointment(appointmentDetailsModel);
-        await incrementQueue(schedule_ID);
         await LogBookFunction({
-          doctor_ID: doctor_ID,
+          appointment_ID: appointmentDetailsModel.appointment_ID,
           updatedFrom: null,
           updatedTo: "Pending",
         });
@@ -213,7 +224,7 @@ exports.InsertAnAppointment = async (req, res) => {
     await User.insertPatient(patientModel);
     await User.insertAppointment(appointmentDetailsModel);
     await LogBookFunction({
-      doctor_ID: doctor_ID,
+      appointment_ID: appointmentDetailsModel.appointment_ID,
       updatedFrom: null,
       updatedTo: "Pending",
     });
@@ -222,6 +233,13 @@ exports.InsertAnAppointment = async (req, res) => {
     console.log(error);
     return sendResponse(res, 500, error.message);
   }
+};
+
+exports.getVacantSlots = async (req, res) => {
+  const { doctor_ID } = req.query;
+  const result = await getVacantSlotsUsingDoctor_ID(doctor_ID);
+  console.log(result);
+  sendResponse(res, 200, result);
 };
 
 const preparePatientAndAppointment = async (
@@ -252,9 +270,8 @@ const preparePatientAndAppointment = async (
   };
   await User.insertPatient(patientModel);
   await User.insertAppointment(appointmentDetailsModel);
-  await incrementQueue(appointmentDetails.schedule_ID);
   await LogBookFunction({
-    doctor_ID: doctor_ID,
+    appointment_ID: appointmentDetailsModel.appointment_ID,
     updatedFrom: null,
     updatedTo: "Pending",
   });

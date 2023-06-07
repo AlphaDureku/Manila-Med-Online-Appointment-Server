@@ -22,8 +22,11 @@ const AppointmentDetailsObject = [
   [Sequelize.col("doctor_first_name"), "doctor_Fname"],
   [Sequelize.col("specialization_Name"), "specialization"],
   [Sequelize.col("doctor_last_name"), "doctor_Lname"],
-  [Sequelize.col("appointment_start"), "appointmentStart"],
   [Sequelize.col("appointment_queue"), "queue_number"],
+  [
+    Sequelize.fn("date_format", Sequelize.col("appointment_start"), "%h:%i%p"),
+    "appointmentStart",
+  ],
   [
     Sequelize.fn(
       "date_format",
@@ -499,15 +502,13 @@ exports.doctorAvailabilityData = async function (doctor_ID) {
 };
 
 exports.updateAppointmentStatusLogBook = async function (
-  doctor_ID,
-  Nurse_ID,
+  appointment_ID,
   updatedFrom,
   updatedTo
 ) {
   const Status_Update_Logbook_Model = {
     Process_ID: "LOG-" + uuid.v4(),
-    doctor_ID: doctor_ID,
-    doctor_Secretary_ID: Nurse_ID,
+    appointment_ID: appointment_ID,
     updatedFrom: updatedFrom,
     updatedTo: updatedTo,
   };
@@ -525,20 +526,38 @@ exports.findDoctorsNurse = async function (doctor_ID) {
   });
 };
 
-exports.getGraphData = async function (doctor_ID, Nurse_ID) {
+exports.getGraphData = async function (doctor_ID) {
   return await model.Status_Update_Logbook.findAll({
     raw: true,
     attributes: [
       "updatedTo",
       [
-        Sequelize.fn("date_format", Sequelize.col("createdAt"), "%M %e, %Y"),
+        Sequelize.fn(
+          "date_format",
+          Sequelize.col("Status_Update_Logbook.createdAt"),
+          "%M %e, %Y"
+        ),
         "updatedAt",
       ],
     ],
-    where: {
-      doctor_ID: doctor_ID,
-      doctor_Secretary_ID: Nurse_ID,
+    include: {
+      model: model.appointmentDetails,
+      where: {
+        doctor_ID: doctor_ID,
+      },
     },
     order: [["createdAt", "ASC"]],
   });
+};
+
+exports.addQueueVacancy = async function (
+  appointment_queue,
+  doctor_schedule_ID
+) {
+  const vacancyModel = {
+    vacancy_ID: "V-" + uuid.v4(),
+    queque_vacancy_number: appointment_queue,
+    doctor_schedule_ID: doctor_schedule_ID,
+  };
+  return await model.QueueVacancy.create(vacancyModel);
 };
