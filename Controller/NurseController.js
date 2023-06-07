@@ -20,6 +20,9 @@ const {
   notifyPatientsThruEmailThatDoctorHasArrived,
   notifyPatientsThruEmailThatDoctorIsLate,
   notifyPatientsThruEmailThatCancelAll,
+  notifyPatientsThruEmailThatConfirmed,
+  notifyPatientsThruEmailThatCancelled,
+  notifyPatientsThruEmailThatRejected,
 } = require("../utils/sendEmail");
 const {
   getAppointmentDetailsUsingAppointmentID,
@@ -230,8 +233,9 @@ exports.searchAppointments = async (req, res) => {
 exports.updateAppointmentStatus = async (req, res) => {
   const { Nurse_ID } = req.data;
   const { updatedFrom, updatedTo, appointment_ID } = req.body;
+  console.log(req.body);
   try {
-    const { Contact, patient_Fname, patient_Lname, start, date } =
+    const { Contact, patient_Fname, patient_Lname, start, date, email, room } =
       await getAppointmentDetailsUsingAppointmentID(appointment_ID);
     const { doctor_Secretary_contact_number } = await Nurse.findNurseUsingID(
       Nurse_ID
@@ -240,37 +244,65 @@ exports.updateAppointmentStatus = async (req, res) => {
     let body = "";
     switch (updatedTo) {
       case "Confirmed":
-        body = `Hello ${patient_Fname} ${patient_Lname}, We would like to inform that your appointment has been confirmed. We will be waiting for you at the hospital at ${date} ${moment(
+        body = `Hello ${patient_Fname} ${patient_Lname}, We would like to inform that your appointment has been confirmed. You should be at the hospital on ${date} on or before ${moment(
           start,
           "HH:mm:ss"
-        ).format("hh:mm A")}`;
+        ).format(
+          "hh:mm A"
+        )}. Your doctor will be waiting for you at room ${room}
+
+
+        Regards, 
+        Medical Center Manila`;
         // await sendSMS(Contact, body);
+        notifyPatientsThruEmailThatConfirmed({
+          email: email,
+          Fname: patient_Fname,
+          Lname: patient_Lname,
+          start: start,
+          room: room,
+          date: date,
+        });
         break;
       case "Cancelled":
-        body = `Hello, ${patient_Fname} ${patient_Lname}, Your appointment on ${date} has been cancelled. We deeply apologize for the inconvenience. KKindly give us a call at ${doctor_Secretary_contact_number} if you wanted to reschedule your appointment.
+        body = `Hello, ${patient_Fname} ${patient_Lname}, Your appointment on ${date} has been cancelled. We deeply apologize for the inconvenience. Kindly give us a call at ${doctor_Secretary_contact_number} if you wanted to reschedule your appointment.
         
         Please be noted that your rescheduled appointment will be in our priority.
         Thank you for understanding.
         
         
         Regards, 
-        Medical Manila Center`;
+        Medical Center Manila`;
+
+        notifyPatientsThruEmailThatCancelled({
+          email: email,
+          Fname: patient_Fname,
+          Lname: patient_Lname,
+          date: date,
+          doctor_Secretary_contact_number: doctor_Secretary_contact_number,
+        });
         addQueueVacancy(appointment_ID);
         // await sendSMS(Contact, body);
         break;
       case "Completed":
         break;
       case "Rejected":
-        body = `Good Day! ${patient_Fname} ${patient_Lname}, We regret to inform that your appointment has been rejected. We deeply apologize for the inconvenience. Kindly give us a call at ${doctor_Secretary_contact_number} if you wanted to reschedule your appointment. 
+        body = `Good Day! ${patient_Fname} ${patient_Lname}, We regret to inform that your appointment has been rejected. We deeply apologize for the inconvenience. Kindly give us a call at ${doctor_Secretary_contact_number} if you wanted would like to rebook your appointment. 
         
         Regards, 
-        Medical Manila Center`;
+        Medical Center Manila`;
+        notifyPatientsThruEmailThatRejected({
+          email: email,
+          Fname: patient_Fname,
+          Lname: patient_Lname,
+          doctor_Secretary_contact_number: doctor_Secretary_contact_number,
+        });
         // await sendSMS(Contact, body);
         break;
       default:
         return sendResponse(res, 400, "invalid parameters");
     }
-
+    console.log(body);
     await Nurse.updateAppointmentStatus(updatedTo, appointment_ID);
     await LogBookFunction({
       appointment_ID: appointment_ID,
@@ -321,8 +353,7 @@ exports.notifyPatientsForTodayThatDoctorHasArrived = async (req, res) => {
         notifyPatientsThruEmailThatCancelAll(AppointmentDetails);
         // NotifyPatientsThruSMSThatCancellAll(AppointmentDetails);
         Nurse.updateAppointmentStatusLogBook(
-          doctor_ID,
-          Nurse_ID,
+          AppointmentDetails.appointment_ID,
           "Confirmed",
           "Cancelled"
         );

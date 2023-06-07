@@ -22,7 +22,7 @@ exports.NotifyPatients = async (patientinfo) => {
     
 
 Regards, 
-Medical Manila Center`
+Medical Center Manila`
   );
 };
 
@@ -40,7 +40,7 @@ exports.NotifyPatientsThruSMSThatDoctorHasArrived = async (
 
 
 Regards, 
-Medical Manila Center`,
+Medical Center Manila`,
       from: TWILIO_MSGSID,
       to: appointmentDetails.Contact,
     })
@@ -59,7 +59,7 @@ exports.NotifyPatientsThruSMSThatDoctorIsLate = async (appointmentDetails) => {
       
 
 Regards, 
-Medical Manila Center`,
+Medical Center Manila`,
       from: TWILIO_MSGSID,
       to: appointmentDetails.Contact,
     })
@@ -77,7 +77,7 @@ exports.NotifyPatientsThruSMSThatCancellAll = async (appointmentDetails) => {
       ).format("hh:mm A")}. Thank you for your cooperation!
       
 Regards, 
-Medical Manila Center`,
+Medical Center Manila`,
       from: TWILIO_MSGSID,
       to: appointmentDetails.Contact,
     })

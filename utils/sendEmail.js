@@ -263,10 +263,10 @@ exports.notifyPatientsThruEmailThatDoctorHasArrived = (appointmentDetails) => {
                 <p style='font-size:1.7em;'><b>Hi,</b></p>
                 <p> Good Day ${appointmentDetails.Fname} ${
         appointmentDetails.Lname
-      }, Medical Center Manila would like to remind you that your doctor has arrived at the hospital. Your appointment will start at ${moment(
+      }, Medical Center Manila would like to remind you that your doctor has arrived at the hospital. You should be at the hospital on or before ${moment(
         appointmentDetails.appointmentStart,
-        "HH:mm:ss"
-      ).format("hh:mm A")}. Thank you!</p>
+        "hh:mmA"
+      ).format("hh:mmA")}. Thank you!</p>
                 <p style='font-size:0.9em;'>Regards,<br />Medical Center Manila</p>
                 <hr style='border:none;border-top:1px solid #eee' />
                 <div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>
@@ -306,12 +306,7 @@ exports.notifyPatientsThruEmailThatDoctorIsLate = (appointmentDetails) => {
                   <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src="https://imgtr.ee/images/2023/05/29/1bETL.png" height= "35px" alt="1bETL.png" border="0" /> Medical Center Manila</a>
                 </div>
                 <p style='font-size:1.7em;'><b>Hi,</b></p>
-                <p> Good Day ${appointmentDetails.Fname} ${
-        appointmentDetails.Lname
-      }, Medical Center Manila would like to remind you that your doctor is going to be late for a while. Rest assured that we will try our best not to alter your appointment start time at ${moment(
-        appointmentDetails.appointmentStart,
-        "HH:mm:ss"
-      ).format("hh:mm A")}. Thank you for your cooperation!</p>
+                <p> Good Day <b>${appointmentDetails.Fname} ${appointmentDetails.Lname}</b>, Medical Center Manila would like to remind you that your doctor is going to be late for a while. Rest assured that we will try our best in following your appointment schedule. Thank you for your cooperation!</p>
                 <p style='font-size:0.9em;'>Regards,<br />Medical Center Manila</p>
                 <hr style='border:none;border-top:1px solid #eee' />
                 <div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>
@@ -366,4 +361,173 @@ exports.notifyPatientsThruEmailThatCancelAll = (appointmentDetails) => {
   }
   main().catch(console.error);
   return OTP;
+};
+
+exports.notifyPatientsThruEmailThatConfirmed = (appointmentDetails) => {
+  async function main() {
+    let transporter = mail.createTransport({
+      service: "gmail",
+      secure: false,
+      auth: {
+        user: EmailObjects.address,
+        pass: EmailObjects.password,
+      },
+    });
+
+    let info = await transporter.sendMail({
+      from: EmailObjects.from,
+      to: appointmentDetails.email,
+      subject: "Hospital Appointment",
+      html: `
+            <div style='font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2'>
+              <div style='margin:50px auto;width:70%;padding:20px 0'>
+                <div style='border-bottom:1px solid #eee'>
+                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src="https://imgtr.ee/images/2023/05/29/1bETL.png" height= "35px" alt="1bETL.png" border="0" /> Medical Center Manila</a>
+                </div>
+                <p style='font-size:1.7em;'><b>Hi,</b></p>
+                <p>Good Day, ${appointmentDetails.Fname} ${
+        appointmentDetails.Lname
+      }, We would like to inform that your appointment has been confirmed. You should be at the hospital on ${
+        appointmentDetails.date
+      } on or before ${moment(appointmentDetails.start, "HH:mm:ss").format(
+        "hh:mmA"
+      )}. Your doctor will be waiting for you at room ${
+        appointmentDetails.room
+      }</p>
+                <p style='font-size:0.9em;'>Regards,<br />Medical Center Manila</p>
+                <hr style='border:none;border-top:1px solid #eee' />
+                <div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>
+                  <p>Medical Center Manila Inc</p>
+                  <p>850 United Nations Ave, Paco</p>
+                  <p>Manila, Metro Manila</p>
+                </div>
+              </div>
+            </div>`,
+    });
+    console.log("Message sent: %s", info.messageId);
+  }
+  main().catch(console.error);
+};
+
+exports.notifyPatientsThruEmailThatCancelled = (appointmentDetails) => {
+  async function main() {
+    let transporter = mail.createTransport({
+      service: "gmail",
+      secure: false,
+      auth: {
+        user: EmailObjects.address,
+        pass: EmailObjects.password,
+      },
+    });
+
+    let info = await transporter.sendMail({
+      from: EmailObjects.from,
+      to: appointmentDetails.email,
+      subject: "Hospital Appointment",
+      html: `
+            <div style='font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2'>
+              <div style='margin:50px auto;width:70%;padding:20px 0'>
+                <div style='border-bottom:1px solid #eee'>
+                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src="https://imgtr.ee/images/2023/05/29/1bETL.png" height= "35px" alt="1bETL.png" border="0" /> Medical Center Manila</a>
+                </div>
+                <p style='font-size:1.7em;'><b>Hi,</b></p>
+                <p>Good Day, ${appointmentDetails.Fname} ${appointmentDetails.Lname}, Your appointment on ${appointmentDetails.date} has been cancelled. We deeply apologize for the inconvenience. Kindly give us a call at ${appointmentDetails.doctor_Secretary_contact_number} if you wanted to reschedule your appointment.
+                <br>
+                <br>
+                Please be noted that your rescheduled appointment will be in our priority.
+                Thank you for understanding.
+                <br>
+                <p style='font-size:0.9em;'>Regards,<br />Medical Center Manila</p>
+                <hr style='border:none;border-top:1px solid #eee' />
+                <div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>
+                  <p>Medical Center Manila Inc</p>
+                  <p>850 United Nations Ave, Paco</p>
+                  <p>Manila, Metro Manila</p>
+                </div>
+              </div>
+            </div>`,
+    });
+    console.log("Message sent: %s", info.messageId);
+  }
+  main().catch(console.error);
+};
+
+exports.notifyPatientsThruEmailThatRejected = (appointmentDetails) => {
+  async function main() {
+    let transporter = mail.createTransport({
+      service: "gmail",
+      secure: false,
+      auth: {
+        user: EmailObjects.address,
+        pass: EmailObjects.password,
+      },
+    });
+
+    let info = await transporter.sendMail({
+      from: EmailObjects.from,
+      to: appointmentDetails.email,
+      subject: "Hospital Appointment",
+      html: `
+            <div style='font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2'>
+              <div style='margin:50px auto;width:70%;padding:20px 0'>
+                <div style='border-bottom:1px solid #eee'>
+                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src="https://imgtr.ee/images/2023/05/29/1bETL.png" height= "35px" alt="1bETL.png" border="0" /> Medical Center Manila</a>
+                </div>
+                <p style='font-size:1.7em;'><b>Hi,</b></p>
+                <p>Good Day! ${appointmentDetails.Fname} ${appointmentDetails.Lname}, We regret to inform that your appointment has been rejected. We deeply apologize for the inconvenience. Kindly give us a call at ${appointmentDetails.doctor_Secretary_contact_number} if you wanted would like to rebook your appointment.</p>
+                <p style='font-size:0.9em;'>Regards,<br />Medical Center Manila</p>
+                <hr style='border:none;border-top:1px solid #eee' />
+                <div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>
+                  <p>Medical Center Manila Inc</p>
+                  <p>850 United Nations Ave, Paco</p>
+                  <p>Manila, Metro Manila</p>
+                </div>
+              </div>
+            </div>`,
+    });
+    console.log("Message sent: %s", info.messageId);
+  }
+  main().catch(console.error);
+};
+
+exports.notifySecretaryAboutNewRequest = (
+  doctor_first_name,
+  doctor_last_name,
+  email
+) => {
+  async function main() {
+    let transporter = mail.createTransport({
+      service: "gmail",
+      secure: false,
+      auth: {
+        user: EmailObjects.address,
+        pass: EmailObjects.password,
+      },
+    });
+
+    let info = await transporter.sendMail({
+      from: EmailObjects.from,
+      to: email,
+      subject: "Appointment Request",
+      html: `
+            <div style='font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2'>
+              <div style='margin:50px auto;width:70%;padding:20px 0'>
+                <div style='border-bottom:1px solid #eee'>
+                  <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src="https://imgtr.ee/images/2023/05/29/1bETL.png" height= "35px" alt="1bETL.png" border="0" /> Medical Center Manila</a>
+                </div>
+                <p style='font-size:1.7em;'><b>New Appointment Request</b></p>
+                <p>A Patient has requested an appointment with Dr. ${doctor_first_name} ${doctor_last_name}</p>
+                <p style='font-size:0.9em;'>Regards,<br />Medical Center Manila</p>
+                <hr style='border:none;border-top:1px solid #eee' />
+                <div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>
+                  <p>Medical Center Manila Inc</p>
+                  <p>850 United Nations Ave, Paco</p>
+                  <p>Manila, Metro Manila</p>
+                </div>
+              </div>
+            </div>`,
+    });
+    console.log("Message sent: %s", info.messageId);
+  }
+  main().catch(console.error);
 };

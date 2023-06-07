@@ -9,6 +9,8 @@ const {
   getVacantSlotsUsingDoctor_ID,
   getVacantSlotsUsingSchedule_ID,
   destroyVacantUsingID,
+  getDoctorNameUsingID,
+  getDoctorNameUsingIDAndNurseEmail,
 } = require("../Models/database_query/doctor_queries");
 const moment = require("moment");
 const {
@@ -42,7 +44,6 @@ exports.verifyOTP = async (req, res) => {
     if (req.query.hasExpired === "true") {
       return sendResponse(res, 200, { isVerified: false });
     } else {
-      console.log("whu");
       if (req.session.OTP == req.query.inputOTP || req.query.inputOTP == 1) {
         return sendResponse(res, 200, { isVerified: true });
       }
@@ -95,7 +96,6 @@ exports.setAppointment = async (req, res) => {
     if (luckySlot.length !== 0) {
       queue_number = luckySlot[0].queque_vacancy_number;
       await destroyVacantUsingID(luckySlot[0].vacancy_ID);
-      console.log("whu");
     } else {
       queue_number = await getQueueInstance(schedule_ID);
       await incrementQueue(schedule_ID);
@@ -111,6 +111,14 @@ exports.setAppointment = async (req, res) => {
           appointment_start: moment(recom_Time, "h:mm A").format("HH:mm:ss"),
           appointment_queue: queue_number,
         };
+        const { doctor_first_name, doctor_last_name, email } =
+          await getDoctorNameUsingIDAndNurseEmail(doctor_ID);
+        sendEmail.notifySecretaryAboutNewRequest(
+          doctor_first_name,
+          doctor_last_name,
+          email
+        );
+
         await User.insertAppointment(appointmentDetailsModel);
         await LogBookFunction({
           appointment_ID: appointmentDetailsModel.appointment_ID,
@@ -269,6 +277,16 @@ const preparePatientAndAppointment = async (
     appointment_start: moment(recom_Time, "h:mm A").format("HH:mm:ss"),
     appointment_queue: queue_number,
   };
+
+  const { doctor_first_name, doctor_last_name, email } =
+    await getDoctorNameUsingIDAndNurseEmail(doctor_ID);
+  console.log(email);
+  sendEmail.notifySecretaryAboutNewRequest(
+    doctor_first_name,
+    doctor_last_name,
+    email
+  );
+  console.log("haha" + doctor_ID);
   await User.insertPatient(patientModel);
   await User.insertAppointment(appointmentDetailsModel);
   await LogBookFunction({

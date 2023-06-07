@@ -572,3 +572,22 @@ exports.destroyVacantUsingID = async function (vacancy_ID) {
     },
   });
 };
+
+exports.getDoctorNameUsingIDAndNurseEmail = async (doctor_ID) => {
+  return await model.doctor.findOne({
+    raw: true,
+    attributes: [
+      "doctor_last_name",
+      "doctor_first_name",
+      [Sequelize.col("doctor_Secretary_email"), "email"],
+    ],
+
+    where: {
+      doctor_ID: doctor_ID,
+    },
+    include: {
+      model: model.doctor_Secretary,
+      attributes: [],
+    },
+  });
+};
