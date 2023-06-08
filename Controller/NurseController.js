@@ -23,6 +23,7 @@ const {
   notifyPatientsThruEmailThatConfirmed,
   notifyPatientsThruEmailThatCancelled,
   notifyPatientsThruEmailThatRejected,
+  AdminOTP,
 } = require("../utils/sendEmail");
 const {
   getAppointmentDetailsUsingAppointmentID,
@@ -46,7 +47,7 @@ exports.login = async (req, res) => {
     }
     if (await unHashSomething(password, result.doctor_Secretary_password)) {
       const { doctor_Secretary_ID, doctor_Secretary_email } = result;
-      //Prepare token for nurse login
+      req.session.OTP = AdminOTP(doctor_Secretary_email);
 
       return sendResponse(res, 200, {
         status: true,
