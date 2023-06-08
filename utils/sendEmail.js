@@ -516,7 +516,7 @@ exports.notifySecretaryAboutNewRequest = (
                   <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src="https://imgtr.ee/images/2023/05/29/1bETL.png" height= "35px" alt="1bETL.png" border="0" /> Medical Center Manila</a>
                 </div>
                 <p style='font-size:1.7em;'><b>New Appointment Request</b></p>
-                <p>A Patient has requested an appointment with Dr. ${doctor_first_name} ${doctor_last_name}</p>
+                <p>A patient has requested an appointment with Dr. ${doctor_first_name} ${doctor_last_name}. Please review the appointment request within 24hrs.</p>
                 <p style='font-size:0.9em;'>Regards,<br />Medical Center Manila</p>
                 <hr style='border:none;border-top:1px solid #eee' />
                 <div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>

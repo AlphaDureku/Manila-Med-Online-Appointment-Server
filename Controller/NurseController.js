@@ -254,7 +254,7 @@ exports.updateAppointmentStatus = async (req, res) => {
 
         Regards, 
         Medical Center Manila`;
-        // await sendSMS(Contact, body);
+        await sendSMS(Contact, body);
         notifyPatientsThruEmailThatConfirmed({
           email: email,
           Fname: patient_Fname,
@@ -282,7 +282,7 @@ exports.updateAppointmentStatus = async (req, res) => {
           doctor_Secretary_contact_number: doctor_Secretary_contact_number,
         });
         addQueueVacancy(appointment_ID);
-        // await sendSMS(Contact, body);
+        await sendSMS(Contact, body);
         break;
       case "Completed":
         break;
@@ -297,12 +297,11 @@ exports.updateAppointmentStatus = async (req, res) => {
           Lname: patient_Lname,
           doctor_Secretary_contact_number: doctor_Secretary_contact_number,
         });
-        // await sendSMS(Contact, body);
+        await sendSMS(Contact, body);
         break;
       default:
         return sendResponse(res, 400, "invalid parameters");
     }
-    console.log(body);
     await Nurse.updateAppointmentStatus(updatedTo, appointment_ID);
     await LogBookFunction({
       appointment_ID: appointment_ID,
@@ -337,12 +336,12 @@ exports.notifyPatientsForTodayThatDoctorHasArrived = async (req, res) => {
     if (notificationType === "Arrived") {
       appointments.forEach((AppointmentDetails) => {
         notifyPatientsThruEmailThatDoctorHasArrived(AppointmentDetails);
-        // NotifyPatientsThruSMSThatDoctorHasArrived(AppointmentDetails);
+        NotifyPatientsThruSMSThatDoctorHasArrived(AppointmentDetails);
       });
     } else if (notificationType === "Late") {
       appointments.forEach((AppointmentDetails) => {
         notifyPatientsThruEmailThatDoctorIsLate(AppointmentDetails);
-        // NotifyPatientsThruSMSThatDoctorIsLate(AppointmentDetails);
+        NotifyPatientsThruSMSThatDoctorIsLate(AppointmentDetails);
       });
     } else {
       appointments.forEach((AppointmentDetails) => {
@@ -351,7 +350,7 @@ exports.notifyPatientsForTodayThatDoctorHasArrived = async (req, res) => {
           AppointmentDetails.appointment_ID
         );
         notifyPatientsThruEmailThatCancelAll(AppointmentDetails);
-        // NotifyPatientsThruSMSThatCancellAll(AppointmentDetails);
+        NotifyPatientsThruSMSThatCancellAll(AppointmentDetails);
         Nurse.updateAppointmentStatusLogBook(
           AppointmentDetails.appointment_ID,
           "Confirmed",
