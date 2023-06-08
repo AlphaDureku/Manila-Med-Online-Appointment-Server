@@ -271,7 +271,6 @@ exports.updateAppointmentStatus = async (req, res) => {
         Please be noted that your rescheduled appointment will be in our priority.
         Thank you for understanding.
         
-        
         Regards, 
         Medical Center Manila`;
 
