@@ -303,6 +303,7 @@ exports.updateAppointmentStatus = async (req, res) => {
       default:
         return sendResponse(res, 400, "invalid parameters");
     }
+    console.log(Contact);
     await Nurse.updateAppointmentStatus(updatedTo, appointment_ID);
     await LogBookFunction({
       appointment_ID: appointment_ID,
