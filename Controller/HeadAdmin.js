@@ -104,8 +104,16 @@ exports.dashboard = async (req, res) => {
 
 exports.addDoctor = async (req, res) => {
   try {
-    const { Fname, Lname, gender, email, contact, specialization_ID, hmo_ID } =
-      req.body;
+    const {
+      Fname,
+      Lname,
+      gender,
+      email,
+      contact,
+      specialization_ID,
+      hmo_ID,
+      room,
+    } = req.body;
     const result = await HeadAdmin.findOneDoctor(email);
     if (result) {
       return sendResponse(res, 200, {
@@ -121,6 +129,7 @@ exports.addDoctor = async (req, res) => {
       doctor_gender: gender,
       doctor_contact_number: contact,
       doctorSpecializationSpecializationID: specialization_ID,
+      doctor_room: room,
     };
     await HeadAdmin.addDoctor(doctorModel, hmo_ID);
     sendResponse(res, 200, true);
