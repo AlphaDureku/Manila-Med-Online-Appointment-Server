@@ -245,7 +245,10 @@ exports.updateAppointmentStatus = async (req, res) => {
     let body = "";
     switch (updatedTo) {
       case "Confirmed":
-        body = `Hello ${patient_Fname} ${patient_Lname}, We would like to inform that your appointment has been confirmed. You should be at the hospital on ${date} on or before ${moment(
+        body = `
+          Hello ${patient_Fname} ${patient_Lname}, We would like to inform that your appointment has been confirmed. 
+          
+          You should be at the hospital on ${date} on or before ${moment(
           start,
           "HH:mm:ss"
         ).format(
