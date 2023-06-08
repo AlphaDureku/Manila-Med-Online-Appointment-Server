@@ -245,20 +245,16 @@ exports.updateAppointmentStatus = async (req, res) => {
     let body = "";
     switch (updatedTo) {
       case "Confirmed":
-        body = `
-          Hello ${patient_Fname} ${patient_Lname}, We would like to inform that your appointment has been confirmed. 
-          
-          You should be at the hospital on ${date} on or before ${moment(
+        body = `Hello ${patient_Fname} ${patient_Lname}, We would like to inform that your appointment has been confirmed. 
+                You should be at the hospital on ${date} on or before ${moment(
           start,
           "HH:mm:ss"
         ).format(
           "hh:mm A"
         )}. Your doctor will be waiting for you at room ${room}
 
-
         Regards, 
         Medical Center Manila`;
-        await sendSMS(Contact, body);
         notifyPatientsThruEmailThatConfirmed({
           email: email,
           Fname: patient_Fname,
@@ -267,6 +263,7 @@ exports.updateAppointmentStatus = async (req, res) => {
           room: room,
           date: date,
         });
+        await sendSMS(Contact, body);
         break;
       case "Cancelled":
         body = `Hello, ${patient_Fname} ${patient_Lname}, Your appointment on ${date} has been cancelled. We deeply apologize for the inconvenience. Kindly give us a call at ${doctor_Secretary_contact_number} if you wanted to reschedule your appointment.
@@ -307,6 +304,7 @@ exports.updateAppointmentStatus = async (req, res) => {
         return sendResponse(res, 400, "invalid parameters");
     }
     console.log(Contact);
+    console.log(body);
     await Nurse.updateAppointmentStatus(updatedTo, appointment_ID);
     await LogBookFunction({
       appointment_ID: appointment_ID,
