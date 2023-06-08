@@ -474,7 +474,7 @@ exports.notifyPatientsThruEmailThatRejected = (appointmentDetails) => {
                   <a href=''style='font-size:1.5em;color: #388440;text-decoration:none;font-weight:600'><img src="https://imgtr.ee/images/2023/05/29/1bETL.png" height= "35px" alt="1bETL.png" border="0" /> Medical Center Manila</a>
                 </div>
                 <p style='font-size:1.7em;'><b>Hi,</b></p>
-                <p>Good Day! ${appointmentDetails.Fname} ${appointmentDetails.Lname}, We regret to inform that your appointment has been rejected. We deeply apologize for the inconvenience. Kindly give us a call at ${appointmentDetails.doctor_Secretary_contact_number} if you wanted would like to rebook your appointment.</p>
+                <p>Good Day! ${appointmentDetails.Fname} ${appointmentDetails.Lname}, We regret to inform that your appointment has been rejected. We deeply apologize for the inconvenience. Kindly give us a call at ${appointmentDetails.doctor_Secretary_contact_number} if you would like to rebook your appointment.</p>
                 <p style='font-size:0.9em;'>Regards,<br />Medical Center Manila</p>
                 <hr style='border:none;border-top:1px solid #eee' />
                 <div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>
