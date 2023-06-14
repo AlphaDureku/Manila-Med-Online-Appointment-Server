@@ -393,7 +393,8 @@ exports.notifyPatientsThruEmailThatConfirmed = (appointmentDetails) => {
         "hh:mmA"
       )}. Your doctor will be waiting for you at room ${
         appointmentDetails.room
-      }</p>
+      } <br>
+      Note: Failure to arrive on time or if late for 15 minutes, the doctor will accomodate another patient.</p>
                 <p style='font-size:0.9em;'>Regards,<br />Medical Center Manila</p>
                 <hr style='border:none;border-top:1px solid #eee' />
                 <div style='float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300'>
