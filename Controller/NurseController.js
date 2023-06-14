@@ -249,7 +249,9 @@ exports.updateAppointmentStatus = async (req, res) => {
           start,
           "HH:mm:ss"
         ).format("hh:mm A")}
+
         Note: Failure to arrive on time or if late for 15 minutes, the doctor will accomodate another patient.
+        
         Regards, 
         Medical Center Manila`;
         notifyPatientsThruEmailThatConfirmed({
