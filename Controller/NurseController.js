@@ -260,7 +260,7 @@ exports.updateAppointmentStatus = async (req, res) => {
           room: room,
           date: date,
         });
-        // await sendSMS(Contact, body);
+        await sendSMS(Contact, body);
         break;
       case "Cancelled":
         body = `Hello, ${patient_Fname} ${patient_Lname}, Your appointment on ${date} has been cancelled. We deeply apologize for the inconvenience. Kindly give us a call at ${doctor_Secretary_contact_number} if you wanted to reschedule your appointment.
