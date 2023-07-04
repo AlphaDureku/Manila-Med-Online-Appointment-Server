@@ -368,4 +368,6 @@ async function setDoctor_Department(doctorModel) {
 setDoctor_Department(doctorModel)
 */
 
+syncAll();
+
 module.exports = sequelize.models;
